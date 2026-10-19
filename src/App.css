@@ -1,0 +1,25 @@
+
+.desktop_grid {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  background-color: #ede4fa;
+}
+
+.practice_section_grid {
+    display: grid;
+    grid-template-columns: 270px minmax(0, 1fr);
+
+    max-width: 1140px;
+    width: calc(100% - 40px);
+    margin: 30px auto;
+
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 800px) {
+  .practice_section_grid {
+    grid-template-columns: 1fr;
+  }
+}

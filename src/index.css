@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Urbanist", sans-serif;
+    width: 100%;
+    min-height: 100%;
+}
+
+.desktop_grid {
+    background-color: #F0E8FF;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.practice_section_grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 75px);
+}

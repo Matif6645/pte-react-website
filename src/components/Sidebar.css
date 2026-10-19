@@ -1,0 +1,153 @@
+.practice_sidebar {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    min-height: 100%;
+    margin-top: 5px;
+    padding: 14px 10px 20px;
+    border-radius: 8px;
+    background: transparent;
+}
+
+.practice_space {
+    margin: 0 8px 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    color: #9aa0b4;
+    background: transparent;
+}
+
+.practice_nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar_group {
+    display: flex;
+    flex-direction: column;
+}
+
+.other_practice {
+    margin: 16px 8px 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #7c6bb5;
+}
+
+.section_btn,
+.dropdown_item {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.section_btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    color: #1f2937;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.section_btn:hover {
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.section_btn.open_section {
+    background: #fff4dc;
+}
+
+.section_btn.open_section:hover {
+    background: #ffeec4;
+}
+
+.section_left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reading_icon,
+.speaking_icon,
+.writing_icon,
+.listening_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.reading_icon {
+    background: #ffe7a3;
+}
+
+.speaking_icon {
+    background: #e9d5ff;
+}
+
+.writing_icon {
+    background: #ffd0d8;
+}
+
+.listening_icon {
+    background: #d6e8ff;
+}
+
+.section_arrow,
+.item_arrow {
+    color: #9ca3af;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.dropdown_list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 0 8px;
+}
+
+.dropdown_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 9px 12px 9px 14px;
+    border-radius: 10px;
+    color: #4b5563;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.dropdown_item:hover {
+    background: #f3eaff;
+    color: #3b0764;
+}
+
+.dropdown_item.active_item {
+    background: #e4d4fb;
+    color: #3b0764;
+    font-weight: 600;
+}
+
+.dropdown_item.active_item:hover {
+    background: #d9c4f7;
+}
+
+.item_arrow {
+    font-size: 14px;
+}
