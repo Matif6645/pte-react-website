@@ -8,9 +8,9 @@
 
 .practice_section_grid {
     display: grid;
-    grid-template-columns: 270px minmax(0, 1fr);
+    grid-template-columns: 200px minmax(0, 1fr);
 
-    max-width: 1140px;
+    max-width: 1200px;
     width: calc(100% - 40px);
     margin: 30px auto;
 

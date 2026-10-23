@@ -5,7 +5,7 @@ const sections = [
   {
     id: "reading",
     label: "READING",
-    icon: "📖",
+    icon: "fa-solid fa-book-open",
     items: [
       "Fill in the Blanks (Dropdown)",
       "Reorder Paragraphs",
@@ -17,7 +17,7 @@ const sections = [
   {
     id: "speaking",
     label: "SPEAKING",
-    icon: "🎙️",
+    icon: "fa-solid fa-microphone",
     items: [
       "Read Aloud",
       "Repeat Sentence",
@@ -29,7 +29,7 @@ const sections = [
   {
     id: "writing",
     label: "WRITING",
-    icon: "📝",
+    icon: "fa-solid fa-pen",
     items: [
       "Summarize Written Text",
       "Write Essay",
@@ -38,7 +38,7 @@ const sections = [
   {
     id: "listening",
     label: "LISTENING",
-    icon: "🎧",
+    icon: "fa-solid fa-headphones",
     items: [
       "Summarize Spoken Text",
       "Fill in the Blanks",
@@ -78,7 +78,9 @@ function Sidebar() {
               onClick={() => toggleSection(section.id)}
             >
               <span className="section_left">
-                <span className={`${section.id}_icon`}>{section.icon}</span>
+                <span className={`${section.id}_icon`}>
+  <i className={section.icon}></i>
+</span>
                 <span>{section.label}</span>
               </span>
               <span className="section_arrow">

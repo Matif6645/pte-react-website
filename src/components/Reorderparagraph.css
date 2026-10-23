@@ -1,0 +1,179 @@
+
+/* =====================================
+   REORDER PARAGRAPHS
+===================================== */
+
+/* Main Container */
+
+.reorder_practice_container {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Top Section */
+
+.reorder_practice_top {
+    width: 100%;
+}
+
+/* Back Button */
+
+.back_to_home_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 16px;
+    margin-bottom: 20px;
+
+    background-color: #E1D1FE;
+    color: #530783;
+
+    border: 1px solid #E5DBFC;
+    border-radius: 8px;
+
+    font-family: "Urbanist", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back_to_home_btn:hover {
+    background-color: #7653E3;
+    color: white;
+}
+
+.back_to_home_btn i {
+    font-size: 14px;
+}
+
+/* =====================================
+   REORDER PARAGRAPH LIST
+===================================== */
+
+.reorder_list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+/* Individual Paragraph Box */
+
+.reorder_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+    padding: 18px 20px;
+
+    background-color: #F9F7FF;
+    border: 1px solid #E5DBFC;
+    border-radius: 8px;
+
+    transition: all 0.3s ease;
+}
+
+.reorder_item:hover {
+    background-color: #F0E9FF;
+    border-color: #7653E3;
+    box-shadow: 0 3px 10px rgba(83, 7, 131, 0.08);
+}
+
+/* Paragraph Text */
+
+.paragraph_text {
+    flex: 1;
+
+    margin: 0;
+
+    font-family: "Urbanist", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.7;
+
+    color: #333333;
+}
+
+/* Paragraph Number */
+
+.paragraph_number {
+    display: inline-block;
+
+    margin-right: 10px;
+
+    color: #530783;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* =====================================
+   DRAG HANDLE ICON
+===================================== */
+
+.drag_hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 36px;
+    height: 36px;
+
+    background-color: #EDE4FA;
+    border-radius: 6px;
+
+    color: #7653E3;
+    font-size: 18px;
+
+    cursor: grab;
+}
+
+.drag_hint:hover {
+    background-color: #7653E3;
+    color: white;
+}
+
+.drag_hint:active {
+    cursor: grabbing;
+}
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 768px) {
+
+    .reorder_item {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .paragraph_text {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .paragraph_number {
+        font-size: 14px;
+    }
+
+    .drag_hint {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .back_to_home_btn {
+        font-size: 13px;
+        padding: 9px 12px;
+    }
+}

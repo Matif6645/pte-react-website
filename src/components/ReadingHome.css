@@ -1,0 +1,429 @@
+
+/* =====================================
+   READING HOME PAGE
+===================================== */
+
+.reading_home {
+    width: 100%;
+    min-width: 0;
+    padding: 24px;
+    font-family: "Urbanist", sans-serif;
+    background: #F6F3FF;
+    border-radius: 16px;
+}
+
+/* Page heading */
+
+.reading_home_eyebrow {
+    margin: 0 0 12px;
+    color: #7653E3;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.reading_home_title {
+    margin: 0 0 8px;
+    color: #192744;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.reading_home_subtitle {
+    margin: 0 0 28px;
+    color: #68748A;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+/* =====================================
+   FIVE CARD GRID
+===================================== */
+
+.practice_cards_grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    width: 100%;
+    align-items: start;
+}
+
+/* Individual card */
+
+.practice_card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid #E5DBFC;
+    border-radius: 14px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(83, 7, 131, 0.04);
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.practice_card:hover {
+    border-color: #B9A0F8;
+    box-shadow: 0 8px 22px rgba(83, 7, 131, 0.09);
+    transform: translateY(-2px);
+}
+
+/* =====================================
+   QUESTION TYPE ICONS
+===================================== */
+
+.practice_card_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    font-size: 21px;
+}
+
+/* Dropdown */
+
+.icon_purple {
+    background: #EEE7FF;
+    color: #7653E3;
+}
+
+/* Reorder Paragraphs */
+
+.icon_blue {
+    background: #E4F2FF;
+    color: #287DB3;
+}
+
+/* Multiple Choice - Multiple Answers */
+
+.icon_green {
+    background: #E1F7F0;
+    color: #15977E;
+}
+
+/* Drag and Drop */
+
+.icon_orange {
+    background: #FFF0E1;
+    color: #D18131;
+}
+
+/* Multiple Choice - Single Answer */
+
+.icon_pink {
+    background: #FBE7F2;
+    color: #A04486;
+}
+
+/* =====================================
+   CARD TITLE
+===================================== */
+
+.practice_card_title {
+    margin: 0;
+    min-height: 48px;
+    color: #192744;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* =====================================
+   QUESTION STATISTICS
+===================================== */
+
+.practice_card_stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat_label {
+    margin: 0 0 6px;
+    color: #68748A;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.stat_value {
+    margin: 0;
+    color: #192744;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.stat_right {
+    text-align: right;
+}
+
+/* Divider */
+
+.practice_card_divider {
+    width: 100%;
+    height: 1px;
+    margin: 0;
+    border: none;
+    background: #E9E4F2;
+}
+
+/* =====================================
+   CATEGORY DROPDOWN
+===================================== */
+
+.card_dropdown_wrap {
+    width: 100%;
+    position: relative;
+    margin-bottom: 0;
+}
+
+/* Dropdown button */
+
+.card_dropdown_trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 15px;
+
+    background: #F8F6FF;
+    border: 1px solid #E5DBFC;
+    border-radius: 10px;
+
+    color: #34244F;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.card_dropdown_trigger span {
+    min-width: 0;
+}
+
+.card_dropdown_trigger i {
+    color: #7653E3;
+    font-size: 14px;
+}
+
+.card_dropdown_trigger:hover:not(:disabled) {
+    background: #F0E9FF;
+    border-color: #B9A0F8;
+}
+
+.card_dropdown_trigger.open_trigger {
+    border-color: #A78BFA;
+    background: #EEE7FF;
+}
+
+/* Disabled category selector */
+
+.card_dropdown_trigger:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* Expanded category panel */
+
+.card_dropdown_panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+
+    width: 100%;
+    margin-top: 0;
+    padding: 0 12px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: #F8F6FF;
+
+    pointer-events: none;
+    visibility: hidden;
+
+    transition:
+        grid-template-rows 0.3s ease,
+        opacity 0.3s ease,
+        margin-top 0.3s ease,
+        padding 0.3s ease,
+        border-color 0.3s ease,
+        visibility 0.3s;
+}
+.card_dropdown_panel.show {
+    grid-template-rows: 1fr;
+    opacity: 1;
+
+    margin-top: 8px;
+    padding: 12px;
+
+    border-color: #E5DBFC;
+
+    pointer-events: auto;
+    visibility: visible;
+}
+/* Panel heading
+
+.card_dropdown_panel_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #34244F;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.card_dropdown_panel_header i {
+    color: #7653E3;
+    font-size: 12px;
+} */
+
+/* Category list */
+
+.question_categories_list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Individual category */
+
+.category_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 9px 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #49516B;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.category_row:hover {
+    background: #EDE4FF;
+}
+
+.category_row.active_category {
+    background: #E7DAFF;
+    color: #530783;
+    font-weight: 700;
+}
+
+.category_count {
+    flex-shrink: 0;
+    color: #7653E3;
+    font-weight: 700;
+}
+
+.category_empty {
+    margin: 0;
+    color: #8790A2;
+    font-size: 12px;
+}
+
+/* =====================================
+   START PRACTICE BUTTON
+===================================== */
+
+.start_practice_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 4px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 30px;
+    background: #7653E3;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.start_practice_btn span {
+    font-size: 18px;
+}
+
+.start_practice_btn:hover:not(:disabled) {
+    background: #530783;
+    box-shadow: 0 5px 14px rgba(83, 7, 131, 0.18);
+}
+
+.start_practice_btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.start_practice_btn:disabled {
+    background: #D8C8F5;
+    color: #FFFFFF;
+    cursor: not-allowed;
+}
+
+/* Keyboard focus */
+
+.card_dropdown_trigger:focus-visible,
+.category_row:focus-visible,
+.start_practice_btn:focus-visible {
+    outline: 2px solid #7653E3;
+    outline-offset: 3px;
+}
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 1000px) {
+    .reading_home {
+        padding: 18px;
+    }
+
+    .practice_cards_grid {
+        gap: 14px;
+    }
+
+    .practice_card {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 700px) {
+    .practice_cards_grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reading_home_title {
+        font-size: 25px;
+    }
+
+    .reading_home_subtitle {
+        font-size: 14px;
+    }
+}
