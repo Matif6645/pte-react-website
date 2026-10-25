@@ -1,4 +1,17 @@
-.reading_practice_container {
+/* ==========================================
+   PTE ACADEMY - GLOBAL PRACTICE CSS
+   Shared by all Reading question types
+========================================== */
+
+/* ==========================================
+   1. MAIN PRACTICE CONTAINERS
+========================================== */
+
+.reading_practice_container,
+.reorder_practice_container,
+.multiple_choice_container,
+.mcq_practice_container,
+.drag_drop_container {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -11,11 +24,48 @@
   box-sizing: border-box;
 }
 
-.reading_practice_top {
+/* ==========================================
+   2. TOP SECTIONS
+========================================== */
+
+.reading_practice_top,
+.reorder_practice_top,
+.multiple_choice_top,
+.mcq_practice_top,
+.drag_drop_top {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+
+/* ==========================================
+   3. BACK BUTTON
+========================================== */
+
+.practice_back_btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background-color: #ffffff;
+  color: #7c3aed;
+  border: 1px solid #c4b5fd;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.practice_back_btn:hover {
+  background-color: #f5f3ff;
+}
+
+/* ==========================================
+   4. READING PRACTICE LABEL
+========================================== */
 
 .reading_heading_row {
   display: flex;
@@ -37,6 +87,11 @@
   color: #6d28d9;
 }
 
+/* ==========================================
+   5. MAIN PAGE HEADING
+========================================== */
+
+.practice_heading,
 .fill_blanks_heading {
   margin: 4px 0 0;
   font-size: 28px;
@@ -45,16 +100,26 @@
   line-height: 1.2;
 }
 
+.practice_heading span,
 .fill_blanks_heading span {
   font-weight: 500;
   color: #4b5563;
 }
+
+/* ==========================================
+   6. INSTRUCTIONS
+========================================== */
 
 .practice_instruction {
   margin: 0 0 8px;
   font-size: 15px;
   color: #6b7280;
 }
+
+/* ==========================================
+   7. CATEGORY AND SEARCH SECTION
+   ORIGINAL CSS - UNCHANGED
+========================================== */
 
 .category_search_container {
   display: flex;
@@ -82,6 +147,11 @@
   font-weight: 600;
   color: #374151;
 }
+
+/* ==========================================
+   8. CATEGORY DROPDOWN
+   ORIGINAL CSS - UNCHANGED
+========================================== */
 
 .dropdown {
   position: relative;
@@ -111,7 +181,9 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .question_set_select:hover,
@@ -135,12 +207,19 @@
   pointer-events: none;
 }
 
+/* ==========================================
+   9. SEARCH FIELD
+   ORIGINAL CSS - UNCHANGED
+========================================== */
+
 .fill_blanks_search {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 18px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .fill_blanks_search i {
@@ -166,6 +245,10 @@
   font-weight: 400;
 }
 
+/* ==========================================
+   10. WHITE QUESTION CARD
+========================================== */
+
 .bottom_section_reading {
   display: flex;
   flex-direction: column;
@@ -178,12 +261,20 @@
   box-shadow: 0 8px 24px rgba(109, 40, 217, 0.06);
 }
 
+/* ==========================================
+   11. QUESTION NUMBER
+========================================== */
+
 .question_number {
   margin: 0;
   font-size: 13px;
   font-weight: 500;
   color: #a78bfa;
 }
+
+/* ==========================================
+   12. QUESTION TITLE
+========================================== */
 
 .question_title {
   display: flex;
@@ -199,6 +290,10 @@
   letter-spacing: 0.02em;
   color: #111827;
 }
+
+/* ==========================================
+   13. DIFFICULTY BADGES
+========================================== */
 
 .difficulty {
   border-radius: 8px;
@@ -221,6 +316,11 @@
   background-color: #fecaca;
   color: #991b1b;
 }
+
+/* ==========================================
+   14. QUESTION DETAILS
+   TIME / QUESTION TYPE / CATEGORY
+========================================== */
 
 .question_details {
   display: flex;
@@ -248,12 +348,20 @@
   letter-spacing: 0.02em;
 }
 
+/* ==========================================
+   15. DIVIDER
+========================================== */
+
 .question_divider {
   width: 100%;
   border: none;
   border-top: 1px solid #e5e7eb;
   margin: 4px 0 8px;
 }
+
+/* ==========================================
+   16. QUESTION CONTENT BACKGROUND
+========================================== */
 
 .question_content {
   width: 100%;
@@ -270,79 +378,9 @@
   color: #374151;
 }
 
-.blank_dropdown {
-  display: inline-block;
-  min-width: 120px;
-  width: auto;
-  height: 36px;
-  padding: 4px 34px 4px 12px;
-  margin: 0 4px;
-  vertical-align: middle;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  color: #6d28d9;
-  background-color: #ffffff;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237C3AED' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  border: 1.5px solid #c4b5fd;
-  border-radius: 8px;
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.blank_dropdown:hover:not(:disabled),
-.blank_dropdown:focus:not(:disabled) {
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
-}
-
-.blank_dropdown:disabled {
-  cursor: not-allowed;
-  opacity: 1;
-}
-
-.blank_dropdown option {
-  font-weight: 500;
-  color: #374151;
-}
-
-.blank_wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0 2px;
-  vertical-align: middle;
-  flex-wrap: wrap;
-}
-
-.blank_correct {
-  border-color: #22c55e !important;
-  color: #15803d !important;
-  background-color: #f0fdf4 !important;
-  background-image: none !important;
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15) !important;
-}
-
-.blank_wrong {
-  border-color: #ef4444 !important;
-  color: #b91c1c !important;
-  background-color: #fef2f2 !important;
-  background-image: none !important;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.12) !important;
-}
-
-.correct_answer_hint {
-  font-size: 14px;
-  font-weight: 600;
-  color: #0d9488;
-  white-space: nowrap;
-}
+/* ==========================================
+   17. SCORE TEXT
+========================================== */
 
 .score_text {
   margin: 0;
@@ -351,17 +389,69 @@
   color: #6d28d9;
 }
 
-.question_actions {
+/* ==========================================
+   18. RESET AND CHECK ANSWER ROW
+   BUTTONS SIDE BY SIDE
+========================================== */
+
+.question_actions,
+.practice_action_row {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
   gap: 12px;
   flex-wrap: wrap;
 }
+
+.practice_action_row {
+  margin-top: 12px;
+}
+
+/* ==========================================
+   19. RESET BUTTON
+========================================== */
+
+.practice_reset_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 120px;
+  height: 42px;
+  padding: 0 20px;
+  background-color: #ffffff;
+  color: #7c3aed;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.practice_reset_btn:hover:not(:disabled) {
+  background-color: #f5f3ff;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.12);
+}
+
+.practice_reset_btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   20. CHECK ANSWER BUTTON
+========================================== */
 
 .check_btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   min-width: 120px;
   height: 42px;
   padding: 0 20px;
@@ -374,7 +464,10 @@
   color: #ffffff;
   border: none;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .check_btn:hover:not(:disabled) {
@@ -386,6 +479,10 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* ==========================================
+   21. PREVIOUS AND NEXT NAVIGATION
+========================================== */
 
 .question_nav {
   display: flex;
@@ -410,8 +507,13 @@
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
 }
+
+/* PREVIOUS BUTTON */
 
 .prev_btn {
   background-color: #ffffff;
@@ -423,6 +525,8 @@
   background-color: #f5f3ff;
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.12);
 }
+
+/* NEXT QUESTION BUTTON */
 
 .next_btn {
   background-color: #7c3aed;
@@ -436,6 +540,8 @@
   transform: translateY(-1px);
 }
 
+/* DISABLED NAVIGATION BUTTONS */
+
 .prev_btn:disabled,
 .next_btn:disabled {
   opacity: 0.45;
@@ -444,11 +550,20 @@
   box-shadow: none;
 }
 
+/* ==========================================
+   22. MOBILE RESPONSIVENESS
+========================================== */
+
 @media (max-width: 800px) {
-  .reading_practice_container {
+  .reading_practice_container,
+  .reorder_practice_container,
+  .multiple_choice_container,
+  .mcq_practice_container,
+  .drag_drop_container {
     padding: 16px;
   }
 
+  .practice_heading,
   .fill_blanks_heading {
     font-size: 22px;
   }

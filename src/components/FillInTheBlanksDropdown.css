@@ -1,0 +1,75 @@
+.blank_dropdown {
+  display: inline-block;
+  min-width: 120px;
+  width: auto;
+  height: 36px;
+  padding: 4px 34px 4px 12px;
+  margin: 0 4px;
+  vertical-align: middle;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #6d28d9;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237C3AED' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.blank_dropdown:hover:not(:disabled),
+.blank_dropdown:focus:not(:disabled) {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.blank_dropdown:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.blank_dropdown option {
+  font-weight: 500;
+  color: #374151;
+}
+
+.blank_wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 2px;
+  vertical-align: middle;
+  flex-wrap: wrap;
+}
+
+.blank_correct {
+  border-color: #22c55e !important;
+  color: #15803d !important;
+  background-color: #f0fdf4 !important;
+  background-image: none !important;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15) !important;
+}
+
+.blank_wrong {
+  border-color: #ef4444 !important;
+  color: #b91c1c !important;
+  background-color: #fef2f2 !important;
+  background-image: none !important;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.12) !important;
+}
+
+.correct_answer_hint {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0d9488;
+  white-space: nowrap;
+}

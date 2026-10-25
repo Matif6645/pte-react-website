@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./PracticeShared.css";
 import "./ReadingHome.css";
 
 const practiceTypes = [
@@ -11,7 +12,11 @@ const practiceTypes = [
     categoriesCount: 4,
     ready: true,
     categoryOptions: [
-      { value: "SCIENCE & TECHNOLOGY", label: "Science & Technology", count: 5 },
+      {
+        value: "SCIENCE & TECHNOLOGY",
+        label: "Science & Technology",
+        count: 5,
+      },
       { value: "HISTORY", label: "History", count: 3 },
       { value: "BIOLOGY", label: "Biology", count: 3 },
       { value: "MEDICAL SCIENCE", label: "Medical Science", count: 3 },
@@ -22,20 +27,38 @@ const practiceTypes = [
     title: "Reorder Paragraphs",
     icon: "fa-solid fa-arrows-up-down",
     iconClass: "icon_blue",
-    totalQuestions: null,
-    categoriesCount: null,
-    ready: false,
-    categoryOptions: [],
+    totalQuestions: 6,
+    categoriesCount: 4,
+    ready: true,
+    categoryOptions: [
+      {
+        value: "SCIENCE & TECHNOLOGY",
+        label: "Science & Technology",
+        count: 2,
+      },
+      { value: "HISTORY", label: "History", count: 2 },
+      { value: "BIOLOGY", label: "Biology", count: 1 },
+      { value: "MEDICAL SCIENCE", label: "Medical Science", count: 1 },
+    ],
   },
   {
     id: "mcq-multiple",
     title: "Multiple Choice (Multiple Answers)",
     icon: "fa-solid fa-list-check",
     iconClass: "icon_green",
-    totalQuestions: null,
-    categoriesCount: null,
-    ready: false,
-    categoryOptions: [],
+    totalQuestions: 4,
+    categoriesCount: 4,
+    ready: true,
+    categoryOptions: [
+      {
+        value: "SCIENCE & TECHNOLOGY",
+        label: "Science & Technology",
+        count: 1,
+      },
+      { value: "HISTORY", label: "History", count: 1 },
+      { value: "BIOLOGY", label: "Biology", count: 1 },
+      { value: "MEDICAL SCIENCE", label: "Medical Science", count: 1 },
+    ],
   },
   {
     id: "fill-blanks-drag",
@@ -63,6 +86,7 @@ function ReadingHome({ onStartPractice }) {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState({
     "fill-blanks-dropdown": "SCIENCE & TECHNOLOGY",
+    "reorder-paragraphs": "SCIENCE & TECHNOLOGY",
   });
 
   function toggleDropdown(cardId) {
@@ -79,7 +103,9 @@ function ReadingHome({ onStartPractice }) {
 
   function getSelectedLabel(item) {
     const selectedValue = selectedCategories[item.id];
-    const found = item.categoryOptions.find((opt) => opt.value === selectedValue);
+    const found = item.categoryOptions.find(
+      (opt) => opt.value === selectedValue,
+    );
     if (found) {
       return `${found.label} · Question set (${found.count})`;
     }
@@ -98,9 +124,7 @@ function ReadingHome({ onStartPractice }) {
         {practiceTypes.map((item) => {
           const isOpen = openDropdownId === item.id;
           const selected =
-            selectedCategories[item.id] ||
-            item.categoryOptions[0]?.value ||
-            "";
+            selectedCategories[item.id] || item.categoryOptions[0]?.value || "";
 
           return (
             <article key={item.id} className="practice_card">
@@ -113,65 +137,60 @@ function ReadingHome({ onStartPractice }) {
               <div className="practice_card_stats">
                 <div>
                   <p className="stat_label">Total Questions</p>
-                  <p className="stat_value">
-                    {item.totalQuestions ?? "—"}
-                  </p>
+                  <p className="stat_value">{item.totalQuestions ?? "—"}</p>
                 </div>
                 <div className="stat_right">
                   <p className="stat_label">Categories</p>
-                  <p className="stat_value">
-                    {item.categoriesCount ?? "—"}
-                  </p>
+                  <p className="stat_value">{item.categoriesCount ?? "—"}</p>
                 </div>
               </div>
 
               <hr className="practice_card_divider" />
 
               <div className="card_dropdown_wrap">
-              <button
-  type="button"
-  className={
-    isOpen
-      ? "card_dropdown_trigger open_trigger"
-      : "card_dropdown_trigger"
-  }
-  onClick={() => toggleDropdown(item.id)}
-  disabled={!item.ready && item.categoryOptions.length === 0}
->
-  <span>Choose a Category</span>
+                <button
+                  type="button"
+                  className={
+                    isOpen
+                      ? "card_dropdown_trigger open_trigger"
+                      : "card_dropdown_trigger"
+                  }
+                  onClick={() => toggleDropdown(item.id)}
+                  disabled={!item.ready && item.categoryOptions.length === 0}
+                >
+                  <span>Choose a Category</span>
 
-  <i
-    className={`fa-solid ${
-      isOpen ? "fa-chevron-up" : "fa-chevron-down"
-    }`}
-  ></i>
-</button>
+                  <i
+                    className={`fa-solid ${
+                      isOpen ? "fa-chevron-up" : "fa-chevron-down"
+                    }`}
+                  ></i>
+                </button>
 
-               <div className={`card_dropdown_panel ${isOpen ? "show" : ""}`}>
-  <div className="question_categories_list">
-    {item.categoryOptions.length === 0 ? (
-      <p className="category_empty">Coming soon</p>
-    ) : (
-      item.categoryOptions.map((opt) => (
-        <button
-          key={opt.value}
-          type="button"
-          className={
-            selected === opt.value
-              ? "category_row active_category"
-              : "category_row"
-          }
-          onClick={() => selectCategory(item.id, opt.value)}
-          tabIndex={isOpen ? 0 : -1}
-        >
-          <span>{opt.label}</span>
-          <span className="category_count">{opt.count}</span>
-        </button>
-      ))
-    )}
-  </div>
-</div>
-                
+                <div className={`card_dropdown_panel ${isOpen ? "show" : ""}`}>
+                  <div className="question_categories_list">
+                    {item.categoryOptions.length === 0 ? (
+                      <p className="category_empty">Coming soon</p>
+                    ) : (
+                      item.categoryOptions.map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          className={
+                            selected === opt.value
+                              ? "category_row active_category"
+                              : "category_row"
+                          }
+                          onClick={() => selectCategory(item.id, opt.value)}
+                          tabIndex={isOpen ? 0 : -1}
+                        >
+                          <span>{opt.label}</span>
+                          <span className="category_count">{opt.count}</span>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
 
               <button

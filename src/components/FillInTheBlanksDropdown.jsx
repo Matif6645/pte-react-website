@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
-import "./ReadingPractice.css";
+import PracticeShared from "./PracticeShared.jsx";
+import "./PracticeShared.css";
+import "./FillInTheBlanksDropdown.css";
 
 const questions = [
   {
@@ -263,7 +265,8 @@ const questions = [
       { type: "blank", options: ["writing", "electricity", "aviation"] },
       {
         type: "text",
-        value: " allowed societies to preserve information. Today, archaeologists study ancient ",
+        value:
+          " allowed societies to preserve information. Today, archaeologists study ancient ",
       },
       { type: "blank", options: ["artifacts", "satellites", "computers"] },
       {
@@ -313,8 +316,7 @@ const questions = [
     segments: [
       {
         type: "text",
-        value:
-          "World War II began in 1939 following Germany's invasion of ",
+        value: "World War II began in 1939 following Germany's invasion of ",
       },
       { type: "blank", options: ["Poland", "Canada", "India"] },
       {
@@ -364,8 +366,7 @@ const questions = [
       { type: "blank", options: ["membrane", "skeleton", "tendon"] },
       {
         type: "text",
-        value:
-          " controls the movement of substances into and out of the cell.",
+        value: " controls the movement of substances into and out of the cell.",
       },
     ],
   },
@@ -529,8 +530,7 @@ const questions = [
       { type: "blank", options: ["strains", "vitamins", "hormones"] },
       {
         type: "text",
-        value:
-          ". Resistant infections may require more complex and expensive ",
+        value: ". Resistant infections may require more complex and expensive ",
       },
       { type: "blank", options: ["treatments", "diagnoses", "vaccinations"] },
       {
@@ -602,9 +602,7 @@ function BlankSelect({
       </select>
 
       {checked && !isCorrect && (
-        <span className="correct_answer_hint">
-          (Answer: {correctAnswer})
-        </span>
+        <span className="correct_answer_hint">(Answer: {correctAnswer})</span>
       )}
     </span>
   );
@@ -626,9 +624,7 @@ function ReadingPractice() {
   }, []);
 
   const filteredQuestions = useMemo(() => {
-    const byCategory = questions.filter(
-      (q) => q.category === selectedCategory
-    );
+    const byCategory = questions.filter((q) => q.category === selectedCategory);
 
     const term = search.trim().toLowerCase();
     if (!term) return byCategory;
@@ -637,7 +633,7 @@ function ReadingPractice() {
       (q) =>
         q.title.toLowerCase().includes(term) ||
         String(q.id).includes(term) ||
-        q.difficulty.toLowerCase().includes(term)
+        q.difficulty.toLowerCase().includes(term),
     );
   }, [selectedCategory, search]);
 

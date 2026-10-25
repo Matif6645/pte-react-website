@@ -2,8 +2,9 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import ReadingHome from "./components/ReadingHome";
-import ReadingPractice from "./components/ReadingPractice";
-import ReorderParagraphs from "./components/ReorderParagraph"
+import ReadingPractice from "./components/FillInTheBlanksDropdown";
+import ReorderParagraphs from "./components/ReorderParagraphs";
+import MultipleChoice from "./components/MultipleChoiceMultipleAnswer";
 import "./App.css";
 
 function App() {
@@ -19,10 +20,23 @@ function App() {
   }
 
   function startPractice(practiceId, category) {
+    if (category) setInitialCategory(category);
+
     if (practiceId === "fill-blanks-dropdown") {
-      if (category) setInitialCategory(category);
       setActiveView("fill-blanks-dropdown");
       setActiveItem("Fill in the Blanks (Dropdown)");
+      return;
+    }
+
+    if (practiceId === "reorder-paragraphs") {
+      setActiveView("reorder-paragraphs");
+      setActiveItem("Reorder Paragraphs");
+      return;
+    }
+
+    if (practiceId === "mcq-multiple") {
+      setActiveView("mcq-multiple");
+      setActiveItem("Multiple Choice (Multiple Answers)");
     }
   }
 
@@ -34,8 +48,48 @@ function App() {
       return;
     }
 
-    // Other reading items still go to home for now
+    if (item === "Reorder Paragraphs") {
+      setActiveView("reorder-paragraphs");
+      return;
+    }
+
+    if (item === "Multiple Choice (Multiple Answers)") {
+      setActiveView("mcq-multiple");
+      return;
+    }
+
     setActiveView("reading-home");
+  }
+
+  function renderMain() {
+    if (activeView === "fill-blanks-dropdown") {
+      return (
+        <ReadingPractice
+          onBack={openReadingHome}
+          initialCategory={initialCategory}
+        />
+      );
+    }
+
+    if (activeView === "reorder-paragraphs") {
+      return (
+        <ReorderParagraphs
+          onBack={openReadingHome}
+          initialCategory={initialCategory}
+        />
+      );
+    }
+
+    if (activeView === "mcq-multiple") {
+      return (
+        <MultipleChoice
+          onBack={openReadingHome}
+          initialCategory={initialCategory}
+        />
+      );
+    }
+
+    return <ReadingHome onStartPractice={startPractice} />;
   }
 
   return (
@@ -49,16 +103,7 @@ function App() {
           onOpenReadingHome={openReadingHome}
         />
 
-        <ReorderParagraphs/>
-
-        {activeView === "fill-blanks-dropdown" ? (
-          <ReadingPractice
-            onBack={openReadingHome}
-            initialCategory={initialCategory}
-          />
-        ) : (
-          <ReadingHome onStartPractice={startPractice} />
-        )}
+        {renderMain()}
       </main>
     </div>
   );
