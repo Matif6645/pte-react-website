@@ -332,7 +332,13 @@ function MultipleChoice({ onBack, initialCategory }) {
                   disabled={isChecked}
                 >
                   <span className="mcq_checkbox">
-                    {selected.includes(opt.id) ? (
+                    {isChecked ? (
+                      question.correctAnswers.includes(opt.id) ? (
+                        <i className="fa-solid fa-check"></i>
+                      ) : selected.includes(opt.id) ? (
+                        <i className="fa-solid fa-xmark"></i>
+                      ) : null
+                    ) : selected.includes(opt.id) ? (
                       <i className="fa-solid fa-check"></i>
                     ) : null}
                   </span>

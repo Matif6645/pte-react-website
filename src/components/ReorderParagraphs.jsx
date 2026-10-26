@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import "./ReorderParagraphs.css";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import PracticeShared from "./PracticeShared.jsx";
 import "./PracticeShared.css";
+import "./ReorderParagraphs.css";
 
 const questions = [
   {
@@ -204,6 +205,8 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   const [checkedMap, setCheckedMap] = useState({});
   const [dragParaId, setDragParaId] = useState(null);
   const [dragFrom, setDragFrom] = useState(null);
+  const answerSlotsRef = useRef(null);
+  const previousPositionsRef = useRef(null);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -281,8 +284,73 @@ function ReorderParagraphs({ onBack, initialCategory }) {
 
   function updateAnswers(next) {
     if (!question) return;
-    setAnswersMap((prev) => ({ ...prev, [question.id]: next }));
+
+    const positions = new Map();
+
+    answerSlotsRef.current
+      ?.querySelectorAll("[data-paragraph-id]")
+      .forEach((element) => {
+        positions.set(
+          element.dataset.paragraphId,
+          element.getBoundingClientRect(),
+        );
+      });
+
+    previousPositionsRef.current = positions;
+
+    setAnswersMap((prev) => ({
+      ...prev,
+      [question.id]: next,
+    }));
   }
+  useLayoutEffect(() => {
+    const previousPositions = previousPositionsRef.current;
+
+    if (!previousPositions || !answerSlotsRef.current) {
+      return;
+    }
+
+    previousPositionsRef.current = null;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    const elements = answerSlotsRef.current.querySelectorAll(
+      "[data-paragraph-id]",
+    );
+
+    elements.forEach((element) => {
+      const id = element.dataset.paragraphId;
+      const previous = previousPositions.get(id);
+
+      if (!previous) return;
+
+      const current = element.getBoundingClientRect();
+
+      const moveX = previous.left - current.left;
+      const moveY = previous.top - current.top;
+
+      if (Math.abs(moveX) < 1 && Math.abs(moveY) < 1) {
+        return;
+      }
+
+      element.animate(
+        [
+          {
+            transform: `translate(${moveX}px, ${moveY}px)`,
+          },
+          {
+            transform: "translate(0px, 0px)",
+          },
+        ],
+        {
+          duration: 330,
+          easing: "cubic-bezier(0.2, 0.85, 0.25, 1)",
+        },
+      );
+    });
+  }, [answers]);
 
   function addToAnswer(para) {
     if (!question || isChecked || usedIds.has(para.id)) return;
@@ -373,278 +441,177 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   }
 
   return (
-    <div className="reorder_practice_container">
-      <div className="reorder_practice_top">
-        {onBack && (
-          <button type="button" className="back_to_home_btn" onClick={onBack}>
-            <i className="fa-solid fa-arrow-left"></i>
-            Back to Reading Practice
-          </button>
-        )}
-
-        <div className="reading_heading_row">
-          <i className="fa-solid fa-arrows-up-down"></i>
-          <h2>READING PRACTICE</h2>
-        </div>
-
-        <h3 className="fill_blanks_heading">Reorder Paragraphs</h3>
-
-        <p className="practice_instruction">
-          Select the jumbled paragraphs on the left to place them in your
-          answer. Use the arrows to change their order. You can also drag and
-          drop.
-        </p>
-
-        <div className="category_search_container">
-          <div className="category_question_container">
-            <p className="category_title">Category &amp; Question Set</p>
-            <div className="dropdown">
-              <select
-                className="question_set_select"
-                value={selectedCategory}
-                onChange={(e) => changeCategory(e.target.value)}
-              >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat} · Question set ({categoryCounts[cat]})
-                  </option>
-                ))}
-              </select>
-              <i className="fa-solid fa-chevron-down dropdown_arrow"></i>
-            </div>
+    <PracticeShared
+      title="Reorder Paragraphs"
+      description="Select the jumbled paragraphs on the left to place them in your answer. Use the arrows to change their order. You can also drag and drop."
+      icon="fa-solid fa-arrows-up-down"
+      categories={categories}
+      selectedCategory={selectedCategory}
+      categoryCounts={categoryCounts}
+      onCategoryChange={changeCategory}
+      search={search}
+      onSearchChange={(value) => {
+        setSearch(value);
+        setCurrentIndex(0);
+      }}
+      question={question}
+      questionNumber={safeIndex + 1}
+      totalQuestions={total}
+      details={
+        question
+          ? [
+              { icon: "fa-regular fa-clock", text: question.time },
+              {
+                icon: "fa-solid fa-layer-group",
+                text: `${question.paragraphs} PARAGRAPHS`,
+              },
+              { icon: "fa-solid fa-tag", text: question.category },
+            ]
+          : []
+      }
+      onBack={onBack}
+      onReset={handleReset}
+      onCheck={handleCheck}
+      checkDisabled={
+        isChecked || !question || answers.some((slot) => slot === null)
+      }
+      checkLabel={isChecked ? "Checked" : "Check Answer"}
+      onPrevious={() => goToQuestion(safeIndex - 1)}
+      onNext={() => goToQuestion(safeIndex + 1)}
+      previousDisabled={safeIndex === 0 || total === 0}
+      nextDisabled={safeIndex === total - 1 || total === 0}
+    >
+      <div className="reorder_board">
+        <section className="reorder_column">
+          <div className="reorder_column_header">
+            <i className="fa-solid fa-shuffle"></i>
+            <h4>Jumbled Paragraphs</h4>
           </div>
 
-          <div className="reading-right">
-            <p className="search_title">Search Questions</p>
-            <div className="fill_blanks_search">
-              <i className="fa-solid fa-magnifying-glass"></i>
-              <input
-                type="search"
-                placeholder="Search questions by title, keyword or question number..."
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setCurrentIndex(0);
-                }}
-              />
-            </div>
+          <div className="jumbled_list">
+            {jumbled.map((para) => {
+              const used = usedIds.has(para.id);
+              return (
+                <div
+                  key={para.id}
+                  className={used ? "jumble_card jumble_used" : "jumble_card"}
+                  draggable={!isChecked && !used}
+                  onDragStart={() => onDragStartPara(para, "jumbled", null)}
+                  onDragEnd={onDragEnd}
+                >
+                  <div className="jumble_card_top">
+                    {!isChecked && (
+                      <button
+                        type="button"
+                        className={
+                          used ? "icon_btn used_btn" : "icon_btn add_btn"
+                        }
+                        onClick={() => addToAnswer(para)}
+                        disabled={used}
+                      >
+                        <i
+                          className={`fa-solid ${
+                            used ? "fa-check" : "fa-plus"
+                          }`}
+                        ></i>
+                      </button>
+                    )}
+                  </div>
+                  <p className="jumble_text">{para.text}</p>
+                </div>
+              );
+            })}
           </div>
-        </div>
-      </div>
+        </section>
 
-      <div className="bottom_section_reading">
-        {!question ? (
-          <p className="practice_instruction">
-            No questions found in this category.
-          </p>
-        ) : (
-          <>
-            <p className="question_number">
-              Question {safeIndex + 1} of {total}
-            </p>
+        <section className="reorder_column">
+          <div className="reorder_column_header">
+            <i className="fa-solid fa-list-ol"></i>
+            <h4>Your Answer</h4>
+          </div>
 
-            <div className="question_title">
-              <h3>{question.title}</h3>
-              <span
-                className={`difficulty difficulty_${question.difficulty.toLowerCase()}`}
-              >
-                {question.difficulty}
-              </span>
-            </div>
+          <div className="answer_slots" ref={answerSlotsRef}>
+            {answers.map((para, slotIndex) => {
+              let statusClass = "";
+              if (isChecked && para) {
+                statusClass =
+                  para.id === question.correctOrder[slotIndex]
+                    ? "slot_correct"
+                    : "slot_wrong";
+              }
 
-            <div className="question_details">
-              <div className="question_detail">
-                <i className="fa-regular fa-clock"></i>
-                <span>{question.time}</span>
-              </div>
-              <div className="question_detail">
-                <i className="fa-solid fa-layer-group"></i>
-                <span>{question.paragraphs} PARAGRAPHS</span>
-              </div>
-              <div className="question_detail">
-                <i className="fa-solid fa-tag"></i>
-                <span>{question.category}</span>
-              </div>
-            </div>
+              return (
+                <div
+                  key={`slot-${slotIndex}`}
+                  data-paragraph-id={para?.id}
+                  className={
+                    para
+                      ? `answer_slot filled_slot ${statusClass}`
+                      : "answer_slot empty_slot"
+                  }
+                  onDragOver={onDragOverSlot}
+                  onDrop={() => onDropToSlot(slotIndex)}
+                >
+                  <span className="slot_number">{slotIndex + 1}</span>
 
-            <hr className="question_divider" />
-
-            <div className="reorder_board">
-              <section className="reorder_column">
-                <div className="reorder_column_header">
-                  <i className="fa-solid fa-shuffle"></i>
-                  <h4>Jumbled Paragraphs</h4>
-                </div>
-
-                <div className="jumbled_list">
-                  {jumbled.map((para) => {
-                    const used = usedIds.has(para.id);
-                    return (
-                      <div
-                        key={para.id}
-                        className={
-                          used ? "jumble_card jumble_used" : "jumble_card"
-                        }
-                        draggable={!isChecked && !used}
-                        onDragStart={() =>
-                          onDragStartPara(para, "jumbled", null)
-                        }
-                        onDragEnd={onDragEnd}
-                      >
-                        <div className="jumble_card_top">
-                          {!isChecked && (
-                            <button
-                              type="button"
-                              className={
-                                used ? "icon_btn used_btn" : "icon_btn add_btn"
-                              }
-                              onClick={() => addToAnswer(para)}
-                              disabled={used}
-                            >
-                              <i
-                                className={`fa-solid ${
-                                  used ? "fa-check" : "fa-plus"
-                                }`}
-                              ></i>
-                            </button>
-                          )}
-                        </div>
-                        <p className="jumble_text">{para.text}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-
-              <section className="reorder_column">
-                <div className="reorder_column_header">
-                  <i className="fa-solid fa-list-ol"></i>
-                  <h4>Your Answer</h4>
-                </div>
-
-                <div className="answer_slots">
-                  {answers.map((para, slotIndex) => {
-                    let statusClass = "";
-                    if (isChecked && para) {
-                      statusClass =
-                        para.id === question.correctOrder[slotIndex]
-                          ? "slot_correct"
-                          : "slot_wrong";
-                    }
-
-                    return (
-                      <div
-                        key={`slot-${slotIndex}`}
-                        className={
-                          para
-                            ? `answer_slot filled_slot ${statusClass}`
-                            : "answer_slot empty_slot"
-                        }
-                        onDragOver={onDragOverSlot}
-                        onDrop={() => onDropToSlot(slotIndex)}
-                      >
-                        <span className="slot_number">{slotIndex + 1}</span>
-
-                        {para ? (
-                          <div
-                            className="answer_card"
-                            draggable={!isChecked}
-                            onDragStart={() =>
-                              onDragStartPara(para, "answer", slotIndex)
-                            }
-                            onDragEnd={onDragEnd}
+                  {para ? (
+                    <div
+                      className="answer_card"
+                      draggable={!isChecked}
+                      onDragStart={() =>
+                        onDragStartPara(para, "answer", slotIndex)
+                      }
+                      onDragEnd={onDragEnd}
+                    >
+                      <div className="answer_card_top">
+                        {!isChecked && (
+                          <button
+                            type="button"
+                            className="icon_btn remove_btn"
+                            onClick={() => removeFromAnswer(slotIndex)}
                           >
-                            <div className="answer_card_top">
-                              {!isChecked && (
-                                <button
-                                  type="button"
-                                  className="icon_btn remove_btn"
-                                  onClick={() => removeFromAnswer(slotIndex)}
-                                >
-                                  <i className="fa-solid fa-xmark"></i>
-                                </button>
-                              )}
-                            </div>
-                            <p className="jumble_text">{para.text}</p>
-                            {!isChecked && (
-                              <div className="answer_move_btns">
-                                <button
-                                  type="button"
-                                  className="move_arrow_btn"
-                                  onClick={() => moveAnswer(slotIndex, -1)}
-                                  disabled={slotIndex === 0}
-                                >
-                                  <i className="fa-solid fa-chevron-up"></i>
-                                </button>
-                                <button
-                                  type="button"
-                                  className="move_arrow_btn"
-                                  onClick={() => moveAnswer(slotIndex, 1)}
-                                  disabled={slotIndex === answers.length - 1}
-                                >
-                                  <i className="fa-solid fa-chevron-down"></i>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <p className="slot_placeholder">Select a paragraph</p>
+                            <i className="fa-solid fa-xmark"></i>
+                          </button>
                         )}
                       </div>
-                    );
-                  })}
+                      <p className="jumble_text">{para.text}</p>
+                      {!isChecked && (
+                        <div className="answer_move_btns">
+                          <button
+                            type="button"
+                            className="move_arrow_btn"
+                            onClick={() => moveAnswer(slotIndex, -1)}
+                            disabled={slotIndex === 0}
+                          >
+                            <i className="fa-solid fa-chevron-up"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="move_arrow_btn"
+                            onClick={() => moveAnswer(slotIndex, 1)}
+                            disabled={slotIndex === answers.length - 1}
+                          >
+                            <i className="fa-solid fa-chevron-down"></i>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <p className="slot_placeholder">Select a paragraph</p>
+                  )}
                 </div>
-              </section>
-            </div>
-
-            {isChecked && score && (
-              <p className="score_text">
-                Score: {score.right} / {score.total} correct
-              </p>
-            )}
-
-            <div className="reorder_footer_actions">
-              <button type="button" className="reset_btn" onClick={handleReset}>
-                <i className="fa-solid fa-rotate-left"></i>
-                Reset
-              </button>
-
-              <button
-                type="button"
-                className="check_btn"
-                onClick={handleCheck}
-                disabled={isChecked || answers.some((s) => s === null)}
-              >
-                <i className="fa-solid fa-check"></i>
-                {isChecked ? "Checked" : "Check Answer"}
-              </button>
-            </div>
-
-            <div className="question_nav">
-              <button
-                type="button"
-                className="prev_btn"
-                onClick={() => goToQuestion(safeIndex - 1)}
-                disabled={safeIndex === 0}
-              >
-                <i className="fa-solid fa-arrow-left"></i>
-                Previous
-              </button>
-
-              <button
-                type="button"
-                className="next_btn"
-                onClick={() => goToQuestion(safeIndex + 1)}
-                disabled={safeIndex === total - 1}
-              >
-                Next Question
-                <i className="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-          </>
-        )}
+              );
+            })}
+          </div>
+        </section>
       </div>
-    </div>
+
+      {isChecked && score && (
+        <p className="score_text">
+          Score: {score.right} / {score.total} correct
+        </p>
+      )}
+    </PracticeShared>
   );
 }
 

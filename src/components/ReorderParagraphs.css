@@ -43,7 +43,7 @@
 
 .back_to_home_btn:hover {
   background-color: #f5f3ff;
-} 
+}
 
 .reorder_item {
   display: flex;
@@ -56,7 +56,10 @@
   border-radius: 4px;
   cursor: grab;
   user-select: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .reorder_item:active {
@@ -249,6 +252,375 @@
   color: #7c3aed;
   font-weight: 600;
   cursor: pointer;
+}
+/* ==========================================
+   REORDER PARAGRAPHS - UPDATED DESIGN
+========================================== */
+
+/* TWO COLUMNS */
+
+.reorder_board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.reorder_column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.reorder_column_header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #6d28d9;
+}
+
+.reorder_column_header h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #6028e8;
+}
+
+/* JUMBLED PARAGRAPHS */
+
+.jumbled_list,
+.answer_slots {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jumble_card {
+  padding: 20px;
+  min-height: 145px;
+
+  background: #ffffff;
+  border: 1.5px solid #e5e3f0;
+  border-radius: 18px;
+
+  cursor: grab;
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.jumble_card:hover {
+  border-color: #c4b5fd;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.07);
+}
+
+.jumble_card:active {
+  cursor: grabbing;
+}
+
+.jumble_card_top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* PLUS BUTTON */
+
+.jumble_card .icon_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #7653ef;
+  color: #ffffff;
+
+  font-size: 17px;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.jumble_card .icon_btn:hover:not(:disabled) {
+  background: #6028e8;
+  transform: scale(1.08);
+}
+
+.jumble_card .icon_btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+/* USED PARAGRAPH */
+
+.jumble_used {
+  background: #faf9ff;
+}
+
+.jumble_card .used_btn:disabled {
+  background: #e9e3ff;
+  color: #7653ef;
+  opacity: 1;
+  cursor: default;
+}
+
+/* PARAGRAPH TEXT */
+
+.jumble_text {
+  margin: 0;
+  color: #201b38;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   YOUR ANSWER CARDS
+========================================== */
+
+.answer_slot {
+  position: relative;
+  min-height: 145px;
+  padding: 20px;
+
+  border: 1.5px solid #e8e4f7;
+  border-radius: 18px;
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.filled_slot {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+
+  background: #f9f8ff;
+}
+
+.filled_slot:hover {
+  border-color: #c4b5fd;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.06);
+}
+
+/* NUMBER CIRCLE */
+
+.filled_slot .slot_number {
+  position: static;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  border-radius: 50%;
+
+  background: #e9e3ff;
+  color: #6028e8;
+
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* ANSWER TEXT */
+
+.answer_card {
+  min-width: 0;
+  grid-column: 2;
+}
+
+.answer_card .jumble_text {
+  margin: 3px 0 0;
+  padding-right: 32px;
+}
+
+/* REMOVE BUTTON */
+
+.answer_card_top {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  margin: 0;
+}
+
+.answer_card .remove_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  border: 1px solid #fecdd3;
+  border-radius: 50%;
+
+  background: #fff0f2;
+  color: #e24768;
+
+  font-size: 15px;
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.answer_card .remove_btn:hover {
+  background: #ffe1e6;
+  transform: scale(1.1);
+}
+
+/* ==========================================
+   UP / DOWN BUTTONS
+========================================== */
+
+.answer_move_btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.move_arrow_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  border: 1px solid #ded5ff;
+  border-radius: 10px;
+
+  background: #f1eeff;
+  color: #6230e7;
+
+  font-size: 17px;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.move_arrow_btn:hover:not(:disabled) {
+  background: #e4dbff;
+  border-color: #c4b5fd;
+  transform: translateY(-2px);
+}
+
+.move_arrow_btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.move_arrow_btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* EMPTY ANSWER SLOTS */
+
+.empty_slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px dashed #d4c4f7;
+  background: #faf8ff;
+}
+
+.empty_slot .slot_number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.slot_placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* CORRECT / INCORRECT STATES */
+
+.slot_correct {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.slot_wrong {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .reorder_board {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .jumble_card,
+  .answer_slot {
+    padding: 16px;
+    min-height: 120px;
+  }
+
+  .jumble_text {
+    font-size: 14px;
+  }
+
+  .reorder_column_header h4 {
+    font-size: 18px;
+  }
+
+  .move_arrow_btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+.answer_slot {
+  backface-visibility: hidden;
+}
+
+.answer_card {
+  cursor: grab;
+}
+
+.answer_card:active {
+  cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jumble_card,
+  .answer_slot,
+  .icon_btn,
+  .remove_btn,
+  .move_arrow_btn {
+    transition: none;
+  }
 }
 
 @media (max-width: 900px) {

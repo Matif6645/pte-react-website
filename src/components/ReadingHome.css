@@ -1,429 +1,634 @@
-
-/* =====================================
-   READING HOME PAGE
-===================================== */
+/* ==========================================
+   PTE ACADEMY - READING HOME
+========================================== */
 
 .reading_home {
-    width: 100%;
-    min-width: 0;
-    padding: 24px;
-    font-family: "Urbanist", sans-serif;
-    background: #F6F3FF;
-    border-radius: 16px;
+  width: 100%;
+  min-width: 0;
+  padding: 24px;
+  box-sizing: border-box;
+
+  background: #f6f3ff;
+  border-radius: 16px;
+
+  font-family: "Urbanist", sans-serif;
 }
 
-/* Page heading */
+/* ==========================================
+   HERO SECTION - HEADING + CANVA IMAGE
+========================================== */
+
+.reading_home_hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+
+  width: 100%;
+  margin-bottom: 28px;
+  padding: 12px 20px;
+
+  background: #f5f3ff;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+/* LEFT SIDE - HEADING */
+
+.reading_home_hero_text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  min-width: 0;
+  padding-top: 8px;
+}
+
+/* READING PRACTICE LABEL */
 
 .reading_home_eyebrow {
-    margin: 0 0 12px;
-    color: #7653E3;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+  margin: 0 0 12px;
+
+  color: #7653e3;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
+
+/* MAIN HEADING */
 
 .reading_home_title {
-    margin: 0 0 8px;
-    color: #192744;
-    font-size: 30px;
-    font-weight: 800;
-    line-height: 1.2;
+  margin: 0 0 10px;
+
+  color: #192744;
+  font-size: clamp(26px, 2.6vw, 32px);
+  font-weight: 800;
+  line-height: 1.25;
 }
+
+/* DESCRIPTION */
 
 .reading_home_subtitle {
-    margin: 0 0 28px;
-    color: #68748A;
-    font-size: 16px;
-    font-weight: 400;
+  margin: 0;
+
+  color: #68748a;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
-/* =====================================
-   FIVE CARD GRID
-===================================== */
+/* RIGHT SIDE - CANVA IMAGE */
+
+.reading_home_hero_image {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+
+  min-width: 0;
+  overflow: hidden;
+}
+
+.reading_home_hero_image img {
+  display: block;
+
+  width: auto;
+  max-width: 100%;
+  height: 180px;
+
+  object-fit: contain;
+  object-position: top right;
+
+  border-radius: 10px;
+}
+
+/* ==========================================
+   FIVE PRACTICE CARDS GRID
+========================================== */
 
 .practice_cards_grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    width: 100%;
-    align-items: start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+
+  width: 100%;
 }
 
-/* Individual card */
+/* ==========================================
+   INDIVIDUAL PRACTICE CARD
+========================================== */
 
 .practice_card {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-width: 0;
-    padding: 20px;
-    border: 1px solid #E5DBFC;
-    border-radius: 14px;
-    background: #FFFFFF;
-    box-shadow: 0 4px 14px rgba(83, 7, 131, 0.04);
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  min-width: 0;
+  padding: 20px;
+
+  background: #ffffff;
+  border: 1px solid #e5dbfc;
+  border-radius: 14px;
+
+  box-shadow: 0 4px 14px rgba(83, 7, 131, 0.04);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .practice_card:hover {
-    border-color: #B9A0F8;
-    box-shadow: 0 8px 22px rgba(83, 7, 131, 0.09);
-    transform: translateY(-2px);
+  border-color: #b9a0f8;
+  box-shadow: 0 8px 22px rgba(83, 7, 131, 0.09);
+  transform: translateY(-2px);
 }
 
-/* =====================================
+/* ==========================================
    QUESTION TYPE ICONS
-===================================== */
+========================================== */
 
 .practice_card_icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    flex-shrink: 0;
-    border-radius: 12px;
-    font-size: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 12px;
+  font-size: 21px;
 }
 
-/* Dropdown */
+/* Fill in the Blanks - Dropdown */
 
 .icon_purple {
-    background: #EEE7FF;
-    color: #7653E3;
+  background: #eee7ff;
+  color: #7653e3;
 }
 
 /* Reorder Paragraphs */
 
 .icon_blue {
-    background: #E4F2FF;
-    color: #287DB3;
+  background: #e4f2ff;
+  color: #287db3;
 }
 
 /* Multiple Choice - Multiple Answers */
 
 .icon_green {
-    background: #E1F7F0;
-    color: #15977E;
+  background: #e1f7f0;
+  color: #15977e;
 }
 
-/* Drag and Drop */
+/* Fill in the Blanks - Drag and Drop */
 
 .icon_orange {
-    background: #FFF0E1;
-    color: #D18131;
+  background: #fff0e1;
+  color: #d18131;
 }
 
 /* Multiple Choice - Single Answer */
 
 .icon_pink {
-    background: #FBE7F2;
-    color: #A04486;
+  background: #fbe7f2;
+  color: #a04486;
 }
 
-/* =====================================
-   CARD TITLE
-===================================== */
+/* ==========================================
+   PRACTICE CARD TITLE
+========================================== */
 
 .practice_card_title {
-    margin: 0;
-    min-height: 48px;
-    color: #192744;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.4;
+  margin: 0;
+  min-height: 48px;
+
+  color: #192744;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
-/* =====================================
+/* ==========================================
    QUESTION STATISTICS
-===================================== */
+========================================== */
 
 .practice_card_stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .stat_label {
-    margin: 0 0 6px;
-    color: #68748A;
-    font-size: 12px;
-    font-weight: 500;
+  margin: 0 0 6px;
+
+  color: #68748a;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .stat_value {
-    margin: 0;
-    color: #192744;
-    font-size: 22px;
-    font-weight: 800;
+  margin: 0;
+
+  color: #192744;
+  font-size: 22px;
+  font-weight: 800;
 }
 
 .stat_right {
-    text-align: right;
+  text-align: right;
 }
 
-/* Divider */
+/* ==========================================
+   CARD DIVIDER
+========================================== */
 
 .practice_card_divider {
-    width: 100%;
-    height: 1px;
-    margin: 0;
-    border: none;
-    background: #E9E4F2;
+  width: 100%;
+  height: 1px;
+  margin: 0;
+
+  border: none;
+  background: #e9e4f2;
 }
 
-/* =====================================
+/* ==========================================
    CATEGORY DROPDOWN
-===================================== */
+========================================== */
 
 .card_dropdown_wrap {
-    width: 100%;
-    position: relative;
-    margin-bottom: 0;
+  position: relative;
+  width: 100%;
+  margin-bottom: 0;
 }
 
-/* Dropdown button */
+/* CATEGORY BUTTON */
 
 .card_dropdown_trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: 46px;
-    padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 
-    background: #F8F6FF;
-    border: 1px solid #E5DBFC;
-    border-radius: 10px;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 15px;
 
-    color: #34244F;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
+  background: #f8f6ff;
+  border: 1px solid #e5dbfc;
+  border-radius: 10px;
+
+  color: #34244f;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .card_dropdown_trigger span {
-    min-width: 0;
+  min-width: 0;
 }
 
 .card_dropdown_trigger i {
-    color: #7653E3;
-    font-size: 14px;
+  flex-shrink: 0;
+  color: #7653e3;
+  font-size: 14px;
 }
 
 .card_dropdown_trigger:hover:not(:disabled) {
-    background: #F0E9FF;
-    border-color: #B9A0F8;
+  background: #f0e9ff;
+  border-color: #b9a0f8;
 }
+
+/* OPEN DROPDOWN */
 
 .card_dropdown_trigger.open_trigger {
-    border-color: #A78BFA;
-    background: #EEE7FF;
+  background: #eee7ff;
+  border-color: #a78bfa;
 }
 
-/* Disabled category selector */
+/* DISABLED DROPDOWN */
 
 .card_dropdown_trigger:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
-/* Expanded category panel */
+/* ==========================================
+   EXPANDABLE CATEGORY PANEL
+========================================== */
 
 .card_dropdown_panel {
-    display: grid;
-    grid-template-rows: 0fr;
-    opacity: 0;
+  display: grid;
+  grid-template-rows: 0fr;
 
-    width: 100%;
-    margin-top: 0;
-    padding: 0 12px;
+  width: 100%;
+  margin-top: 0;
+  padding: 0 12px;
 
-    border: 1px solid transparent;
-    border-radius: 10px;
-    background: #F8F6FF;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 
-    pointer-events: none;
-    visibility: hidden;
+  background: #f8f6ff;
+  border: 1px solid transparent;
+  border-radius: 10px;
 
-    transition:
-        grid-template-rows 0.3s ease,
-        opacity 0.3s ease,
-        margin-top 0.3s ease,
-        padding 0.3s ease,
-        border-color 0.3s ease,
-        visibility 0.3s;
+  box-sizing: border-box;
+
+  transition:
+    grid-template-rows 0.3s ease,
+    opacity 0.3s ease,
+    margin-top 0.3s ease,
+    padding 0.3s ease,
+    border-color 0.3s ease,
+    visibility 0.3s;
 }
+
+/* OPEN CATEGORY PANEL */
+
 .card_dropdown_panel.show {
-    grid-template-rows: 1fr;
-    opacity: 1;
+  grid-template-rows: 1fr;
 
-    margin-top: 8px;
-    padding: 12px;
+  margin-top: 8px;
+  padding: 12px;
 
-    border-color: #E5DBFC;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 
-    pointer-events: auto;
-    visibility: visible;
-}
-/* Panel heading
-
-.card_dropdown_panel_header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 12px;
-    color: #34244F;
-    font-size: 13px;
-    font-weight: 700;
+  border-color: #e5dbfc;
 }
 
-.card_dropdown_panel_header i {
-    color: #7653E3;
-    font-size: 12px;
-} */
-
-/* Category list */
+/* ==========================================
+   CATEGORY LIST
+========================================== */
 
 .question_categories_list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 
-    min-height: 0;
-    overflow: hidden;
+  min-height: 0;
+  overflow: hidden;
 }
 
-/* Individual category */
+/* CATEGORY ROW */
 
 .category_row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    width: 100%;
-    padding: 9px 10px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    color: #49516B;
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    text-align: left;
-    cursor: pointer;
-    transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;
+  padding: 9px 10px;
+
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+
+  color: #49516b;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
+
+/* CATEGORY HOVER */
 
 .category_row:hover {
-    background: #EDE4FF;
+  background: #ede4ff;
 }
+
+/* SELECTED CATEGORY */
 
 .category_row.active_category {
-    background: #E7DAFF;
-    color: #530783;
-    font-weight: 700;
+  background: #e7daff;
+  color: #530783;
+  font-weight: 700;
 }
+
+/* CATEGORY QUESTION COUNT */
 
 .category_count {
-    flex-shrink: 0;
-    color: #7653E3;
-    font-weight: 700;
+  flex-shrink: 0;
+
+  color: #7653e3;
+  font-weight: 700;
 }
+
+/* EMPTY CATEGORY MESSAGE */
 
 .category_empty {
-    margin: 0;
-    color: #8790A2;
-    font-size: 12px;
+  margin: 0;
+
+  color: #8790a2;
+  font-size: 12px;
 }
 
-/* =====================================
+/* ==========================================
    START PRACTICE BUTTON
-===================================== */
+========================================== */
 
 .start_practice_btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    min-height: 44px;
-    margin-top: 4px;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 30px;
-    background: #7653E3;
-    color: #FFFFFF;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 12px 18px;
+
+  background: #7653e3;
+  border: none;
+  border-radius: 30px;
+
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
+/* ARROW */
 
 .start_practice_btn span {
-    font-size: 18px;
+  font-size: 18px;
 }
+
+/* BUTTON HOVER */
 
 .start_practice_btn:hover:not(:disabled) {
-    background: #530783;
-    box-shadow: 0 5px 14px rgba(83, 7, 131, 0.18);
+  background: #530783;
+  box-shadow: 0 5px 14px rgba(83, 7, 131, 0.18);
 }
+
+/* BUTTON PRESS */
 
 .start_practice_btn:active:not(:disabled) {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
+
+/* DISABLED BUTTON */
 
 .start_practice_btn:disabled {
-    background: #D8C8F5;
-    color: #FFFFFF;
-    cursor: not-allowed;
+  background: #d8c8f5;
+  color: #ffffff;
+  cursor: not-allowed;
 }
 
-/* Keyboard focus */
+/* ==========================================
+   KEYBOARD ACCESSIBILITY
+========================================== */
 
 .card_dropdown_trigger:focus-visible,
 .category_row:focus-visible,
 .start_practice_btn:focus-visible {
-    outline: 2px solid #7653E3;
-    outline-offset: 3px;
+  outline: 2px solid #7653e3;
+  outline-offset: 3px;
 }
 
-/* =====================================
-   RESPONSIVE DESIGN
-===================================== */
+/* ==========================================
+   RESPONSIVE - SMALL DESKTOP
+========================================== */
 
 @media (max-width: 1000px) {
-    .reading_home {
-        padding: 18px;
-    }
+  .reading_home {
+    padding: 18px;
+  }
 
-    .practice_cards_grid {
-        gap: 14px;
-    }
+  .reading_home_hero {
+    gap: 18px;
+    padding: 12px 16px;
+  }
 
-    .practice_card {
-        padding: 16px;
-    }
+  .reading_home_hero_image img {
+    height: 160px;
+  }
+
+  .practice_cards_grid {
+    gap: 14px;
+  }
+
+  .practice_card {
+    padding: 16px;
+  }
 }
 
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 768px) {
+  .reading_home_hero {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .reading_home_hero_text {
+    padding-top: 0;
+  }
+
+  .reading_home_hero_image {
+    justify-content: center;
+  }
+
+  .reading_home_hero_image img {
+    height: 170px;
+    max-width: 100%;
+    object-position: center;
+  }
+
+  .reading_home_title {
+    font-size: 27px;
+  }
+
+  .reading_home_subtitle {
+    font-size: 15px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
 @media (max-width: 700px) {
-    .practice_cards_grid {
-        grid-template-columns: 1fr;
-    }
+  .practice_cards_grid {
+    grid-template-columns: 1fr;
+  }
 
-    .reading_home_title {
-        font-size: 25px;
-    }
+  .reading_home_title {
+    font-size: 25px;
+  }
 
-    .reading_home_subtitle {
-        font-size: 14px;
-    }
+  .reading_home_subtitle {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reading_home {
+    padding: 12px;
+  }
+
+  .reading_home_hero {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+
+  .reading_home_hero_image img {
+    height: 145px;
+  }
+
+  .practice_card {
+    padding: 16px;
+  }
+
+  .practice_card_title {
+    font-size: 16px;
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .practice_card,
+  .card_dropdown_trigger,
+  .card_dropdown_panel,
+  .category_row,
+  .start_practice_btn {
+    transition: none;
+  }
+
+  .practice_card:hover,
+  .start_practice_btn:active {
+    transform: none;
+  }
 }

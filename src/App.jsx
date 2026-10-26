@@ -2,21 +2,45 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import ReadingHome from "./components/ReadingHome";
-import ReadingPractice from "./components/FillInTheBlanksDropdown";
+import FillInTheBlanksDropdown from "./components/FillInTheBlanksDropdown";
 import ReorderParagraphs from "./components/ReorderParagraphs";
-import MultipleChoice from "./components/MultipleChoiceMultipleAnswer";
+import MultipleChoiceMultipleAnswer from "./components/MultipleChoiceMultipleAnswer";
+import FillInTheBlankDragDrop from "./components/FillInTheBlankDragDrop";
+import MultipleChoiceSingleAnswer from "./components/MultipleChoiceSingleAnswer";
+import AdminLogin from "./admin/AdminLogin";
+import AdminDashboard from "./admin/AdminDashboard";
+import { isAdminLoggedIn, logout } from "./admin/auth";
 import "./App.css";
 
 function App() {
-  const [activeView, setActiveView] = useState("reading-home");
+  const [activeView, setActiveView] = useState(
+    isAdminLoggedIn() ? "admin-dashboard" : "reading-home",
+  );
   const [activeItem, setActiveItem] = useState("");
   const [initialCategory, setInitialCategory] = useState(
-    "SCIENCE & TECHNOLOGY"
+    "SCIENCE & TECHNOLOGY",
   );
 
   function openReadingHome() {
     setActiveView("reading-home");
     setActiveItem("");
+  }
+
+  function openAdminLogin() {
+    if (isAdminLoggedIn()) {
+      setActiveView("admin-dashboard");
+      return;
+    }
+    setActiveView("admin-login");
+  }
+
+  function handleAdminLoginSuccess() {
+    setActiveView("admin-dashboard");
+  }
+
+  function handleAdminLogout() {
+    logout();
+    setActiveView("admin-login");
   }
 
   function startPractice(practiceId, category) {
@@ -37,6 +61,18 @@ function App() {
     if (practiceId === "mcq-multiple") {
       setActiveView("mcq-multiple");
       setActiveItem("Multiple Choice (Multiple Answers)");
+      return;
+    }
+
+    if (practiceId === "fill-blanks-drag") {
+      setActiveView("fill-blanks-drag");
+      setActiveItem("Fill in the Blanks (Drag and Drop)");
+      return;
+    }
+
+    if (practiceId === "mcq-single") {
+      setActiveView("mcq-single");
+      setActiveItem("Multiple Choice (Single Answer)");
     }
   }
 
@@ -58,13 +94,23 @@ function App() {
       return;
     }
 
+    if (item === "Fill in the Blanks (Drag and Drop)") {
+      setActiveView("fill-blanks-drag");
+      return;
+    }
+
+    if (item === "Multiple Choice (Single Answer)") {
+      setActiveView("mcq-single");
+      return;
+    }
+
     setActiveView("reading-home");
   }
 
   function renderMain() {
     if (activeView === "fill-blanks-dropdown") {
       return (
-        <ReadingPractice
+        <FillInTheBlanksDropdown
           onBack={openReadingHome}
           initialCategory={initialCategory}
         />
@@ -82,7 +128,25 @@ function App() {
 
     if (activeView === "mcq-multiple") {
       return (
-        <MultipleChoice
+        <MultipleChoiceMultipleAnswer
+          onBack={openReadingHome}
+          initialCategory={initialCategory}
+        />
+      );
+    }
+
+    if (activeView === "fill-blanks-drag") {
+      return (
+        <FillInTheBlankDragDrop
+          onBack={openReadingHome}
+          initialCategory={initialCategory}
+        />
+      );
+    }
+
+    if (activeView === "mcq-single") {
+      return (
+        <MultipleChoiceSingleAnswer
           onBack={openReadingHome}
           initialCategory={initialCategory}
         />
@@ -92,9 +156,36 @@ function App() {
     return <ReadingHome onStartPractice={startPractice} />;
   }
 
+  if (activeView === "admin-login") {
+    return (
+      <AdminLogin
+        onLoginSuccess={handleAdminLoginSuccess}
+        onBackToSite={openReadingHome}
+      />
+    );
+  }
+
+  if (activeView === "admin-dashboard") {
+    if (!isAdminLoggedIn()) {
+      return (
+        <AdminLogin
+          onLoginSuccess={handleAdminLoginSuccess}
+          onBackToSite={openReadingHome}
+        />
+      );
+    }
+
+    return (
+      <AdminDashboard
+        onLogout={handleAdminLogout}
+        onBackToSite={openReadingHome}
+      />
+    );
+  }
+
   return (
     <div className="desktop_grid">
-      <Header />
+      <Header onLoginClick={openAdminLogin} />
 
       <main className="practice_section_grid">
         <Sidebar

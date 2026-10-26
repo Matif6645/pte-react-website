@@ -1,0 +1,248 @@
+/* ========================================
+   FILL IN THE BLANKS - DRAG AND DROP
+======================================== */
+
+/* QUESTION PASSAGE */
+
+.drag_passage {
+  width: 100%;
+  padding: 24px;
+  background-color: #ffffff;
+  border: 1px solid #ded8eb;
+  border-radius: 8px 8px 0 0;
+}
+
+.drag_passage p {
+  font-family: "Urbanist", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 2.8;
+  color: #333333;
+  margin: 0;
+}
+
+/* ========================================
+   BLANK WRAPPER
+======================================== */
+
+.drag_blank_wrap {
+  display: inline;
+}
+
+/* EMPTY BLANK */
+
+.drag_blank {
+  display: inline-block;
+  vertical-align: middle;
+
+  min-width: 140px;
+  min-height: 32px;
+
+  padding: 5px 12px;
+  margin: 0 5px;
+
+  border: 1px solid #bcbcbc;
+  border-radius: 4px;
+
+  background-color: #f9f9f9;
+  color: #333333;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+
+  text-align: center;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.drag_blank:hover:not(:disabled) {
+  border-color: #7653e3;
+  background-color: #f4efff;
+}
+
+/* FILLED BLANK */
+
+.drag_blank_filled {
+  background-color: #ede4fa;
+  border-color: #7653e3;
+  color: #530783;
+}
+
+/* CORRECT ANSWER */
+
+.blank_correct {
+  background-color: #e8fff8;
+  border-color: #00c9b7;
+  color: #008f80;
+}
+
+/* INCORRECT ANSWER */
+
+.blank_wrong {
+  background-color: #fff0f0;
+  border-color: #ff4d4f;
+  color: #e63946;
+}
+
+/* DISABLED AFTER CHECKING */
+
+.drag_blank:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+/* CORRECT ANSWER HINT */
+
+.correct_answer_hint {
+  display: inline;
+  margin-left: 5px;
+
+  color: #00a99d;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ========================================
+   WORD BANK
+======================================== */
+
+.drag_word_bank {
+  width: 100%;
+  padding: 16px 20px;
+
+  background-color: #f8f7fc;
+
+  border: 1px solid #ded8eb;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+/* WORD BANK LABEL */
+
+.drag_bank_label {
+  margin: 0 0 12px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #530783;
+}
+
+/* WORDS CONTAINER */
+
+.drag_words_row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* DRAGGABLE WORD */
+
+.drag_word_chip {
+  padding: 8px 14px;
+
+  border: 1px solid #7653e3;
+  border-radius: 5px;
+
+  background-color: #7653e3;
+  color: #ffffff;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: grab;
+  user-select: none;
+
+  transition: all 0.2s ease;
+}
+
+.drag_word_chip:hover:not(:disabled) {
+  background-color: #530783;
+  border-color: #530783;
+}
+
+/* SELECTED WORD */
+
+.selected_chip {
+  background-color: #530783;
+  border-color: #530783;
+
+  box-shadow: 0 0 0 3px rgba(118, 83, 227, 0.2);
+}
+
+/* DRAGGING */
+
+.drag_word_chip:active {
+  cursor: grabbing;
+}
+
+/* DISABLED WORDS */
+
+.drag_word_chip:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* EMPTY WORD BANK */
+
+.drag_bank_empty {
+  font-size: 14px;
+  color: #888888;
+  font-style: italic;
+}
+
+/* ========================================
+   SCORE
+======================================== */
+
+.drag_passage ~ .score_text {
+  margin-top: 16px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+
+  color: #530783;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 768px) {
+  .drag_passage {
+    padding: 16px;
+  }
+
+  .drag_passage p {
+    font-size: 14px;
+    line-height: 2.6;
+  }
+
+  .drag_blank {
+    min-width: 100px;
+    font-size: 13px;
+    padding: 4px 8px;
+  }
+
+  .drag_word_bank {
+    padding: 14px;
+  }
+
+  .drag_words_row {
+    gap: 8px;
+  }
+
+  .drag_word_chip {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+
+  .correct_answer_hint {
+    font-size: 12px;
+  }
+}

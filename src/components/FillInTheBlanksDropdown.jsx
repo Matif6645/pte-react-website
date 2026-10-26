@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import PracticeShared from "./PracticeShared.jsx";
 import "./PracticeShared.css";
 import "./FillInTheBlanksDropdown.css";
+import scienceImage from "../assets/science-dropdown.png";
 
 const questions = [
   {
@@ -608,8 +609,10 @@ function BlankSelect({
   );
 }
 
-function ReadingPractice() {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+function ReadingPractice({ onBack, initialCategory }) {
+  const [selectedCategory, setSelectedCategory] = useState(
+    categories.includes(initialCategory) ? initialCategory : categories[0],
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [search, setSearch] = useState("");
   const [answers, setAnswers] = useState({});
@@ -679,169 +682,124 @@ function ReadingPractice() {
     if (!question) return;
     setCheckedMap((prev) => ({ ...prev, [question.id]: true }));
   }
+  // RESET FUNCTION
+  function handleReset() {
+    if (!question) return;
+
+    setAnswers((prev) => ({
+      ...prev,
+      [question.id]: {},
+    }));
+
+    setCheckedMap((prev) => ({
+      ...prev,
+      [question.id]: false,
+    }));
+  }
 
   let blankCounter = -1;
 
   return (
-    <div className="reading_practice_container">
-      <div className="reading_practice_top">
-        <div className="reading_heading_row">
-          <i className="fa-solid fa-book-open"></i>
-          <h2>READING PRACTICE</h2>
-        </div>
+    <PracticeShared
+      title="Fill in the blanks"
+      type="Dropdown"
+      description="Find the word that makes each sentence fit."
+      icon="fa-solid fa-book-open"
+      headerImage={
+        selectedCategory === "SCIENCE & TECHNOLOGY" ? scienceImage : null
+      }
+      // CATEGORY AND SEARCH
+      categories={categories}
+      selectedCategory={selectedCategory}
+      categoryCounts={categoryCounts}
+      onCategoryChange={changeCategory}
+      search={search}
+      onSearchChange={(value) => {
+        setSearch(value);
+        setCurrentIndex(0);
+      }}
+      // QUESTION INFORMATION
+      question={question}
+      questionNumber={safeIndex + 1}
+      totalQuestions={total}
+      // TIME / BLANKS / CATEGORY
+      details={
+        question
+          ? [
+              {
+                icon: "fa-regular fa-clock",
+                text: question.time,
+              },
+              {
+                icon: "fa-solid fa-layer-group",
+                text: `${question.blanks} BLANKS`,
+              },
+              {
+                icon: "fa-solid fa-tag",
+                text: question.category,
+              },
+            ]
+          : []
+      }
+      // BACK BUTTON
+      onBack={onBack}
+      // RESET AND CHECK ANSWER
+      onReset={handleReset}
+      onCheck={handleCheck}
+      checkDisabled={isChecked}
+      checkLabel={isChecked ? "Checked" : "Check Answer"}
+      // PREVIOUS AND NEXT
+      onPrevious={() => goToQuestion(safeIndex - 1)}
+      onNext={() => goToQuestion(safeIndex + 1)}
+      previousDisabled={safeIndex === 0 || total === 0}
+      nextDisabled={safeIndex === total - 1 || total === 0}
+    >
+      {/* QUESTION CONTENT */}
 
-        <h3 className="fill_blanks_heading">
-          Fill in the blanks <span>(Dropdown)</span>
-        </h3>
+      {question && (
+        <>
+          <div className="question_content">
+            <p>
+              {question.segments.map((segment, index) => {
+                if (segment.type === "text") {
+                  return <span key={index}>{segment.value}</span>;
+                }
 
-        <p className="practice_instruction">
-          Find the word that makes each sentence fit.
-        </p>
+                blankCounter += 1;
 
-        <div className="category_search_container">
-          <div className="category_question_container">
-            <p className="category_title">Category &amp; Question Set</p>
-            <div className="dropdown">
-              <select
-                className="question_set_select"
-                value={selectedCategory}
-                onChange={(e) => changeCategory(e.target.value)}
-              >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat} · Question set ({categoryCounts[cat]})
-                  </option>
-                ))}
-              </select>
-              <i className="fa-solid fa-chevron-down dropdown_arrow"></i>
-            </div>
-          </div>
+                const blankIndex = blankCounter;
 
-          <div className="reading-right">
-            <p className="search_title">Search Questions</p>
-            <div className="fill_blanks_search">
-              <i className="fa-solid fa-magnifying-glass"></i>
-              <input
-                type="search"
-                placeholder="Search questions by title, keyword or question number..."
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setCurrentIndex(0);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+                const userValue = questionAnswers[blankIndex] || "";
 
-      <div className="bottom_section_reading">
-        {!question ? (
-          <p className="practice_instruction">
-            No questions found in this category.
-          </p>
-        ) : (
-          <>
-            <p className="question_number">
-              Question {safeIndex + 1} of {total}
+                const correctAnswer = correctList[blankIndex] || "";
+
+                const isCorrect = userValue === correctAnswer;
+
+                return (
+                  <BlankSelect
+                    key={`${question.id}-blank-${blankIndex}`}
+                    options={segment.options}
+                    value={userValue}
+                    onChange={(value) => updateBlank(blankIndex, value)}
+                    checked={isChecked}
+                    isCorrect={isCorrect}
+                    correctAnswer={correctAnswer}
+                  />
+                );
+              })}
             </p>
+          </div>
 
-            <div className="question_title">
-              <h3>{question.title}</h3>
-              <span
-                className={`difficulty difficulty_${question.difficulty.toLowerCase()}`}
-              >
-                {question.difficulty}
-              </span>
-            </div>
+          {/* SCORE */}
 
-            <div className="question_details">
-              <div className="question_detail">
-                <i className="fa-regular fa-clock"></i>
-                <span>{question.time}</span>
-              </div>
-              <div className="question_detail">
-                <i className="fa-solid fa-layer-group"></i>
-                <span>{question.blanks} BLANKS</span>
-              </div>
-              <div className="question_detail">
-                <i className="fa-solid fa-tag"></i>
-                <span>{question.category}</span>
-              </div>
-            </div>
-
-            <hr className="question_divider" />
-
-            <div className="question_content">
-              <p>
-                {question.segments.map((segment, index) => {
-                  if (segment.type === "text") {
-                    return <span key={index}>{segment.value}</span>;
-                  }
-
-                  blankCounter += 1;
-                  const blankIndex = blankCounter;
-                  const userValue = questionAnswers[blankIndex] || "";
-                  const correctAnswer = correctList[blankIndex] || "";
-                  const isCorrect = userValue === correctAnswer;
-
-                  return (
-                    <BlankSelect
-                      key={`${question.id}-blank-${blankIndex}`}
-                      options={segment.options}
-                      value={userValue}
-                      onChange={(value) => updateBlank(blankIndex, value)}
-                      checked={isChecked}
-                      isCorrect={isCorrect}
-                      correctAnswer={correctAnswer}
-                    />
-                  );
-                })}
-              </p>
-            </div>
-
-            {isChecked && score && (
-              <p className="score_text">
-                Score: {score.right} / {score.total} correct
-              </p>
-            )}
-
-            <div className="question_actions">
-              <button
-                type="button"
-                className="check_btn"
-                onClick={handleCheck}
-                disabled={isChecked}
-              >
-                {isChecked ? "Checked" : "Check"}
-              </button>
-            </div>
-
-            <div className="question_nav">
-              <button
-                type="button"
-                className="prev_btn"
-                onClick={() => goToQuestion(safeIndex - 1)}
-                disabled={safeIndex === 0}
-              >
-                <i className="fa-solid fa-arrow-left"></i>
-                Previous
-              </button>
-
-              <button
-                type="button"
-                className="next_btn"
-                onClick={() => goToQuestion(safeIndex + 1)}
-                disabled={safeIndex === total - 1}
-              >
-                Next Question
-                <i className="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+          {isChecked && score && (
+            <p className="score_text">
+              Score: {score.right} / {score.total} correct
+            </p>
+          )}
+        </>
+      )}
+    </PracticeShared>
   );
 }
 

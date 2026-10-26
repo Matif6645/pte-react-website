@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./PracticeShared.css";
 import "./ReadingHome.css";
+import readingImage from "../assets/reading-practice.svg";
 
 const practiceTypes = [
   {
@@ -65,20 +66,38 @@ const practiceTypes = [
     title: "Fill in the Blanks (Drag and Drop)",
     icon: "fa-solid fa-hand-pointer",
     iconClass: "icon_orange",
-    totalQuestions: null,
-    categoriesCount: null,
-    ready: false,
-    categoryOptions: [],
+    totalQuestions: 4,
+    categoriesCount: 4,
+    ready: true,
+    categoryOptions: [
+      {
+        value: "SCIENCE & TECHNOLOGY",
+        label: "Science & Technology",
+        count: 1,
+      },
+      { value: "HISTORY", label: "History", count: 1 },
+      { value: "BIOLOGY", label: "Biology", count: 1 },
+      { value: "MEDICAL SCIENCE", label: "Medical Science", count: 1 },
+    ],
   },
   {
     id: "mcq-single",
     title: "Multiple Choice (Single Answer)",
     icon: "fa-solid fa-list-ul",
     iconClass: "icon_pink",
-    totalQuestions: null,
-    categoriesCount: null,
-    ready: false,
-    categoryOptions: [],
+    totalQuestions: 4,
+    categoriesCount: 4,
+    ready: true,
+    categoryOptions: [
+      {
+        value: "SCIENCE & TECHNOLOGY",
+        label: "Science & Technology",
+        count: 1,
+      },
+      { value: "HISTORY", label: "History", count: 1 },
+      { value: "BIOLOGY", label: "Biology", count: 1 },
+      { value: "MEDICAL SCIENCE", label: "Medical Science", count: 1 },
+    ],
   },
 ];
 
@@ -87,6 +106,9 @@ function ReadingHome({ onStartPractice }) {
   const [selectedCategories, setSelectedCategories] = useState({
     "fill-blanks-dropdown": "SCIENCE & TECHNOLOGY",
     "reorder-paragraphs": "SCIENCE & TECHNOLOGY",
+    "mcq-multiple": "HISTORY",
+    "fill-blanks-drag": "SCIENCE & TECHNOLOGY",
+    "mcq-single": "BIOLOGY",
   });
 
   function toggleDropdown(cardId) {
@@ -114,11 +136,23 @@ function ReadingHome({ onStartPractice }) {
 
   return (
     <div className="reading_home">
-      <p className="reading_home_eyebrow">READING PRACTICE</p>
-      <h2 className="reading_home_title">Choose Your Reading Practice</h2>
-      <p className="reading_home_subtitle">
-        Select a question type to start practising.
-      </p>
+      <div className="reading_home_hero">
+        {/* LEFT SIDE - HEADING */}
+        <div className="reading_home_hero_text">
+          <p className="reading_home_eyebrow">READING PRACTICE</p>
+
+          <h2 className="reading_home_title">Choose Your Reading Practice</h2>
+
+          <p className="reading_home_subtitle">
+            Select a question type to start practising.
+          </p>
+        </div>
+
+        {/* RIGHT SIDE - CANVA IMAGE */}
+        <div className="reading_home_hero_image">
+          <img src={readingImage} alt="PTE Academy Reading Practice" />
+        </div>
+      </div>
 
       <div className="practice_cards_grid">
         {practiceTypes.map((item) => {

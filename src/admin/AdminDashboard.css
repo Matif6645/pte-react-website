@@ -1,0 +1,327 @@
+/* ==========================================
+   PTE ACADEMY - ADMIN DASHBOARD
+========================================== */
+
+/* MAIN DASHBOARD PAGE */
+
+.admin_dashboard_page {
+  min-height: 100vh;
+  width: 100%;
+  padding: 32px 40px;
+
+  box-sizing: border-box;
+
+  background: #f5f3ff;
+  font-family: "Urbanist", sans-serif;
+}
+
+/* ==========================================
+   DASHBOARD HEADER
+========================================== */
+
+.admin_dashboard_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  padding: 28px 32px;
+  margin-bottom: 28px;
+
+  background: linear-gradient(
+    120deg,
+    #ffffff 0%,
+    #faf7ff 35%,
+    #e8dcff 75%,
+    #ffffff 100%
+  );
+
+  border: 1px solid #ede9fe;
+  border-radius: 20px;
+
+  box-shadow: 0 6px 24px rgba(109, 40, 217, 0.05);
+}
+
+/* SMALL ADMIN LABEL */
+
+.admin_dashboard_eyebrow {
+  margin: 0 0 10px;
+
+  color: #7c3aed;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* MAIN DASHBOARD TITLE */
+
+.admin_dashboard_title {
+  margin: 0;
+
+  color: #192744;
+
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+/* ==========================================
+   HEADER ACTION BUTTONS
+========================================== */
+
+.admin_dashboard_actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* BACK TO WEBSITE */
+
+.admin_back_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 44px;
+  padding: 0 22px;
+
+  background: #ffffff;
+  color: #7c3aed;
+
+  border: 1.5px solid #c4b5fd;
+  border-radius: 999px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.admin_back_btn:hover {
+  background: #7c3aed;
+  color: #ffffff;
+  border-color: #7c3aed;
+
+  box-shadow: 0 5px 14px rgba(124, 58, 237, 0.2);
+  transform: translateY(-2px);
+}
+
+/* LOGOUT BUTTON */
+
+.admin_logout_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 44px;
+  padding: 0 24px;
+
+  background: #7c3aed;
+  color: #ffffff;
+
+  border: 1.5px solid #7c3aed;
+  border-radius: 999px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow: 0 5px 14px rgba(124, 58, 237, 0.16);
+
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.admin_logout_btn:hover {
+  background: #6d28d9;
+  box-shadow: 0 7px 18px rgba(124, 58, 237, 0.25);
+  transform: translateY(-2px);
+}
+
+/* BUTTON KEYBOARD FOCUS */
+
+.admin_back_btn:focus-visible,
+.admin_logout_btn:focus-visible {
+  outline: 3px solid rgba(124, 58, 237, 0.3);
+  outline-offset: 3px;
+}
+
+/* ==========================================
+   WELCOME CARD
+========================================== */
+
+.admin_welcome_card {
+  width: 100%;
+  padding: 32px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border: 1px solid #ede9fe;
+  border-radius: 20px;
+
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.06);
+}
+
+/* CARD HEADING */
+
+.admin_welcome_card h2 {
+  margin: 0 0 12px;
+
+  color: #192744;
+
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+/* CARD DESCRIPTION */
+
+.admin_welcome_card p {
+  margin: 0 0 24px;
+
+  color: #6b7280;
+
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+/* DASHBOARD FEATURE LIST */
+
+.admin_welcome_card ul {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+/* INDIVIDUAL FEATURE */
+
+.admin_welcome_card li {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  min-height: 50px;
+  padding: 12px 16px 12px 44px;
+
+  box-sizing: border-box;
+
+  background: #faf7ff;
+  color: #40356d;
+
+  border: 1px solid #ede9fe;
+  border-radius: 12px;
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* PURPLE DECORATIVE DOT */
+
+.admin_welcome_card li::before {
+  content: "";
+
+  position: absolute;
+  left: 18px;
+  top: 50%;
+
+  width: 10px;
+  height: 10px;
+
+  background: #7c3aed;
+  border-radius: 50%;
+
+  transform: translateY(-50%);
+}
+
+/* ==========================================
+   TABLET RESPONSIVENESS
+========================================== */
+
+@media (max-width: 900px) {
+  .admin_dashboard_page {
+    padding: 24px;
+  }
+
+  .admin_dashboard_header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin_dashboard_actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .admin_dashboard_title {
+    font-size: 26px;
+  }
+}
+
+/* ==========================================
+   MOBILE RESPONSIVENESS
+========================================== */
+
+@media (max-width: 600px) {
+  .admin_dashboard_page {
+    padding: 16px;
+  }
+
+  .admin_dashboard_header {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .admin_dashboard_title {
+    font-size: 23px;
+  }
+
+  .admin_dashboard_actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin_back_btn,
+  .admin_logout_btn {
+    width: 100%;
+  }
+
+  .admin_welcome_card {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .admin_welcome_card h2 {
+    font-size: 22px;
+  }
+
+  .admin_welcome_card li {
+    font-size: 14px;
+  }
+}
