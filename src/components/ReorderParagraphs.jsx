@@ -1,9 +1,9 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
-import "./PracticeShared.css";
 import "./ReorderParagraphs.css";
 
-const questions = [
+const defaultQuestions = [
   {
     id: 1,
     title: "CLIMATE AND WEATHER",
@@ -205,8 +205,11 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   const [checkedMap, setCheckedMap] = useState({});
   const [dragParaId, setDragParaId] = useState(null);
   const [dragFrom, setDragFrom] = useState(null);
-  const answerSlotsRef = useRef(null);
-  const previousPositionsRef = useRef(null);
+
+  const questions = useMemo(
+    () => getMergedQuestions("reorder-paragraphs", defaultQuestions),
+    [],
+  );
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -214,7 +217,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
       counts[cat] = questions.filter((q) => q.category === cat).length;
     });
     return counts;
-  }, []);
+  }, [questions]);
 
   const filteredQuestions = useMemo(() => {
     const byCategory = questions.filter((q) => q.category === selectedCategory);
@@ -227,7 +230,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
         String(q.id).includes(term) ||
         q.difficulty.toLowerCase().includes(term),
     );
-  }, [selectedCategory, search]);
+  }, [questions, selectedCategory, search]);
 
   const total = filteredQuestions.length;
   const safeIndex = total === 0 ? 0 : Math.min(currentIndex, total - 1);
@@ -284,73 +287,8 @@ function ReorderParagraphs({ onBack, initialCategory }) {
 
   function updateAnswers(next) {
     if (!question) return;
-
-    const positions = new Map();
-
-    answerSlotsRef.current
-      ?.querySelectorAll("[data-paragraph-id]")
-      .forEach((element) => {
-        positions.set(
-          element.dataset.paragraphId,
-          element.getBoundingClientRect(),
-        );
-      });
-
-    previousPositionsRef.current = positions;
-
-    setAnswersMap((prev) => ({
-      ...prev,
-      [question.id]: next,
-    }));
+    setAnswersMap((prev) => ({ ...prev, [question.id]: next }));
   }
-  useLayoutEffect(() => {
-    const previousPositions = previousPositionsRef.current;
-
-    if (!previousPositions || !answerSlotsRef.current) {
-      return;
-    }
-
-    previousPositionsRef.current = null;
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    const elements = answerSlotsRef.current.querySelectorAll(
-      "[data-paragraph-id]",
-    );
-
-    elements.forEach((element) => {
-      const id = element.dataset.paragraphId;
-      const previous = previousPositions.get(id);
-
-      if (!previous) return;
-
-      const current = element.getBoundingClientRect();
-
-      const moveX = previous.left - current.left;
-      const moveY = previous.top - current.top;
-
-      if (Math.abs(moveX) < 1 && Math.abs(moveY) < 1) {
-        return;
-      }
-
-      element.animate(
-        [
-          {
-            transform: `translate(${moveX}px, ${moveY}px)`,
-          },
-          {
-            transform: "translate(0px, 0px)",
-          },
-        ],
-        {
-          duration: 330,
-          easing: "cubic-bezier(0.2, 0.85, 0.25, 1)",
-        },
-      );
-    });
-  }, [answers]);
 
   function addToAnswer(para) {
     if (!question || isChecked || usedIds.has(para.id)) return;
@@ -472,144 +410,147 @@ function ReorderParagraphs({ onBack, initialCategory }) {
       onBack={onBack}
       onReset={handleReset}
       onCheck={handleCheck}
-      checkDisabled={
-        isChecked || !question || answers.some((slot) => slot === null)
-      }
+      checkDisabled={isChecked || answers.some((s) => s === null)}
       checkLabel={isChecked ? "Checked" : "Check Answer"}
       onPrevious={() => goToQuestion(safeIndex - 1)}
       onNext={() => goToQuestion(safeIndex + 1)}
       previousDisabled={safeIndex === 0 || total === 0}
       nextDisabled={safeIndex === total - 1 || total === 0}
     >
-      <div className="reorder_board">
-        <section className="reorder_column">
-          <div className="reorder_column_header">
-            <i className="fa-solid fa-shuffle"></i>
-            <h4>Jumbled Paragraphs</h4>
-          </div>
+      {question && (
+        <>
+          <div className="reorder_board">
+            <section className="reorder_column">
+              <div className="reorder_column_header">
+                <i className="fa-solid fa-shuffle"></i>
+                <h4>Jumbled Paragraphs</h4>
+              </div>
 
-          <div className="jumbled_list">
-            {jumbled.map((para) => {
-              const used = usedIds.has(para.id);
-              return (
-                <div
-                  key={para.id}
-                  className={used ? "jumble_card jumble_used" : "jumble_card"}
-                  draggable={!isChecked && !used}
-                  onDragStart={() => onDragStartPara(para, "jumbled", null)}
-                  onDragEnd={onDragEnd}
-                >
-                  <div className="jumble_card_top">
-                    {!isChecked && (
-                      <button
-                        type="button"
-                        className={
-                          used ? "icon_btn used_btn" : "icon_btn add_btn"
-                        }
-                        onClick={() => addToAnswer(para)}
-                        disabled={used}
-                      >
-                        <i
-                          className={`fa-solid ${
-                            used ? "fa-check" : "fa-plus"
-                          }`}
-                        ></i>
-                      </button>
-                    )}
-                  </div>
-                  <p className="jumble_text">{para.text}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="reorder_column">
-          <div className="reorder_column_header">
-            <i className="fa-solid fa-list-ol"></i>
-            <h4>Your Answer</h4>
-          </div>
-
-          <div className="answer_slots" ref={answerSlotsRef}>
-            {answers.map((para, slotIndex) => {
-              let statusClass = "";
-              if (isChecked && para) {
-                statusClass =
-                  para.id === question.correctOrder[slotIndex]
-                    ? "slot_correct"
-                    : "slot_wrong";
-              }
-
-              return (
-                <div
-                  key={`slot-${slotIndex}`}
-                  data-paragraph-id={para?.id}
-                  className={
-                    para
-                      ? `answer_slot filled_slot ${statusClass}`
-                      : "answer_slot empty_slot"
-                  }
-                  onDragOver={onDragOverSlot}
-                  onDrop={() => onDropToSlot(slotIndex)}
-                >
-                  <span className="slot_number">{slotIndex + 1}</span>
-
-                  {para ? (
+              <div className="jumbled_list">
+                {jumbled.map((para) => {
+                  const used = usedIds.has(para.id);
+                  return (
                     <div
-                      className="answer_card"
-                      draggable={!isChecked}
-                      onDragStart={() =>
-                        onDragStartPara(para, "answer", slotIndex)
+                      key={para.id}
+                      className={
+                        used ? "jumble_card jumble_used" : "jumble_card"
                       }
+                      draggable={!isChecked && !used}
+                      onDragStart={() => onDragStartPara(para, "jumbled", null)}
                       onDragEnd={onDragEnd}
                     >
-                      <div className="answer_card_top">
+                      <div className="jumble_card_top">
                         {!isChecked && (
                           <button
                             type="button"
-                            className="icon_btn remove_btn"
-                            onClick={() => removeFromAnswer(slotIndex)}
+                            className={
+                              used ? "icon_btn used_btn" : "icon_btn add_btn"
+                            }
+                            onClick={() => addToAnswer(para)}
+                            disabled={used}
                           >
-                            <i className="fa-solid fa-xmark"></i>
+                            <i
+                              className={`fa-solid ${
+                                used ? "fa-check" : "fa-plus"
+                              }`}
+                            ></i>
                           </button>
                         )}
                       </div>
                       <p className="jumble_text">{para.text}</p>
-                      {!isChecked && (
-                        <div className="answer_move_btns">
-                          <button
-                            type="button"
-                            className="move_arrow_btn"
-                            onClick={() => moveAnswer(slotIndex, -1)}
-                            disabled={slotIndex === 0}
-                          >
-                            <i className="fa-solid fa-chevron-up"></i>
-                          </button>
-                          <button
-                            type="button"
-                            className="move_arrow_btn"
-                            onClick={() => moveAnswer(slotIndex, 1)}
-                            disabled={slotIndex === answers.length - 1}
-                          >
-                            <i className="fa-solid fa-chevron-down"></i>
-                          </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section className="reorder_column">
+              <div className="reorder_column_header">
+                <i className="fa-solid fa-list-ol"></i>
+                <h4>Your Answer</h4>
+              </div>
+
+              <div className="answer_slots">
+                {answers.map((para, slotIndex) => {
+                  let statusClass = "";
+                  if (isChecked && para) {
+                    statusClass =
+                      para.id === question.correctOrder[slotIndex]
+                        ? "slot_correct"
+                        : "slot_wrong";
+                  }
+
+                  return (
+                    <div
+                      key={`slot-${slotIndex}`}
+                      className={
+                        para
+                          ? `answer_slot filled_slot ${statusClass}`
+                          : "answer_slot empty_slot"
+                      }
+                      onDragOver={onDragOverSlot}
+                      onDrop={() => onDropToSlot(slotIndex)}
+                    >
+                      <span className="slot_number">{slotIndex + 1}</span>
+
+                      {para ? (
+                        <div
+                          className="answer_card"
+                          draggable={!isChecked}
+                          onDragStart={() =>
+                            onDragStartPara(para, "answer", slotIndex)
+                          }
+                          onDragEnd={onDragEnd}
+                        >
+                          <div className="answer_card_top">
+                            {!isChecked && (
+                              <button
+                                type="button"
+                                className="icon_btn remove_btn"
+                                onClick={() => removeFromAnswer(slotIndex)}
+                              >
+                                <i className="fa-solid fa-xmark"></i>
+                              </button>
+                            )}
+                          </div>
+                          <p className="jumble_text">{para.text}</p>
+                          {!isChecked && (
+                            <div className="answer_move_btns">
+                              <button
+                                type="button"
+                                className="move_arrow_btn"
+                                onClick={() => moveAnswer(slotIndex, -1)}
+                                disabled={slotIndex === 0}
+                              >
+                                <i className="fa-solid fa-chevron-up"></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="move_arrow_btn"
+                                onClick={() => moveAnswer(slotIndex, 1)}
+                                disabled={slotIndex === answers.length - 1}
+                              >
+                                <i className="fa-solid fa-chevron-down"></i>
+                              </button>
+                            </div>
+                          )}
                         </div>
+                      ) : (
+                        <p className="slot_placeholder">Select a paragraph</p>
                       )}
                     </div>
-                  ) : (
-                    <p className="slot_placeholder">Select a paragraph</p>
-                  )}
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
 
-      {isChecked && score && (
-        <p className="score_text">
-          Score: {score.right} / {score.total} correct
-        </p>
+          {isChecked && score && (
+            <p className="score_text">
+              Score: {score.right} / {score.total} correct
+            </p>
+          )}
+        </>
       )}
     </PracticeShared>
   );

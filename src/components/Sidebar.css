@@ -1,251 +1,239 @@
-
- .practice_sidebar {
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-    min-height: 100%;
-    min-width: 0;
-    margin-top: 5px;
-    padding: 20px 12px;
-    border-radius: 12px;
-     background: linear-gradient(
-        160deg,
-        #E3D5FA 0%,
-        #D8C5F5 50%,
-        #EEE5FD 100%
-    );
-    font-family: "Urbanist", sans-serif;
-     border: 1px solid #D2C0F5;
+.practice_sidebar {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-height: 100%;
+  min-width: 0;
+  margin-top: 5px;
+  padding: 20px 12px;
+  border-radius: 12px;
+  background: linear-gradient(160deg, #e3d5fa 0%, #d8c5f5 50%, #eee5fd 100%);
+  font-family: "Urbanist", sans-serif;
+  border: 1px solid #d2c0f5;
 }
 .practice_sidebar {
-    background:
-        radial-gradient(
-            circle 130px at -30px -40px,
-            rgba(255, 255, 255, 0.22) 99%,
-            transparent 100%
-        ),
-        radial-gradient(
-            circle 110px at 100% 0%,
-            rgba(167, 139, 250, 0.18) 99%,
-            transparent 100%
-        ),
-        linear-gradient(
-            160deg,
-            #E3D5FA 0%,
-            #D8C5F5 50%,
-            #EEE5FD 100%
-        );
+  background:
+    radial-gradient(
+      circle 130px at -30px -40px,
+      rgba(255, 255, 255, 0.22) 99%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 110px at 100% 0%,
+      rgba(167, 139, 250, 0.18) 99%,
+      transparent 100%
+    ),
+    linear-gradient(160deg, #e3d5fa 0%, #d8c5f5 50%, #eee5fd 100%);
 }
 
 /* Practice space heading */
 
 .practice_space {
-    margin: 0 10px 18px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #8977AD;
+  margin: 0 10px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8977ad;
 }
 
 /* Navigation */
 
 .practice_nav {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .sidebar_group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .other_practice {
-    margin: 22px 10px 10px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: #8977AD;
-    text-transform: uppercase;
-    
+  margin: 22px 10px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #8977ad;
+  text-transform: uppercase;
 }
 
 /* Section buttons */
 
 .section_btn,
 .dropdown_item {
-    width: 100%;
-    border: none;
-    font-family: inherit;
-    cursor: pointer;
-    text-align: left;
+  width: 100%;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
 }
 
 .section_btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 11px 12px;
-    border-radius: 12px;
-    background: transparent;
-    color: #342A55;
-    font-size: 14px;
-    font-weight: 600;
-    transition: background 0.2s ease,
-                box-shadow 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: transparent;
+  color: #342a55;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .section_btn:hover {
-    background: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.65);
 }
 
 .section_btn.open_section {
-    background: #FFFFFF;
-    box-shadow: 0 2px 10px rgba(83, 7, 131, 0.07);
-    outline: 1px solid #D8C6F8;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(83, 7, 131, 0.07);
+  outline: 1px solid #d8c6f8;
 }
 
 .section_btn.open_section:hover {
-    background: #FCFAFF;
+  background: #fcfaff;
 }
 
 /* Section labels and icons */
 
 .section_left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
 }
 
 .reading_icon,
 .speaking_icon,
 .writing_icon,
 .listening_icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
 
-    border-radius: 10px;
-    background: #EDE2FF;
-    color: #7653E3;
-    font-size: 16px;
+  border-radius: 10px;
+  background: #ede2ff;
+  color: #7653e3;
+  font-size: 16px;
 }
 
 .section_arrow,
 .item_arrow {
-    color: #9479C1;
-    font-size: 15px;
-    line-height: 1;
+  color: #9479c1;
+  font-size: 15px;
+  line-height: 1;
 }
 
 /* Question list */
 
 .dropdown_list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 4px 0 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0 8px 8px;
 }
 
 .dropdown_item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: transparent;
-    color: #56476C;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.4;
-    transition: background 0.2s ease,
-                color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: transparent;
+  color: #56476c;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .dropdown_item:hover {
-    background: #E9DDFB;
-    color: #530783;
+  background: #e9ddfb;
+  color: #530783;
 }
 
 .dropdown_item.active_item {
-    background: #DFD0FA;
-    color: #4D1DAD;
-    font-weight: 700;
+  background: #dfd0fa;
+  color: #4d1dad;
+  font-weight: 700;
 }
 
 .dropdown_item.active_item:hover {
-    background: #D5BEFA;
+  background: #d5befa;
 }
 
 .dropdown_item.active_item .item_arrow {
-    color: #7438DB;
+  color: #7438db;
 }
 
 .section_btn:focus-visible,
 .dropdown_item:focus-visible {
-    outline: 2px solid #7653E3;
-    outline-offset: 2px;
+  outline: 2px solid #7653e3;
+  outline-offset: 2px;
 }
-
-
 
 /* To add the decorative circles
 Add this to the bottom of Sidebar.css: */
 .practice_sidebar {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
 }
 
 .practice_sidebar::before {
-    content: "";
-    position: absolute;
-    width: 350px;
-    height: 350px;
-    left: -150px;
-    bottom: -140px;
-    border-radius: 50%;
-    background: rgba(185, 165, 255, 0.22);
-    pointer-events: none;
-    z-index: 0;
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  left: -150px;
+  bottom: -140px;
+  border-radius: 50%;
+  background: rgba(185, 165, 255, 0.22);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .practice_sidebar::after {
-    content: "";
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    right: -160px;
-    bottom: -110px;
-    border-radius: 50%;
-    background: rgba(195, 177, 255, 0.18);
-    pointer-events: none;
-    z-index: 0;
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  right: -160px;
+  bottom: -110px;
+  border-radius: 50%;
+  background: rgba(195, 177, 255, 0.18);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .practice_sidebar > * {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 }
 
 /* Smaller screens */
 
 @media (max-width: 768px) {
-    .practice_sidebar {
-        min-height: auto;
-        padding: 14px 10px;
-    }
+  .practice_sidebar {
+    min-height: auto;
+    padding: 14px 10px;
+  }
 
-    .dropdown_item {
-        font-size: 12px;
-    }
+  .dropdown_item {
+    font-size: 12px;
+  }
 }

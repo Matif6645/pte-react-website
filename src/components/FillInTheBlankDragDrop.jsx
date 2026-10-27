@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
+import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
 import "./FillInTheBlankDragDrop.css";
 
-const questions = [
+const defaultQuestions = [
   {
     id: 1,
     title: "FOREST",
@@ -47,7 +48,8 @@ const questions = [
       { type: "blank" },
       {
         type: "text",
-        value: " to exchange goods between cities. Salt and spices were valuable ",
+        value:
+          " to exchange goods between cities. Salt and spices were valuable ",
       },
       { type: "blank" },
       {
@@ -72,7 +74,8 @@ const questions = [
       { type: "blank" },
       {
         type: "text",
-        value: " from the soil to grow. Roots absorb water and minerals from the ",
+        value:
+          " from the soil to grow. Roots absorb water and minerals from the ",
       },
       { type: "blank" },
       {
@@ -102,7 +105,8 @@ const questions = [
     segments: [
       {
         type: "text",
-        value: "Nurses monitor patients and give medicine according to the doctor's ",
+        value:
+          "Nurses monitor patients and give medicine according to the doctor's ",
       },
       { type: "blank" },
       {
@@ -136,7 +140,7 @@ const categories = [
   "MEDICAL SCIENCE",
 ];
 
-function FillInTheBlanksDragDrop({ onBack, initialCategory }) {
+function FillInTheBlankDragDrop({ onBack, initialCategory }) {
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory)
       ? initialCategory
@@ -149,13 +153,18 @@ function FillInTheBlanksDragDrop({ onBack, initialCategory }) {
   const [selectedWord, setSelectedWord] = useState(null);
   const [dragWord, setDragWord] = useState(null);
 
+  const questions = useMemo(
+    () => getMergedQuestions("fill-blanks-drag", defaultQuestions),
+    [],
+  );
+
   const categoryCounts = useMemo(() => {
     const counts = {};
     categories.forEach((cat) => {
       counts[cat] = questions.filter((q) => q.category === cat).length;
     });
     return counts;
-  }, []);
+  }, [questions]);
 
   const filteredQuestions = useMemo(() => {
     const byCategory = questions.filter((q) => q.category === selectedCategory);
@@ -168,7 +177,7 @@ function FillInTheBlanksDragDrop({ onBack, initialCategory }) {
         String(q.id).includes(term) ||
         q.difficulty.toLowerCase().includes(term),
     );
-  }, [selectedCategory, search]);
+  }, [questions, selectedCategory, search]);
 
   const total = filteredQuestions.length;
   const safeIndex = total === 0 ? 0 : Math.min(currentIndex, total - 1);
@@ -411,4 +420,4 @@ function FillInTheBlanksDragDrop({ onBack, initialCategory }) {
   );
 }
 
-export default FillInTheBlanksDragDrop;
+export default FillInTheBlankDragDrop;

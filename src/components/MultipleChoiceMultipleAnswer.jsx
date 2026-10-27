@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
+import { getMergedQuestions } from "../admin/practiceQuestion.js";
 import "./MultipleChoiceMultipleAnswer.css";
 import "./PracticeShared.css";
 
-const questions = [
+const defaultQuestions = [
   {
     id: 1,
     title: "NEOLITHIC TOMBS",

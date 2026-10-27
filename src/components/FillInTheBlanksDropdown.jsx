@@ -1,10 +1,9 @@
 import { useMemo, useState } from "react";
+import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
-import "./PracticeShared.css";
 import "./FillInTheBlanksDropdown.css";
-import scienceImage from "../assets/science-dropdown.png";
 
-const questions = [
+const defaultQuestions = [
   {
     id: 1,
     title: "RESULTANT FORCE",
@@ -609,14 +608,21 @@ function BlankSelect({
   );
 }
 
-function ReadingPractice({ onBack, initialCategory }) {
+function FillInTheBlanksDropdown({ onBack, initialCategory }) {
   const [selectedCategory, setSelectedCategory] = useState(
-    categories.includes(initialCategory) ? initialCategory : categories[0],
+    initialCategory && categories.includes(initialCategory)
+      ? initialCategory
+      : categories[0],
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [search, setSearch] = useState("");
   const [answers, setAnswers] = useState({});
   const [checkedMap, setCheckedMap] = useState({});
+
+  const questions = useMemo(
+    () => getMergedQuestions("fill-blanks-dropdown", defaultQuestions),
+    [],
+  );
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -624,7 +630,7 @@ function ReadingPractice({ onBack, initialCategory }) {
       counts[cat] = questions.filter((q) => q.category === cat).length;
     });
     return counts;
-  }, []);
+  }, [questions]);
 
   const filteredQuestions = useMemo(() => {
     const byCategory = questions.filter((q) => q.category === selectedCategory);
@@ -638,14 +644,16 @@ function ReadingPractice({ onBack, initialCategory }) {
         String(q.id).includes(term) ||
         q.difficulty.toLowerCase().includes(term),
     );
-  }, [selectedCategory, search]);
+  }, [questions, selectedCategory, search]);
 
   const total = filteredQuestions.length;
   const safeIndex = total === 0 ? 0 : Math.min(currentIndex, total - 1);
   const question = filteredQuestions[safeIndex];
   const questionAnswers = question ? answers[question.id] || {} : {};
   const isChecked = question ? Boolean(checkedMap[question.id]) : false;
-  const correctList = question ? correctAnswers[question.id] || [] : [];
+  const correctList = question
+    ? question.correctAnswers || correctAnswers[question.id] || []
+    : [];
 
   const score = useMemo(() => {
     if (!question || !isChecked) return null;
@@ -682,33 +690,21 @@ function ReadingPractice({ onBack, initialCategory }) {
     if (!question) return;
     setCheckedMap((prev) => ({ ...prev, [question.id]: true }));
   }
-  // RESET FUNCTION
+
   function handleReset() {
     if (!question) return;
-
-    setAnswers((prev) => ({
-      ...prev,
-      [question.id]: {},
-    }));
-
-    setCheckedMap((prev) => ({
-      ...prev,
-      [question.id]: false,
-    }));
+    setAnswers((prev) => ({ ...prev, [question.id]: {} }));
+    setCheckedMap((prev) => ({ ...prev, [question.id]: false }));
   }
 
   let blankCounter = -1;
 
   return (
     <PracticeShared
-      title="Fill in the blanks"
+      title="Fill in the Blanks"
       type="Dropdown"
       description="Find the word that makes each sentence fit."
-      icon="fa-solid fa-book-open"
-      headerImage={
-        selectedCategory === "SCIENCE & TECHNOLOGY" ? scienceImage : null
-      }
-      // CATEGORY AND SEARCH
+      icon="fa-solid fa-filter"
       categories={categories}
       selectedCategory={selectedCategory}
       categoryCounts={categoryCounts}
@@ -718,44 +714,31 @@ function ReadingPractice({ onBack, initialCategory }) {
         setSearch(value);
         setCurrentIndex(0);
       }}
-      // QUESTION INFORMATION
       question={question}
       questionNumber={safeIndex + 1}
       totalQuestions={total}
-      // TIME / BLANKS / CATEGORY
       details={
         question
           ? [
-              {
-                icon: "fa-regular fa-clock",
-                text: question.time,
-              },
+              { icon: "fa-regular fa-clock", text: question.time },
               {
                 icon: "fa-solid fa-layer-group",
                 text: `${question.blanks} BLANKS`,
               },
-              {
-                icon: "fa-solid fa-tag",
-                text: question.category,
-              },
+              { icon: "fa-solid fa-tag", text: question.category },
             ]
           : []
       }
-      // BACK BUTTON
       onBack={onBack}
-      // RESET AND CHECK ANSWER
       onReset={handleReset}
       onCheck={handleCheck}
       checkDisabled={isChecked}
       checkLabel={isChecked ? "Checked" : "Check Answer"}
-      // PREVIOUS AND NEXT
       onPrevious={() => goToQuestion(safeIndex - 1)}
       onNext={() => goToQuestion(safeIndex + 1)}
       previousDisabled={safeIndex === 0 || total === 0}
       nextDisabled={safeIndex === total - 1 || total === 0}
     >
-      {/* QUESTION CONTENT */}
-
       {question && (
         <>
           <div className="question_content">
@@ -766,13 +749,9 @@ function ReadingPractice({ onBack, initialCategory }) {
                 }
 
                 blankCounter += 1;
-
                 const blankIndex = blankCounter;
-
                 const userValue = questionAnswers[blankIndex] || "";
-
                 const correctAnswer = correctList[blankIndex] || "";
-
                 const isCorrect = userValue === correctAnswer;
 
                 return (
@@ -790,8 +769,6 @@ function ReadingPractice({ onBack, initialCategory }) {
             </p>
           </div>
 
-          {/* SCORE */}
-
           {isChecked && score && (
             <p className="score_text">
               Score: {score.right} / {score.total} correct
@@ -803,4 +780,4 @@ function ReadingPractice({ onBack, initialCategory }) {
   );
 }
 
-export default ReadingPractice;
+export default FillInTheBlanksDropdown;
