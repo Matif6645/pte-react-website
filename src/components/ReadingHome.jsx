@@ -101,6 +101,29 @@ const practiceTypes = [
   },
 ];
 
+const readingFeatures = [
+  {
+    title: "Practise All PTE Reading Question Types",
+    description: "Explore practice categories and build confidence.",
+    icon: "fa-solid fa-book-open",
+  },
+  {
+    title: "Improve Speed & Accuracy",
+    description: "Practise with timed questions to improve your skills.",
+    icon: "fa-solid fa-gauge-high",
+  },
+  {
+    title: "Smart Learning Tips",
+    description: "Grammar, vocabulary and illustrated guides.",
+    icon: "fa-regular fa-lightbulb",
+  },
+  {
+    title: "Video Tutorials",
+    description: "Learn effective strategies through video lessons.",
+    icon: "fa-solid fa-circle-play",
+  },
+];
+
 function ReadingHome({ onStartPractice }) {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState({
@@ -137,17 +160,44 @@ function ReadingHome({ onStartPractice }) {
   return (
     <div className="reading_home">
       <div className="reading_home_hero">
-        {/* LEFT SIDE - HEADING */}
-        <div className="reading_home_hero_text">
-          <p className="reading_home_eyebrow">READING PRACTICE</p>
+        
+{/* LEFT SIDE - HEADING + FEATURES */}
+<div className="reading_home_hero_text">
 
-          <h2 className="reading_home_title">Choose Your Reading Practice</h2>
+  <p className="reading_home_eyebrow">
+    READING PRACTICE
+  </p>
 
-          <p className="reading_home_subtitle">
-            Select a question type to start practising.
-          </p>
+  <h2 className="reading_home_title">
+    Choose Your Reading Practice
+  </h2>
+
+  <p className="reading_home_subtitle">
+    Select a question type to start practising.
+  </p>
+
+  {/* FOUR FEATURE BOXES */}
+  <div className="reading_home_features">
+    {readingFeatures.map((feature) => (
+      <div
+        className="reading_home_feature"
+        key={feature.title}
+      >
+        <div className="reading_home_feature_icon">
+          <i className={feature.icon}></i>
         </div>
 
+        <div className="reading_home_feature_content">
+          <h4>{feature.title}</h4>
+          <p>{feature.description}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+</div>
+
+           
         {/* RIGHT SIDE - CANVA IMAGE */}
         <div className="reading_home_hero_image">
           <img src={readingImage} alt="PTE Academy Reading Practice" />

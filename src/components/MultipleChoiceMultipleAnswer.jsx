@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { getMergedQuestions } from "../admin/practiceQuestion.js";
+import { useEffect, useMemo, useState } from "react";
+import { getMergedQuestions } from "../admin/practiceQuestions";
+import PracticeShared from "./PracticeShared.jsx";
 import "./MultipleChoiceMultipleAnswer.css";
-import "./PracticeShared.css";
 
 const defaultQuestions = [
   {
@@ -114,7 +114,7 @@ const categories = [
   "MEDICAL SCIENCE",
 ];
 
-function MultipleChoice({ onBack, initialCategory }) {
+function MultipleChoiceMultipleAnswer({ onBack, initialCategory }) {
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory)
       ? initialCategory
@@ -124,6 +124,17 @@ function MultipleChoice({ onBack, initialCategory }) {
   const [search, setSearch] = useState("");
   const [selectedMap, setSelectedMap] = useState({});
   const [checkedMap, setCheckedMap] = useState({});
+  const [questions, setQuestions] = useState(defaultQuestions);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("mcq-multiple", defaultQuestions).then((merged) => {
+      if (!cancelled) setQuestions(merged);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -131,7 +142,7 @@ function MultipleChoice({ onBack, initialCategory }) {
       counts[cat] = questions.filter((q) => q.category === cat).length;
     });
     return counts;
-  }, []);
+  }, [questions]);
 
   const filteredQuestions = useMemo(() => {
     const byCategory = questions.filter((q) => q.category === selectedCategory);
@@ -144,7 +155,7 @@ function MultipleChoice({ onBack, initialCategory }) {
         String(q.id).includes(term) ||
         q.difficulty.toLowerCase().includes(term),
     );
-  }, [selectedCategory, search]);
+  }, [questions, selectedCategory, search]);
 
   const total = filteredQuestions.length;
   const safeIndex = total === 0 ? 0 : Math.min(currentIndex, total - 1);
@@ -217,189 +228,83 @@ function MultipleChoice({ onBack, initialCategory }) {
   }
 
   return (
-    // html__________________________________-----------------------------------
-    <div className="mcq_practice_container">
-      <div className="mcq_practice_top">
-        {onBack && (
-          <button type="button" className="back_to_home_btn" onClick={onBack}>
-            <i className="fa-solid fa-arrow-left"></i>
-            Back to Reading Practice
-          </button>
-        )}
+    <PracticeShared
+      title="Multiple Choice"
+      type="Multiple Answers"
+      description="Read the passage and select all options that correctly answer the question."
+      icon="fa-solid fa-list-check"
+      categories={categories}
+      selectedCategory={selectedCategory}
+      categoryCounts={categoryCounts}
+      onCategoryChange={changeCategory}
+      search={search}
+      onSearchChange={(value) => {
+        setSearch(value);
+        setCurrentIndex(0);
+      }}
+      question={question}
+      questionNumber={safeIndex + 1}
+      totalQuestions={total}
+      details={
+        question
+          ? [
+              { icon: "fa-regular fa-clock", text: question.time },
+              { icon: "fa-solid fa-square-check", text: "MULTIPLE ANSWERS" },
+              { icon: "fa-solid fa-tag", text: question.category },
+            ]
+          : []
+      }
+      onBack={onBack}
+      onReset={handleReset}
+      onCheck={handleCheck}
+      checkDisabled={isChecked || selected.length === 0}
+      checkLabel={isChecked ? "Checked" : "Check Answer"}
+      onPrevious={() => goToQuestion(safeIndex - 1)}
+      onNext={() => goToQuestion(safeIndex + 1)}
+      previousDisabled={safeIndex === 0 || total === 0}
+      nextDisabled={safeIndex === total - 1 || total === 0}
+    >
+      {question && (
+        <>
+          <div className="mcq_passage">
+            {question.passage.map((para, index) => (
+              <p key={index}>{para}</p>
+            ))}
+          </div>
 
-        <div className="reading_heading_row">
-          <i className="fa-solid fa-list-check"></i>
-          <h2>READING PRACTICE</h2>
-        </div>
+          <p className="mcq_question_text">{question.questionText}</p>
 
-        <h3 className="fill_blanks_heading">
-          Multiple Choice <span>(Multiple Answers)</span>
-        </h3>
-
-        <p className="practice_instruction">
-          Read the passage and select all options that correctly answer the
-          question.
-        </p>
-
-        <div className="category_search_container">
-          <div className="category_question_container">
-            <p className="category_title">Category &amp; Question Set</p>
-            <div className="dropdown">
-              <select
-                className="question_set_select"
-                value={selectedCategory}
-                onChange={(e) => changeCategory(e.target.value)}
+          <div className="mcq_options_list">
+            {question.options.map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                className={optionClass(opt.id)}
+                onClick={() => toggleOption(opt.id)}
+                disabled={isChecked}
               >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat} · Question set ({categoryCounts[cat]})
-                  </option>
-                ))}
-              </select>
-              <i className="fa-solid fa-chevron-down dropdown_arrow"></i>
-            </div>
+                <span className="mcq_checkbox">
+                  {selected.includes(opt.id) ? (
+                    <i className="fa-solid fa-check"></i>
+                  ) : null}
+                </span>
+                <span className="mcq_option_label">{opt.id}.</span>
+                <span className="mcq_option_text">{opt.text}</span>
+              </button>
+            ))}
           </div>
 
-          <div className="reading-right">
-            <p className="search_title">Search Questions</p>
-            <div className="fill_blanks_search">
-              <i className="fa-solid fa-magnifying-glass"></i>
-              <input
-                type="search"
-                placeholder="Search questions by title, keyword or question number..."
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setCurrentIndex(0);
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bottom_section_reading">
-        {!question ? (
-          <p className="practice_instruction">
-            No questions found in this category.
-          </p>
-        ) : (
-          <>
-            <p className="question_number">
-              Question {safeIndex + 1} of {total}
+          {isChecked && score && (
+            <p className="score_text">
+              {score.isPerfect
+                ? `Perfect! ${score.rightSelected}/${score.total} correct`
+                : `Result: ${score.rightSelected} correct, ${score.wrongSelected} wrong, ${score.missed} missed`}
             </p>
-
-            <div className="question_title">
-              <h3>{question.title}</h3>
-              <span
-                className={`difficulty difficulty_${question.difficulty.toLowerCase()}`}
-              >
-                {question.difficulty}
-              </span>
-            </div>
-
-            <div className="question_details">
-              <div className="question_detail">
-                <i className="fa-regular fa-clock"></i>
-                <span>{question.time}</span>
-              </div>
-              <div className="question_detail">
-                <i className="fa-solid fa-square-check"></i>
-                <span>MULTIPLE ANSWERS</span>
-              </div>
-              <div className="question_detail">
-                <i className="fa-solid fa-tag"></i>
-                <span>{question.category}</span>
-              </div>
-            </div>
-
-            <hr className="question_divider" />
-
-            <div className="mcq_passage">
-              {question.passage.map((para, index) => (
-                <p key={index}>{para}</p>
-              ))}
-            </div>
-
-            <p className="mcq_question_text">{question.questionText}</p>
-
-            <div className="mcq_options_list">
-              {question.options.map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  className={optionClass(opt.id)}
-                  onClick={() => toggleOption(opt.id)}
-                  disabled={isChecked}
-                >
-                  <span className="mcq_checkbox">
-                    {isChecked ? (
-                      question.correctAnswers.includes(opt.id) ? (
-                        <i className="fa-solid fa-check"></i>
-                      ) : selected.includes(opt.id) ? (
-                        <i className="fa-solid fa-xmark"></i>
-                      ) : null
-                    ) : selected.includes(opt.id) ? (
-                      <i className="fa-solid fa-check"></i>
-                    ) : null}
-                  </span>
-                  <span className="mcq_option_label">{opt.id}.</span>
-                  <span className="mcq_option_text">{opt.text}</span>
-                </button>
-              ))}
-            </div>
-
-            {isChecked && score && (
-              <p className="score_text">
-                {score.isPerfect
-                  ? `Perfect! ${score.rightSelected}/${score.total} correct`
-                  : `Result: ${score.rightSelected} correct, ${score.wrongSelected} wrong, ${score.missed} missed`}
-              </p>
-            )}
-
-            <div className="mcq_footer_actions">
-              <button type="button" className="reset_btn" onClick={handleReset}>
-                <i className="fa-solid fa-rotate-left"></i>
-                Reset
-              </button>
-
-              <button
-                type="button"
-                className="check_btn"
-                onClick={handleCheck}
-                disabled={isChecked || selected.length === 0}
-              >
-                <i className="fa-solid fa-check"></i>
-                {isChecked ? "Checked" : "Check Answer"}
-              </button>
-            </div>
-
-            <div className="question_nav">
-              <button
-                type="button"
-                className="prev_btn"
-                onClick={() => goToQuestion(safeIndex - 1)}
-                disabled={safeIndex === 0}
-              >
-                <i className="fa-solid fa-arrow-left"></i>
-                Previous
-              </button>
-
-              <button
-                type="button"
-                className="next_btn"
-                onClick={() => goToQuestion(safeIndex + 1)}
-                disabled={safeIndex === total - 1}
-              >
-                Next Question
-                <i className="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+          )}
+        </>
+      )}
+    </PracticeShared>
   );
 }
 
-export default MultipleChoice;
+export default MultipleChoiceMultipleAnswer;

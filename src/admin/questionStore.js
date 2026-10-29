@@ -1,4 +1,4 @@
-const STORAGE_KEY = "pte_admin_questions";
+import { supabase } from "./supabaseClient";
 
 export const QUESTION_TYPES = [
   {
@@ -6,19 +6,19 @@ export const QUESTION_TYPES = [
     label: "Fill in the Blanks (Dropdown)",
   },
   {
-    id: "multiple-choice-multiple-answer",
-    label: "Multiple Choice (Multiple Answers)",
-  },
-  {
     id: "reorder-paragraphs",
     label: "Reorder Paragraphs",
   },
   {
-    id: "fill-blanks-drag-drop",
-    label: "Fill in the Blanks (Drag & Drop)",
+    id: "mcq-multiple",
+    label: "Multiple Choice (Multiple Answers)",
   },
   {
-    id: "multiple-choice-single-answer",
+    id: "fill-blanks-drag",
+    label: "Fill in the Blanks (Drag and Drop)",
+  },
+  {
+    id: "mcq-single",
     label: "Multiple Choice (Single Answer)",
   },
 ];
@@ -30,38 +30,106 @@ export const CATEGORIES = [
   "MEDICAL SCIENCE",
 ];
 
-export function getQuestions() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
+function rowToQuestion(row) {
+  return {
+    id: row.id,
+    type: row.type,
+    title: row.title,
+    difficulty: row.difficulty,
+    category: row.category,
+    time: row.time,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    ...(row.payload && typeof row.payload === "object" ? row.payload : {}),
+  };
+}
+
+function questionToRow(question) {
+  const {
+    id: _id,
+    type,
+    title,
+    difficulty,
+    category,
+    time,
+    createdAt: _createdAt,
+    updatedAt: _updatedAt,
+    created_at: _created_at,
+    updated_at: _updated_at,
+    ...payload
+  } = question;
+
+  return {
+    type,
+    title,
+    difficulty,
+    category,
+    time,
+    payload,
+  };
+}
+
+export async function getQuestions() {
+  const { data, error } = await supabase
+    .from("questions")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("getQuestions error:", error);
+    throw error;
+  }
+
+  return (data || []).map(rowToQuestion);
+}
+
+export async function addQuestion(question) {
+  const row = questionToRow(question);
+  const { data, error } = await supabase
+    .from("questions")
+    .insert(row)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("addQuestion error:", error);
+    throw error;
+  }
+
+  return rowToQuestion(data);
+}
+
+export async function updateQuestion(id, updates) {
+  const row = {
+    ...questionToRow(updates),
+    updated_at: new Date().toISOString(),
+  };
+
+  const { data, error } = await supabase
+    .from("questions")
+    .update(row)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("updateQuestion error:", error);
+    throw error;
+  }
+
+  return rowToQuestion(data);
+}
+
+export async function deleteQuestion(id) {
+  const { error } = await supabase.from("questions").delete().eq("id", id);
+
+  if (error) {
+    console.error("deleteQuestion error:", error);
+    throw error;
   }
 }
 
-export function saveQuestions(questions) {
-  localStorage.setItem(STORAGE_KEY, JSON, stringify(questions));
-}
-
-export function addQuestion(question){
-    const list = getQuestions()
-    const item = {
-        ...question,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-    }
-    list.push(item)
-    saveQuestions(list)
-    return item
-
-}
-
-export function deleteQuestion(id) {
-  const list = getQuestions().filter((q) => q.id !== id)
-  saveQuestions(list)
-
-}
-
-export function getQuestionsByType(typeId){
-    return getQuestions().filter((q) => q.type === typeId)
+export async function getQuestionsByType(typeId) {
+  const list = await getQuestions();
+  return list.filter((q) => q.type === typeId);
 }

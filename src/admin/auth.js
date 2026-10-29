@@ -1,21 +1,39 @@
-const ADMIN_KEY = "pte_admin_logged_in";
+import { supabase } from "./supabaseClient";
 
-const ADMIN_EMAIL = "admin@pte.com";
-const ADMIN_PASSWORD = "admin123";
+export async function login(email, password) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
-export function login(email, password) {
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-    localStorage.setItem(ADMIN_KEY, "true");
-    return { ok: true };
+  if (error) {
+    return { ok: false, message: error.message || "Invalid email or password" };
   }
 
-  return { ok: false, message: "Invalid email or password" };
+  return { ok: true, session: data.session };
 }
 
-export function logout() {
-  localStorage.removeItem(ADMIN_KEY);
+export async function logout() {
+  await supabase.auth.signOut();
 }
 
-export function isAdminLoggedIn() {
-  return localStorage.getItem(ADMIN_KEY) === "true";
+export async function getAdminSession() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) return null;
+  return data.session;
+}
+
+export async function isAdminLoggedIn() {
+  const session = await getAdminSession();
+  return Boolean(session);
+}
+
+export function onAuthChange(callback) {
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((_event, session) => {
+    callback(session);
+  });
+
+  return () => subscription.unsubscribe();
 }

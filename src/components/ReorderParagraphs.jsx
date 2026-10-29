@@ -196,7 +196,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory)
       ? initialCategory
-      : categories[0],
+      : categories[0]
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [search, setSearch] = useState("");
@@ -206,10 +206,19 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   const [dragParaId, setDragParaId] = useState(null);
   const [dragFrom, setDragFrom] = useState(null);
 
-  const questions = useMemo(
-    () => getMergedQuestions("reorder-paragraphs", defaultQuestions),
-    [],
-  );
+  const [questions, setQuestions] = useState(defaultQuestions);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("reorder-paragraphs", defaultQuestions).then(
+      (merged) => {
+        if (!cancelled) setQuestions(merged);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -220,7 +229,9 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   }, [questions]);
 
   const filteredQuestions = useMemo(() => {
-    const byCategory = questions.filter((q) => q.category === selectedCategory);
+    const byCategory = questions.filter(
+      (q) => q.category === selectedCategory
+    );
     const term = search.trim().toLowerCase();
     if (!term) return byCategory;
 
@@ -228,7 +239,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
       (q) =>
         q.title.toLowerCase().includes(term) ||
         String(q.id).includes(term) ||
-        q.difficulty.toLowerCase().includes(term),
+        q.difficulty.toLowerCase().includes(term)
     );
   }, [questions, selectedCategory, search]);
 
@@ -262,7 +273,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
 
   const usedIds = useMemo(
     () => new Set(answers.filter(Boolean).map((p) => p.id)),
-    [answers],
+    [answers]
   );
 
   const score = useMemo(() => {
@@ -436,7 +447,9 @@ function ReorderParagraphs({ onBack, initialCategory }) {
                         used ? "jumble_card jumble_used" : "jumble_card"
                       }
                       draggable={!isChecked && !used}
-                      onDragStart={() => onDragStartPara(para, "jumbled", null)}
+                      onDragStart={() =>
+                        onDragStartPara(para, "jumbled", null)
+                      }
                       onDragEnd={onDragEnd}
                     >
                       <div className="jumble_card_top">

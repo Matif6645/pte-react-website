@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
 import "./FillInTheBlankDragDrop.css";
@@ -48,8 +48,7 @@ const defaultQuestions = [
       { type: "blank" },
       {
         type: "text",
-        value:
-          " to exchange goods between cities. Salt and spices were valuable ",
+        value: " to exchange goods between cities. Salt and spices were valuable ",
       },
       { type: "blank" },
       {
@@ -74,8 +73,7 @@ const defaultQuestions = [
       { type: "blank" },
       {
         type: "text",
-        value:
-          " from the soil to grow. Roots absorb water and minerals from the ",
+        value: " from the soil to grow. Roots absorb water and minerals from the ",
       },
       { type: "blank" },
       {
@@ -105,8 +103,7 @@ const defaultQuestions = [
     segments: [
       {
         type: "text",
-        value:
-          "Nurses monitor patients and give medicine according to the doctor's ",
+        value: "Nurses monitor patients and give medicine according to the doctor's ",
       },
       { type: "blank" },
       {
@@ -153,10 +150,17 @@ function FillInTheBlankDragDrop({ onBack, initialCategory }) {
   const [selectedWord, setSelectedWord] = useState(null);
   const [dragWord, setDragWord] = useState(null);
 
-  const questions = useMemo(
-    () => getMergedQuestions("fill-blanks-drag", defaultQuestions),
-    [],
-  );
+  const [questions, setQuestions] = useState(defaultQuestions);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("fill-blanks-drag", defaultQuestions).then((merged) => {
+      if (!cancelled) setQuestions(merged);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -192,7 +196,7 @@ function FillInTheBlankDragDrop({ onBack, initialCategory }) {
 
   const availableWords = useMemo(() => {
     if (!question) return [];
-    const remaining = [...question.wordBank];
+    const remaining = [...(question.wordBank || [])];
     usedWords.forEach((word) => {
       const idx = remaining.indexOf(word);
       if (idx !== -1) remaining.splice(idx, 1);

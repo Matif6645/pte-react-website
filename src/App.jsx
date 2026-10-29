@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import ReadingHome from "./components/ReadingHome";
@@ -9,17 +9,46 @@ import FillInTheBlankDragDrop from "./components/FillInTheBlankDragDrop";
 import MultipleChoiceSingleAnswer from "./components/MultipleChoiceSingleAnswer";
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
-import { isAdminLoggedIn, logout } from "./admin/auth";
+import { getAdminSession, logout, onAuthChange } from "./admin/auth";
 import "./App.css";
 
 function App() {
-  const [activeView, setActiveView] = useState(
-    isAdminLoggedIn() ? "admin-dashboard" : "reading-home",
-  );
+  const [authReady, setAuthReady] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeView, setActiveView] = useState("reading-home");
   const [activeItem, setActiveItem] = useState("");
   const [initialCategory, setInitialCategory] = useState(
     "SCIENCE & TECHNOLOGY",
   );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getAdminSession().then((session) => {
+      if (cancelled) return;
+      setIsLoggedIn(Boolean(session));
+      if (session) {
+        setActiveView((current) =>
+          current === "admin-login" ? "admin-dashboard" : current,
+        );
+      }
+      setAuthReady(true);
+    });
+
+    const unsubscribe = onAuthChange((session) => {
+      setIsLoggedIn(Boolean(session));
+      if (!session) {
+        setActiveView((current) =>
+          current === "admin-dashboard" ? "admin-login" : current,
+        );
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      unsubscribe();
+    };
+  }, []);
 
   function openReadingHome() {
     setActiveView("reading-home");
@@ -27,7 +56,7 @@ function App() {
   }
 
   function openAdminLogin() {
-    if (isAdminLoggedIn()) {
+    if (isLoggedIn) {
       setActiveView("admin-dashboard");
       return;
     }
@@ -35,11 +64,13 @@ function App() {
   }
 
   function handleAdminLoginSuccess() {
+    setIsLoggedIn(true);
     setActiveView("admin-dashboard");
   }
 
-  function handleAdminLogout() {
-    logout();
+  async function handleAdminLogout() {
+    await logout();
+    setIsLoggedIn(false);
     setActiveView("admin-login");
   }
 
@@ -156,6 +187,14 @@ function App() {
     return <ReadingHome onStartPractice={startPractice} />;
   }
 
+  if (!authReady) {
+    return (
+      <div className="desktop_grid" style={{ padding: 40 }}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   if (activeView === "admin-login") {
     return (
       <AdminLogin
@@ -166,7 +205,7 @@ function App() {
   }
 
   if (activeView === "admin-dashboard") {
-    if (!isAdminLoggedIn()) {
+    if (!isLoggedIn) {
       return (
         <AdminLogin
           onLoginSuccess={handleAdminLoginSuccess}

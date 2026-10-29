@@ -6,19 +6,27 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    const result = login(email.trim(), password);
+    try {
+      const result = await login(email.trim(), password);
 
-    if (!result.ok) {
-      setError(result.message);
-      return;
+      if (!result.ok) {
+        setError(result.message);
+        return;
+      }
+
+      onLoginSuccess?.();
+    } catch (err) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
-
-    onLoginSuccess?.();
   }
 
   return (
@@ -37,8 +45,9 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@pte.com"
+              placeholder="admin@yourdomain.com"
               required
+              disabled={loading}
             />
           </label>
 
@@ -50,13 +59,18 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
               required
+              disabled={loading}
             />
           </label>
 
           {error && <p className="admin_login_error">{error}</p>}
 
-          <button type="submit" className="admin_login_submit">
-            Login
+          <button
+            type="submit"
+            className="admin_login_submit"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
@@ -68,7 +82,9 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
           ← Back to website
         </button>
 
-        <p className="admin_login_hint">Demo: admin@pte.com / admin123</p>
+        <p className="admin_login_hint">
+          Use the admin email and password from your Supabase Auth users.
+        </p>
       </div>
     </div>
   );

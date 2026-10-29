@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { getMergedQuestions } from "../admin/practiceQuestion.js";
+import { useEffect, useMemo, useState } from "react";
+import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
 import "./MultipleChoiceSingleAnswer.css";
 
@@ -46,17 +46,10 @@ const defaultQuestions = [
       "Solar power converts sunlight into electricity using panels made of special materials. When sunlight hits these panels, it creates an electric current that can power homes and businesses.",
       "Many countries support solar energy because it reduces pollution and dependence on fossil fuels. However, solar systems work best in places with strong, regular sunlight.",
     ],
-    questionText:
-      "What is the main advantage of solar power mentioned in the passage?",
+    questionText: "What is the main advantage of solar power mentioned in the passage?",
     options: [
-      {
-        id: "A",
-        text: "It works equally well in every climate without sunlight.",
-      },
-      {
-        id: "B",
-        text: "It can reduce pollution and reliance on fossil fuels.",
-      },
+      { id: "A", text: "It works equally well in every climate without sunlight." },
+      { id: "B", text: "It can reduce pollution and reliance on fossil fuels." },
       { id: "C", text: "It is only useful for powering cars." },
       { id: "D", text: "It produces more pollution than coal." },
     ],
@@ -72,15 +65,11 @@ const defaultQuestions = [
       "The invention of the printing press in the fifteenth century changed how information spread. Books became cheaper and more widely available, so more people could learn to read.",
       "This development supported education, science and the sharing of new ideas across Europe.",
     ],
-    questionText:
-      "According to the passage, what was one important effect of the printing press?",
+    questionText: "According to the passage, what was one important effect of the printing press?",
     options: [
       { id: "A", text: "Books became more expensive and rare." },
       { id: "B", text: "Fewer people learned to read." },
-      {
-        id: "C",
-        text: "Information could spread more widely through cheaper books.",
-      },
+      { id: "C", text: "Information could spread more widely through cheaper books." },
       { id: "D", text: "Science stopped developing in Europe." },
     ],
     correctAnswer: "C",
@@ -95,8 +84,7 @@ const defaultQuestions = [
       "Vaccines help the immune system recognise harmful germs before a real infection occurs. When a vaccinated person later meets that germ, the body can respond more quickly.",
       "Public health programmes use vaccines to protect communities and reduce the spread of serious diseases.",
     ],
-    questionText:
-      "What do vaccines help the body do, according to the passage?",
+    questionText: "What do vaccines help the body do, according to the passage?",
     options: [
       { id: "A", text: "Ignore all germs permanently." },
       {
@@ -127,6 +115,17 @@ function MultipleChoiceSingleAnswer({ onBack, initialCategory }) {
   const [search, setSearch] = useState("");
   const [selectedMap, setSelectedMap] = useState({});
   const [checkedMap, setCheckedMap] = useState({});
+  const [questions, setQuestions] = useState(defaultQuestions);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("mcq-single", defaultQuestions).then((merged) => {
+      if (!cancelled) setQuestions(merged);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -134,7 +133,7 @@ function MultipleChoiceSingleAnswer({ onBack, initialCategory }) {
       counts[cat] = questions.filter((q) => q.category === cat).length;
     });
     return counts;
-  }, []);
+  }, [questions]);
 
   const filteredQuestions = useMemo(() => {
     const byCategory = questions.filter((q) => q.category === selectedCategory);
@@ -147,7 +146,7 @@ function MultipleChoiceSingleAnswer({ onBack, initialCategory }) {
         String(q.id).includes(term) ||
         q.difficulty.toLowerCase().includes(term),
     );
-  }, [selectedCategory, search]);
+  }, [questions, selectedCategory, search]);
 
   const total = filteredQuestions.length;
   const safeIndex = total === 0 ? 0 : Math.min(currentIndex, total - 1);

@@ -76,6 +76,15 @@ function mapToPractice(adminQ, typeId) {
     };
   }
 
+  if (typeId === "fill-blanks-dropdown" && Array.isArray(adminQ.segments)) {
+    return {
+      ...base,
+      blanks: adminQ.correctAnswers.length,
+      segments: adminQ.segments,
+      correctAnswers: adminQ.correctAnswers,
+    };
+  }
+
   if (typeId === "fill-blanks-drag" || typeId === "fill-blanks-dropdown") {
     const answers = splitComma(adminQ.correctAnswers).length
       ? splitComma(adminQ.correctAnswers)
@@ -117,9 +126,14 @@ function mapToPractice(adminQ, typeId) {
 }
 
 export function getMergedQuestions(typeId, defaultQuestions = []) {
-  const adminMapped = getQuestions()
-    .filter((q) => q.type === typeId)
-    .map((q) => mapToPractice(q, typeId));
+  try {
+    const adminMapped = getQuestions()
+      .filter((q) => q && q.type === typeId)
+      .map((q) => mapToPractice(q, typeId));
 
-  return [...defaultQuestions, ...adminMapped];
+    return [...defaultQuestions, ...adminMapped];
+  } catch (error) {
+    console.error("getMergedQuestions error:", error);
+    return defaultQuestions;
+  }
 }

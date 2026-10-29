@@ -1,11 +1,16 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CATEGORIES,
   QUESTION_TYPES,
   addQuestion,
   deleteQuestion,
   getQuestions,
+  updateQuestion,
 } from "./questionStore";
+import DropdownBlanksEditor, {
+  buildDropdownSegments,
+  validateDropdownBlanks,
+} from "./DropdownBlanksEditor.jsx";
 import "./AdminDashboard.css";
 
 const emptyForm = {
@@ -23,12 +28,73 @@ const emptyForm = {
   correctAnswers: "A,C",
   wordBank: "",
   paragraphs: "",
+  dropdownPassage: "",
+  dropdownBlanks: {},
 };
+
+function segmentsToDropdownForm(segments = [], correctAnswers = []) {
+  let dropdownPassage = "";
+  const dropdownBlanks = {};
+  let blankIndex = 0;
+
+  segments.forEach((seg) => {
+    if (seg.type === "text") {
+      dropdownPassage += seg.value || "";
+      return;
+    }
+
+    if (seg.type === "blank") {
+      blankIndex += 1;
+      const options = [...(seg.options || [])];
+      while (options.length < 3) options.push("");
+      const correctText = correctAnswers[blankIndex - 1] || "";
+      let correct = options.findIndex((opt) => opt === correctText);
+      if (correct < 0) correct = 0;
+      dropdownBlanks[blankIndex] = { options, correct };
+      dropdownPassage += `[${blankIndex}]`;
+    }
+  });
+
+  return { dropdownPassage, dropdownBlanks };
+}
+
+function questionToForm(question) {
+  const correctAnswersValue = Array.isArray(question.correctAnswers)
+    ? question.correctAnswers.join(",")
+    : question.correctAnswers || "";
+
+  const dropdownFields =
+    question.type === "fill-blanks-dropdown" && Array.isArray(question.segments)
+      ? segmentsToDropdownForm(question.segments, question.correctAnswers || [])
+      : { dropdownPassage: "", dropdownBlanks: {} };
+
+  return {
+    ...emptyForm,
+    title: question.title || "",
+    difficulty: question.difficulty || "Easy",
+    category: question.category || CATEGORIES[0],
+    time: question.time || "00:20",
+    passage: question.passage || "",
+    questionText: question.questionText || "",
+    optionA: question.optionA || "",
+    optionB: question.optionB || "",
+    optionC: question.optionC || "",
+    optionD: question.optionD || "",
+    correctAnswer: question.correctAnswer || "A",
+    correctAnswers: correctAnswersValue || emptyForm.correctAnswers,
+    wordBank: question.wordBank || "",
+    paragraphs: question.paragraphs || "",
+    ...dropdownFields,
+  };
+}
 
 function AdminDashboard({ onLogout, onBackToSite }) {
   const [section, setSection] = useState("home");
-  const [questions, setQuestions] = useState(() => getQuestions());
+  const [questions, setQuestions] = useState([]);
+  const [loadingQuestions, setLoadingQuestions] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
 
   const stats = useMemo(() => {
@@ -46,32 +112,75 @@ function AdminDashboard({ onLogout, onBackToSite }) {
   const typeQuestions =
     section === "home" ? [] : questions.filter((q) => q.type === section);
 
-  function refresh() {
-    setQuestions(getQuestions());
+  async function refresh() {
+    setLoadingQuestions(true);
+    try {
+      const list = await getQuestions();
+      setQuestions(list);
+    } catch (error) {
+      console.error(error);
+      alert(error.message || "Could not load questions from Supabase.");
+    } finally {
+      setLoadingQuestions(false);
+    }
   }
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   function updateField(key, value) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
+  function closeForm() {
+    setShowForm(false);
+    setEditingId(null);
+    setForm(emptyForm);
+  }
+
   function openAddForm() {
+    setEditingId(null);
     setForm(emptyForm);
     setShowForm(true);
   }
 
-  function handleDelete(id) {
-    const ok = window.confirm("Delete this question?");
-    if (!ok) return;
-    deleteQuestion(id);
-    refresh();
+  function openEditForm(question) {
+    setEditingId(question.id);
+    setForm(questionToForm(question));
+    setShowForm(true);
   }
 
-  function handleSubmit(e) {
+  async function handleDelete(id) {
+    const ok = window.confirm("Delete this question?");
+    if (!ok) return;
+
+    try {
+      await deleteQuestion(id);
+      if (editingId === id) closeForm();
+      await refresh();
+    } catch (error) {
+      alert(error.message || "Delete failed. Are you logged in?");
+    }
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!form.title.trim()) {
       alert("Title required");
       return;
+    }
+
+    if (section === "fill-blanks-dropdown") {
+      const error = validateDropdownBlanks(
+        form.dropdownPassage,
+        form.dropdownBlanks,
+      );
+      if (error) {
+        alert(error);
+        return;
+      }
     }
 
     const base = {
@@ -92,10 +201,29 @@ function AdminDashboard({ onLogout, onBackToSite }) {
       paragraphs: form.paragraphs.trim(),
     };
 
-    addQuestion(base);
-    setShowForm(false);
-    setForm(emptyForm);
-    refresh();
+    if (section === "fill-blanks-dropdown") {
+      const { segments, correctAnswers } = buildDropdownSegments(
+        form.dropdownPassage,
+        form.dropdownBlanks,
+      );
+      base.segments = segments;
+      base.correctAnswers = correctAnswers;
+    }
+
+    setSaving(true);
+    try {
+      if (editingId) {
+        await updateQuestion(editingId, base);
+      } else {
+        await addQuestion(base);
+      }
+      closeForm();
+      await refresh();
+    } catch (error) {
+      alert(error.message || "Save failed. Are you logged in as admin?");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -110,7 +238,7 @@ function AdminDashboard({ onLogout, onBackToSite }) {
           }
           onClick={() => {
             setSection("home");
-            setShowForm(false);
+            closeForm();
           }}
         >
           Dashboard
@@ -125,7 +253,7 @@ function AdminDashboard({ onLogout, onBackToSite }) {
             }
             onClick={() => {
               setSection(type.id);
-              setShowForm(false);
+              closeForm();
             }}
           >
             {type.label}
@@ -169,7 +297,7 @@ function AdminDashboard({ onLogout, onBackToSite }) {
 
             {showForm && (
               <form className="admin_form_card" onSubmit={handleSubmit}>
-                <h2>Add Question</h2>
+                <h2>{editingId ? "Edit Question" : "Add Question"}</h2>
 
                 <label>
                   <span>Title</span>
@@ -305,8 +433,20 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                   </>
                 )}
 
-                {(section === "fill-blanks-drag" ||
-                  section === "fill-blanks-dropdown") && (
+                {section === "fill-blanks-dropdown" && (
+                  <DropdownBlanksEditor
+                    passage={form.dropdownPassage}
+                    blanks={form.dropdownBlanks}
+                    onPassageChange={(value) =>
+                      updateField("dropdownPassage", value)
+                    }
+                    onBlanksChange={(value) =>
+                      updateField("dropdownBlanks", value)
+                    }
+                  />
+                )}
+
+                {section === "fill-blanks-drag" && (
                   <>
                     <label>
                       <span>Passage intro</span>
@@ -358,18 +498,28 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                   <button
                     type="button"
                     className="admin_cancel_btn"
-                    onClick={() => setShowForm(false)}
+                    onClick={closeForm}
                   >
                     Cancel
                   </button>
-                  <button type="submit" className="admin_save_btn">
-                    Save
+                  <button
+                    type="submit"
+                    className="admin_save_btn"
+                    disabled={saving}
+                  >
+                    {saving
+                      ? "Saving..."
+                      : editingId
+                        ? "Update"
+                        : "Save"}
                   </button>
                 </div>
               </form>
             )}
 
-            {typeQuestions.length === 0 ? (
+            {loadingQuestions ? (
+              <p className="admin_empty">Loading questions...</p>
+            ) : typeQuestions.length === 0 ? (
               <p className="admin_empty">No questions added yet.</p>
             ) : (
               <div className="admin_question_table">
@@ -382,13 +532,22 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                         {question.time}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      className="admin_delete_btn"
-                      onClick={() => handleDelete(question.id)}
-                    >
-                      Delete
-                    </button>
+                    <div className="admin_row_actions">
+                      <button
+                        type="button"
+                        className="admin_edit_btn"
+                        onClick={() => openEditForm(question)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="admin_delete_btn"
+                        onClick={() => handleDelete(question.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
