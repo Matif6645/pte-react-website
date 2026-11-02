@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
 import "./FillInTheBlanksDropdown.css";
@@ -265,8 +265,7 @@ const defaultQuestions = [
       { type: "blank", options: ["writing", "electricity", "aviation"] },
       {
         type: "text",
-        value:
-          " allowed societies to preserve information. Today, archaeologists study ancient ",
+        value: " allowed societies to preserve information. Today, archaeologists study ancient ",
       },
       { type: "blank", options: ["artifacts", "satellites", "computers"] },
       {
@@ -316,7 +315,8 @@ const defaultQuestions = [
     segments: [
       {
         type: "text",
-        value: "World War II began in 1939 following Germany's invasion of ",
+        value:
+          "World War II began in 1939 following Germany's invasion of ",
       },
       { type: "blank", options: ["Poland", "Canada", "India"] },
       {
@@ -366,7 +366,8 @@ const defaultQuestions = [
       { type: "blank", options: ["membrane", "skeleton", "tendon"] },
       {
         type: "text",
-        value: " controls the movement of substances into and out of the cell.",
+        value:
+          " controls the movement of substances into and out of the cell.",
       },
     ],
   },
@@ -530,7 +531,8 @@ const defaultQuestions = [
       { type: "blank", options: ["strains", "vitamins", "hormones"] },
       {
         type: "text",
-        value: ". Resistant infections may require more complex and expensive ",
+        value:
+          ". Resistant infections may require more complex and expensive ",
       },
       { type: "blank", options: ["treatments", "diagnoses", "vaccinations"] },
       {
@@ -602,7 +604,9 @@ function BlankSelect({
       </select>
 
       {checked && !isCorrect && (
-        <span className="correct_answer_hint">(Answer: {correctAnswer})</span>
+        <span className="correct_answer_hint">
+          (Answer: {correctAnswer})
+        </span>
       )}
     </span>
   );
@@ -612,17 +616,26 @@ function FillInTheBlanksDropdown({ onBack, initialCategory }) {
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory)
       ? initialCategory
-      : categories[0],
+      : categories[0]
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [search, setSearch] = useState("");
   const [answers, setAnswers] = useState({});
   const [checkedMap, setCheckedMap] = useState({});
 
-  const questions = useMemo(
-    () => getMergedQuestions("fill-blanks-dropdown", defaultQuestions),
-    [],
-  );
+  const [questions, setQuestions] = useState(defaultQuestions);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("fill-blanks-dropdown", defaultQuestions).then(
+      (merged) => {
+        if (!cancelled) setQuestions(merged);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -633,7 +646,9 @@ function FillInTheBlanksDropdown({ onBack, initialCategory }) {
   }, [questions]);
 
   const filteredQuestions = useMemo(() => {
-    const byCategory = questions.filter((q) => q.category === selectedCategory);
+    const byCategory = questions.filter(
+      (q) => q.category === selectedCategory
+    );
 
     const term = search.trim().toLowerCase();
     if (!term) return byCategory;
@@ -642,7 +657,7 @@ function FillInTheBlanksDropdown({ onBack, initialCategory }) {
       (q) =>
         q.title.toLowerCase().includes(term) ||
         String(q.id).includes(term) ||
-        q.difficulty.toLowerCase().includes(term),
+        q.difficulty.toLowerCase().includes(term)
     );
   }, [questions, selectedCategory, search]);
 

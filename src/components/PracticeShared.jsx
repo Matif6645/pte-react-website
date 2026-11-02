@@ -8,6 +8,8 @@ function PracticeShared({
   description,
   icon = "fa-solid fa-book-open",
   headerImage = null,
+  headingLabel = "READING PRACTICE",
+  backLabel = "Back to Reading Practice",
 
   // CATEGORY AND SEARCH
   categories = [],
@@ -43,6 +45,18 @@ function PracticeShared({
   navigation,
 }) {
   const [seconds, setSeconds] = useState(0);
+  // Recommended time limits based on difficulty
+  const timeLimits = {
+    Easy: 90, // 1 minute 30 seconds
+    Medium: 120, // 2 minutes
+    Hard: 150, // 2 minutes 30 seconds
+  };
+
+  // Get the current question difficulty
+  const difficulty = question?.difficulty || "Easy";
+
+  // Check whether the recommended time has been reached
+  const isOverTime = seconds >= (timeLimits[difficulty] ?? 120);
 
   useEffect(() => {
     setSeconds(0);
@@ -83,7 +97,7 @@ function PracticeShared({
         {onBack && (
           <button type="button" className="practice_back_btn" onClick={onBack}>
             <i className="fa-solid fa-arrow-left"></i>
-            Back to Reading Practice
+            {backLabel}
           </button>
         )}
 
@@ -91,7 +105,7 @@ function PracticeShared({
 
         <div className="reading_heading_row">
           <i className={icon}></i>
-          <h2>READING PRACTICE</h2>
+          <h2>{headingLabel}</h2>
         </div>
 
         {/* MAIN PAGE HEADING */}
@@ -187,7 +201,7 @@ function PracticeShared({
             </div>
 
             {/* QUESTION DETAILS:
-                TIME, TYPE/COUNT, CATEGORY */}
+    TIME, TYPE/COUNT, CATEGORY */}
 
             <div className="question_details">
               {details.map((detail, index) => {
@@ -195,10 +209,13 @@ function PracticeShared({
 
                 return (
                   <div
-                    className="question_detail"
+                    className={`question_detail ${
+                      isTimer && isOverTime ? "timer_over_limit" : ""
+                    }`}
                     key={`${detail.text}-${index}`}
                   >
                     <i className={detail.icon}></i>
+
                     <span className={isTimer ? "question_timer" : undefined}>
                       {isTimer ? formatTime(seconds) : detail.text}
                     </span>

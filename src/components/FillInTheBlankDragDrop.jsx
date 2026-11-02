@@ -48,7 +48,8 @@ const defaultQuestions = [
       { type: "blank" },
       {
         type: "text",
-        value: " to exchange goods between cities. Salt and spices were valuable ",
+        value:
+          " to exchange goods between cities. Salt and spices were valuable ",
       },
       { type: "blank" },
       {
@@ -73,7 +74,8 @@ const defaultQuestions = [
       { type: "blank" },
       {
         type: "text",
-        value: " from the soil to grow. Roots absorb water and minerals from the ",
+        value:
+          " from the soil to grow. Roots absorb water and minerals from the ",
       },
       { type: "blank" },
       {
@@ -103,7 +105,8 @@ const defaultQuestions = [
     segments: [
       {
         type: "text",
-        value: "Nurses monitor patients and give medicine according to the doctor's ",
+        value:
+          "Nurses monitor patients and give medicine according to the doctor's ",
       },
       { type: "blank" },
       {

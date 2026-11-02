@@ -2,12 +2,16 @@ import { useState } from "react";
 import "./PracticeShared.css";
 import "./ReadingHome.css";
 import readingImage from "../assets/reading-practice.svg";
+import reorderIcon from "../assets/reorder-icon.png";
+import dropdownIcon from "../assets/fillindropdown.png";
+import dragDropIcon from "../assets/fillindragdrop.png";
+import multipleAnswerIcon from "../assets/multiplechoosemultipleanswer.png";
 
 const practiceTypes = [
   {
     id: "fill-blanks-dropdown",
     title: "Fill in the Blanks (Dropdown)",
-    icon: "fa-solid fa-filter",
+    image: dropdownIcon,
     iconClass: "icon_purple",
     totalQuestions: 14,
     categoriesCount: 4,
@@ -26,7 +30,7 @@ const practiceTypes = [
   {
     id: "reorder-paragraphs",
     title: "Reorder Paragraphs",
-    icon: "fa-solid fa-arrows-up-down",
+    image: reorderIcon,
     iconClass: "icon_blue",
     totalQuestions: 6,
     categoriesCount: 4,
@@ -64,7 +68,7 @@ const practiceTypes = [
   {
     id: "fill-blanks-drag",
     title: "Fill in the Blanks (Drag and Drop)",
-    icon: "fa-solid fa-hand-pointer",
+    image: dragDropIcon,
     iconClass: "icon_orange",
     totalQuestions: 4,
     categoriesCount: 4,
@@ -160,44 +164,33 @@ function ReadingHome({ onStartPractice }) {
   return (
     <div className="reading_home">
       <div className="reading_home_hero">
-        
-{/* LEFT SIDE - HEADING + FEATURES */}
-<div className="reading_home_hero_text">
+        {/* LEFT SIDE - HEADING + FEATURES */}
+        <div className="reading_home_hero_text">
+          <p className="reading_home_eyebrow">READING PRACTICE</p>
 
-  <p className="reading_home_eyebrow">
-    READING PRACTICE
-  </p>
+          <h2 className="reading_home_title">Choose Your Reading Practice</h2>
 
-  <h2 className="reading_home_title">
-    Choose Your Reading Practice
-  </h2>
+          <p className="reading_home_subtitle">
+            Select a question type to start practising.
+          </p>
 
-  <p className="reading_home_subtitle">
-    Select a question type to start practising.
-  </p>
+          {/* FOUR FEATURE BOXES */}
+          <div className="reading_home_features">
+            {readingFeatures.map((feature) => (
+              <div className="reading_home_feature" key={feature.title}>
+                <div className="reading_home_feature_icon">
+                  <i className={feature.icon}></i>
+                </div>
 
-  {/* FOUR FEATURE BOXES */}
-  <div className="reading_home_features">
-    {readingFeatures.map((feature) => (
-      <div
-        className="reading_home_feature"
-        key={feature.title}
-      >
-        <div className="reading_home_feature_icon">
-          <i className={feature.icon}></i>
+                <div className="reading_home_feature_content">
+                  <h4>{feature.title}</h4>
+                  <p>{feature.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="reading_home_feature_content">
-          <h4>{feature.title}</h4>
-          <p>{feature.description}</p>
-        </div>
-      </div>
-    ))}
-  </div>
-
-</div>
-
-           
         {/* RIGHT SIDE - CANVA IMAGE */}
         <div className="reading_home_hero_image">
           <img src={readingImage} alt="PTE Academy Reading Practice" />
@@ -213,7 +206,15 @@ function ReadingHome({ onStartPractice }) {
           return (
             <article key={item.id} className="practice_card">
               <div className={`practice_card_icon ${item.iconClass}`}>
-                <i className={item.icon}></i>
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt=""
+                    className="practice_card_icon_image"
+                  />
+                ) : (
+                  <i className={item.icon}></i>
+                )}
               </div>
 
               <h3 className="practice_card_title">{item.title}</h3>

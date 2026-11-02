@@ -12,6 +12,7 @@ import DropdownBlanksEditor, {
   validateDropdownBlanks,
 } from "./DropdownBlanksEditor.jsx";
 import "./AdminDashboard.css";
+// import "./AdminSidebar.css";
 
 const emptyForm = {
   title: "",
@@ -88,8 +89,52 @@ function questionToForm(question) {
   };
 }
 
+const ADMIN_GROUPS = [
+  {
+    id: "reading", label: "READING", icon: "fa-solid fa-book-open",
+    items: [
+      ["fill-blanks-dropdown", "Fill in the Blanks (Dropdown)"],
+      ["reorder-paragraphs", "Reorder Paragraphs"],
+      ["mcq-multiple", "Multiple Choice (Multiple Answers)"],
+      ["fill-blanks-drag", "Fill in the Blanks (Drag and Drop)"],
+      ["mcq-single", "Multiple Choice (Single Answer)"],
+    ],
+  },
+  {
+    id: "speaking", label: "SPEAKING", icon: "fa-solid fa-microphone",
+    items: [
+      ["read-aloud", "Read Aloud"],
+      ["repeat-sentence", "Repeat Sentence"],
+      ["describe-image", "Describe Image"],
+      ["retell-lecture", "Retell Lecture"],
+      ["answer-short-question", "Answer Short Question"],
+    ],
+  },
+  {
+    id: "writing", label: "WRITING", icon: "fa-solid fa-pen",
+    items: [
+      ["summarize-written-text", "Summarize Written Text"],
+      ["write-essay", "Write Essay"],
+    ],
+  },
+  {
+    id: "listening", label: "LISTENING", icon: "fa-solid fa-headphones",
+    items: [
+      ["summarize-spoken-text", "Summarize Spoken Text"],
+      ["listening-mcq-multiple", "Multiple Choice (Multiple)"],
+      ["listening-fill-blanks", "Fill in the Blanks"],
+      ["highlight-correct-summary", "Highlight Correct Summary"],
+      ["listening-mcq-single", "Multiple Choice (Single)"],
+      ["select-missing-word", "Select Missing Word"],
+      ["highlight-incorrect-words", "Highlight Incorrect Words"],
+      ["write-from-dictation", "Write from Dictation"],
+    ],
+  },
+];
+
 function AdminDashboard({ onLogout, onBackToSite }) {
   const [section, setSection] = useState("home");
+  const [expandedGroup, setExpandedGroup] = useState("reading");
   const [questions, setQuestions] = useState([]);
   const [loadingQuestions, setLoadingQuestions] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -228,48 +273,72 @@ function AdminDashboard({ onLogout, onBackToSite }) {
 
   return (
     <div className="admin_panel">
-      <aside className="admin_sidebar">
-        <h2 className="admin_sidebar_title">Admin Panel</h2>
+      <aside className="admin_sidebar admin_sidebar_v2">
+        <div className="admin_sidebar_brand">
+          <span className="admin_brand_icon"><i className="fa-solid fa-graduation-cap" /></span>
+          <div><strong>PTE Academy</strong><small>ADMIN PANEL</small></div>
+        </div>
 
         <button
           type="button"
-          className={
-            section === "home" ? "admin_nav_btn active" : "admin_nav_btn"
-          }
-          onClick={() => {
-            setSection("home");
-            closeForm();
-          }}
+          className={`admin_dashboard_link ${section === "home" ? "active" : ""}`}
+          onClick={() => { setSection("home"); closeForm(); }}
         >
-          Dashboard
+          <i className="fa-solid fa-table-cells-large" /> Dashboard
         </button>
 
-        {QUESTION_TYPES.map((type) => (
-          <button
-            key={type.id}
-            type="button"
-            className={
-              section === type.id ? "admin_nav_btn active" : "admin_nav_btn"
-            }
-            onClick={() => {
-              setSection(type.id);
-              closeForm();
-            }}
-          >
-            {type.label}
+        <div className="admin_nav_caption">PRACTICE SPACE</div>
+        <nav className="admin_group_nav" aria-label="Question management">
+          {ADMIN_GROUPS.map((group, groupIndex) => {
+            const expanded = expandedGroup === group.id;
+            const selected = group.items.some(([id]) => id === section);
+            return (
+              <div className="admin_nav_group" key={group.id}>
+                {groupIndex === 1 && <div className="admin_nav_caption admin_nav_caption_other">OTHER PRACTICE</div>}
+                <button
+                  type="button"
+                  className={`admin_group_toggle ${expanded ? "expanded" : ""} ${selected ? "selected" : ""}`}
+                  aria-expanded={expanded}
+                  aria-controls={`admin-group-${group.id}`}
+                  onClick={() => setExpandedGroup(expanded ? null : group.id)}
+                >
+                  <span className="admin_group_icon"><i className={group.icon} /></span>
+                  <span className="admin_group_label">{group.label}</span>
+                  <i className={`fa-solid fa-chevron-down admin_group_chevron ${expanded ? "rotated" : ""}`} />
+                </button>
+                <div id={`admin-group-${group.id}`} className={`admin_group_content ${expanded ? "open" : ""}`}>
+                  <div className="admin_group_content_inner">
+                    {group.items.map(([id, label]) => {
+                      const implemented = QUESTION_TYPES.some((type) => type.id === id);
+                      return (
+                        <button
+                          type="button"
+                          key={id}
+                          disabled={implemented}
+                          title={implemented ? label : `${label} — editor not yet available`}
+                          className={`admin_group_item ${section === id ? "active" : ""}`}
+                          onClick={() => { setSection(id); closeForm(); }}
+                        >
+                          <span>{label}</span>
+                          <i className="fa-solid fa-chevron-right" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </nav>
+
+        <div className="admin_sidebar_footer">
+          <button type="button" className="admin_side_link" onClick={onBackToSite}>
+            <i className="fa-solid fa-arrow-left" /> Website
           </button>
-        ))}
-
-        <button
-          type="button"
-          className="admin_side_link"
-          onClick={onBackToSite}
-        >
-          ← Website
-        </button>
-        <button type="button" className="admin_side_logout" onClick={onLogout}>
-          Logout
-        </button>
+          <button type="button" className="admin_side_logout" onClick={onLogout}>
+            <i className="fa-solid fa-right-from-bracket" /> Logout
+          </button>
+        </div>
       </aside>
 
       <main className="admin_main">

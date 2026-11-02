@@ -21,7 +21,7 @@
 .reading_home_hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: start;
+  align-items: center;
   gap: 16px;
 
   width: 100%;
@@ -82,7 +82,7 @@
 
 .reading_home_hero_image {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-end;
 
   min-width: 0;
@@ -597,6 +597,32 @@
   font-size: 11px;
   font-weight: 400;
   line-height: 1.4;
+}
+/* Reading - Purple */
+.reading_home_feature:nth-child(1) i {
+  color: #7653e3;
+}
+
+/* Speed - Blue */
+.reading_home_feature:nth-child(2) i {
+  color: #2196f3;
+}
+
+/* Smart Learning - Orange */
+.reading_home_feature:nth-child(3) i {
+  color: #f59e0b;
+}
+
+/* Video Tutorials - Red */
+.reading_home_feature:nth-child(4) i {
+  color: #ff0000;
+}
+
+.practice_card_icon_image {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
 }
 
 /* TABLET */

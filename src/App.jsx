@@ -7,10 +7,29 @@ import ReorderParagraphs from "./components/ReorderParagraphs";
 import MultipleChoiceMultipleAnswer from "./components/MultipleChoiceMultipleAnswer";
 import FillInTheBlankDragDrop from "./components/FillInTheBlankDragDrop";
 import MultipleChoiceSingleAnswer from "./components/MultipleChoiceSingleAnswer";
+import SummarizeSpokenText from "./components/listening/SummarizeSpokenText";
+import ListeningMcqMultiple from "./components/listening/ListeningMcqMultiple";
+import ListeningFillBlanks from "./components/listening/ListeningFillBlanks";
+import HighlightCorrectSummary from "./components/listening/HighlightCorrectSummary";
+import ListeningMcqSingle from "./components/listening/ListeningMcqSingle";
+import SelectMissingWord from "./components/listening/SelectMissingWord";
+import HighlightIncorrectWords from "./components/listening/HighlightIncorrectWords";
+import WriteFromDictation from "./components/listening/WriteFromDictation";
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
 import { getAdminSession, logout, onAuthChange } from "./admin/auth";
 import "./App.css";
+
+const LISTENING_VIEWS = {
+  "Summarize Spoken Text": "listening-sst",
+  "Multiple Choice (Multiple)": "listening-mcq-multiple",
+  "Fill in the Blanks": "listening-fib",
+  "Highlight Correct Summary": "listening-hcs",
+  "Multiple Choice (Single)": "listening-mcq-single",
+  "Select Missing Word": "listening-smw",
+  "Highlight Incorrect Words": "listening-hiw",
+  "Write from Dictation": "listening-wfd",
+};
 
 function App() {
   const [authReady, setAuthReady] = useState(false);
@@ -135,6 +154,11 @@ function App() {
       return;
     }
 
+    if (LISTENING_VIEWS[item]) {
+      setActiveView(LISTENING_VIEWS[item]);
+      return;
+    }
+
     setActiveView("reading-home");
   }
 
@@ -182,6 +206,31 @@ function App() {
           initialCategory={initialCategory}
         />
       );
+    }
+
+    if (activeView === "listening-sst") {
+      return <SummarizeSpokenText onBack={openReadingHome} />;
+    }
+    if (activeView === "listening-mcq-multiple") {
+      return <ListeningMcqMultiple onBack={openReadingHome} />;
+    }
+    if (activeView === "listening-fib") {
+      return <ListeningFillBlanks onBack={openReadingHome} />;
+    }
+    if (activeView === "listening-hcs") {
+      return <HighlightCorrectSummary onBack={openReadingHome} />;
+    }
+    if (activeView === "listening-mcq-single") {
+      return <ListeningMcqSingle onBack={openReadingHome} />;
+    }
+    if (activeView === "listening-smw") {
+      return <SelectMissingWord onBack={openReadingHome} />;
+    }
+    if (activeView === "listening-hiw") {
+      return <HighlightIncorrectWords onBack={openReadingHome} />;
+    }
+    if (activeView === "listening-wfd") {
+      return <WriteFromDictation onBack={openReadingHome} />;
     }
 
     return <ReadingHome onStartPractice={startPractice} />;
@@ -233,7 +282,9 @@ function App() {
           onOpenReadingHome={openReadingHome}
         />
 
-        {renderMain()}
+        <div className="practice-page-transition" key={activeView}>
+          {renderMain()}
+        </div>
       </main>
     </div>
   );

@@ -61,12 +61,12 @@ function mapToPractice(adminQ, typeId) {
 
   if (typeId === "reorder-paragraphs") {
     const lines = splitLines(adminQ.paragraphs);
-    const paragraphsList = (lines.length ? lines : ["Paragraph 1", "Paragraph 2"]).map(
-      (text, index) => ({
-        id: String.fromCharCode(65 + index),
-        text,
-      }),
-    );
+    const paragraphsList = (
+      lines.length ? lines : ["Paragraph 1", "Paragraph 2"]
+    ).map((text, index) => ({
+      id: String.fromCharCode(65 + index),
+      text,
+    }));
 
     return {
       ...base,
@@ -77,11 +77,14 @@ function mapToPractice(adminQ, typeId) {
   }
 
   if (typeId === "fill-blanks-dropdown" && Array.isArray(adminQ.segments)) {
+    const answers = Array.isArray(adminQ.correctAnswers)
+      ? adminQ.correctAnswers
+      : [];
     return {
       ...base,
-      blanks: adminQ.correctAnswers.length,
+      blanks: answers.length,
       segments: adminQ.segments,
-      correctAnswers: adminQ.correctAnswers,
+      correctAnswers: answers,
     };
   }
 
@@ -125,9 +128,12 @@ function mapToPractice(adminQ, typeId) {
   return base;
 }
 
-export function getMergedQuestions(typeId, defaultQuestions = []) {
+export async function getMergedQuestions(typeId, defaultQuestions = []) {
   try {
-    const adminMapped = getQuestions()
+    const list = await getQuestions();
+    const adminList = Array.isArray(list) ? list : [];
+
+    const adminMapped = adminList
       .filter((q) => q && q.type === typeId)
       .map((q) => mapToPractice(q, typeId));
 

@@ -1,7 +1,21 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
-// https://vite.dev/config/
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
   plugins: [react()],
-})
+  resolve: {
+    alias: {
+      "@supabase/supabase-js": path.resolve(
+        __dirname,
+        "node_modules/@supabase/supabase-js/dist/index.mjs",
+      ),
+    },
+  },
+  optimizeDeps: {
+    include: ["@supabase/supabase-js"],
+  },
+});

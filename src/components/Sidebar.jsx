@@ -30,10 +30,7 @@ const sections = [
     id: "writing",
     label: "WRITING",
     icon: "fa-solid fa-pen",
-    items: [
-      "Summarize Written Text",
-      "Write Essay",
-    ],
+    items: ["Summarize Written Text", "Write Essay"],
   },
   {
     id: "listening",
@@ -41,24 +38,36 @@ const sections = [
     icon: "fa-solid fa-headphones",
     items: [
       "Summarize Spoken Text",
+
+      "Multiple Choice (Multiple)",
+
       "Fill in the Blanks",
+
       "Highlight Correct Summary",
+
+      "Multiple Choice (Single)",
+
+      "Select Missing Word",
+
+      "Highlight Incorrect Words",
+
       "Write from Dictation",
     ],
   },
 ];
 
-function Sidebar() {
+function Sidebar({ activeItem, onSelectItem, onOpenReadingHome }) {
   const [open, setOpen] = useState("reading");
-  const [activeItem, setActiveItem] = useState("Fill in the Blanks (Dropdown)");
 
   function toggleSection(id) {
+    if (id === "reading") {
+      onOpenReadingHome?.();
+    }
     setOpen(open === id ? "" : id);
   }
 
   return (
     <aside className="practice_sidebar">
-
       <p className="practice_space">Practice space</p>
 
       <nav className="practice_nav">
@@ -79,8 +88,8 @@ function Sidebar() {
             >
               <span className="section_left">
                 <span className={`${section.id}_icon`}>
-  <i className={section.icon}></i>
-</span>
+                  <i className={section.icon}></i>
+                </span>
                 <span>{section.label}</span>
               </span>
               <span className="section_arrow">
@@ -99,7 +108,7 @@ function Sidebar() {
                         ? "dropdown_item active_item"
                         : "dropdown_item"
                     }
-                    onClick={() => setActiveItem(item)}
+                    onClick={() => onSelectItem?.(item)}
                   >
                     <span>{item}</span>
                     <span className="item_arrow">⌄</span>
@@ -110,7 +119,6 @@ function Sidebar() {
           </div>
         ))}
       </nav>
-
     </aside>
   );
 }
