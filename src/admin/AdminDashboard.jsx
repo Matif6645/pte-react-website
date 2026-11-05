@@ -12,7 +12,6 @@ import DropdownBlanksEditor, {
   validateDropdownBlanks,
 } from "./DropdownBlanksEditor.jsx";
 import "./AdminDashboard.css";
-// import "./AdminSidebar.css";
 
 const emptyForm = {
   title: "",
@@ -25,13 +24,80 @@ const emptyForm = {
   optionB: "",
   optionC: "",
   optionD: "",
+  optionE: "",
   correctAnswer: "A",
   correctAnswers: "A,C",
   wordBank: "",
   paragraphs: "",
+  audioUrl: "",
   dropdownPassage: "",
   dropdownBlanks: {},
 };
+
+const READING_MCQ_TYPES = ["mcq-single", "mcq-multiple"];
+const LISTENING_MCQ_TYPES = [
+  "listening-mcq-multiple",
+  "listening-mcq-single",
+  "listening-hcs",
+  "listening-smw",
+];
+const LISTENING_SINGLE_TYPES = [
+  "listening-mcq-single",
+  "listening-hcs",
+  "listening-smw",
+];
+
+// Student sidebar groups — IDs must match questionStore QUESTION_TYPES
+const ADMIN_GROUPS = [
+  {
+    id: "reading",
+    label: "READING",
+    icon: "fa-solid fa-book-open",
+    items: [
+      ["fill-blanks-dropdown", "Fill in the Blanks (Dropdown)"],
+      ["reorder-paragraphs", "Reorder Paragraphs"],
+      ["mcq-multiple", "Multiple Choice (Multiple Answers)"],
+      ["fill-blanks-drag", "Fill in the Blanks (Drag and Drop)"],
+      ["mcq-single", "Multiple Choice (Single Answer)"],
+    ],
+  },
+  {
+    id: "speaking",
+    label: "SPEAKING",
+    icon: "fa-solid fa-microphone",
+    items: [
+      ["read-aloud", "Read Aloud"],
+      ["repeat-sentence", "Repeat Sentence"],
+      ["describe-image", "Describe Image"],
+      ["retell-lecture", "Retell Lecture"],
+      ["answer-short-question", "Answer Short Question"],
+    ],
+  },
+  {
+    id: "writing",
+    label: "WRITING",
+    icon: "fa-solid fa-pen",
+    items: [
+      ["summarize-written-text", "Summarize Written Text"],
+      ["write-essay", "Write Essay"],
+    ],
+  },
+  {
+    id: "listening",
+    label: "LISTENING",
+    icon: "fa-solid fa-headphones",
+    items: [
+      ["listening-sst", "Summarize Spoken Text"],
+      ["listening-mcq-multiple", "Multiple Choice (Multiple)"],
+      ["listening-fib", "Fill in the Blanks"],
+      ["listening-hcs", "Highlight Correct Summary"],
+      ["listening-mcq-single", "Multiple Choice (Single)"],
+      ["listening-smw", "Select Missing Word"],
+      ["listening-hiw", "Highlight Incorrect Words"],
+      ["listening-wfd", "Write from Dictation"],
+    ],
+  },
+];
 
 function segmentsToDropdownForm(segments = [], correctAnswers = []) {
   let dropdownPassage = "";
@@ -81,56 +147,15 @@ function questionToForm(question) {
     optionB: question.optionB || "",
     optionC: question.optionC || "",
     optionD: question.optionD || "",
+    optionE: question.optionE || "",
     correctAnswer: question.correctAnswer || "A",
     correctAnswers: correctAnswersValue || emptyForm.correctAnswers,
     wordBank: question.wordBank || "",
     paragraphs: question.paragraphs || "",
+    audioUrl: question.audioUrl || "",
     ...dropdownFields,
   };
 }
-
-const ADMIN_GROUPS = [
-  {
-    id: "reading", label: "READING", icon: "fa-solid fa-book-open",
-    items: [
-      ["fill-blanks-dropdown", "Fill in the Blanks (Dropdown)"],
-      ["reorder-paragraphs", "Reorder Paragraphs"],
-      ["mcq-multiple", "Multiple Choice (Multiple Answers)"],
-      ["fill-blanks-drag", "Fill in the Blanks (Drag and Drop)"],
-      ["mcq-single", "Multiple Choice (Single Answer)"],
-    ],
-  },
-  {
-    id: "speaking", label: "SPEAKING", icon: "fa-solid fa-microphone",
-    items: [
-      ["read-aloud", "Read Aloud"],
-      ["repeat-sentence", "Repeat Sentence"],
-      ["describe-image", "Describe Image"],
-      ["retell-lecture", "Retell Lecture"],
-      ["answer-short-question", "Answer Short Question"],
-    ],
-  },
-  {
-    id: "writing", label: "WRITING", icon: "fa-solid fa-pen",
-    items: [
-      ["summarize-written-text", "Summarize Written Text"],
-      ["write-essay", "Write Essay"],
-    ],
-  },
-  {
-    id: "listening", label: "LISTENING", icon: "fa-solid fa-headphones",
-    items: [
-      ["summarize-spoken-text", "Summarize Spoken Text"],
-      ["listening-mcq-multiple", "Multiple Choice (Multiple)"],
-      ["listening-fill-blanks", "Fill in the Blanks"],
-      ["highlight-correct-summary", "Highlight Correct Summary"],
-      ["listening-mcq-single", "Multiple Choice (Single)"],
-      ["select-missing-word", "Select Missing Word"],
-      ["highlight-incorrect-words", "Highlight Incorrect Words"],
-      ["write-from-dictation", "Write from Dictation"],
-    ],
-  },
-];
 
 function AdminDashboard({ onLogout, onBackToSite }) {
   const [section, setSection] = useState("home");
@@ -157,14 +182,13 @@ function AdminDashboard({ onLogout, onBackToSite }) {
   const typeQuestions =
     section === "home" ? [] : questions.filter((q) => q.type === section);
 
-  async function refresh() {
+  function refresh() {
     setLoadingQuestions(true);
     try {
-      const list = await getQuestions();
-      setQuestions(list);
+      setQuestions(getQuestions());
     } catch (error) {
       console.error(error);
-      alert(error.message || "Could not load questions from Supabase.");
+      alert(error.message || "Could not load questions.");
     } finally {
       setLoadingQuestions(false);
     }
@@ -196,20 +220,20 @@ function AdminDashboard({ onLogout, onBackToSite }) {
     setShowForm(true);
   }
 
-  async function handleDelete(id) {
+  function handleDelete(id) {
     const ok = window.confirm("Delete this question?");
     if (!ok) return;
 
     try {
-      await deleteQuestion(id);
+      deleteQuestion(id);
       if (editingId === id) closeForm();
-      await refresh();
+      refresh();
     } catch (error) {
-      alert(error.message || "Delete failed. Are you logged in?");
+      alert(error.message || "Delete failed.");
     }
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
 
     if (!form.title.trim()) {
@@ -240,10 +264,12 @@ function AdminDashboard({ onLogout, onBackToSite }) {
       optionB: form.optionB.trim(),
       optionC: form.optionC.trim(),
       optionD: form.optionD.trim(),
+      optionE: form.optionE.trim(),
       correctAnswer: form.correctAnswer,
       correctAnswers: form.correctAnswers,
       wordBank: form.wordBank.trim(),
       paragraphs: form.paragraphs.trim(),
+      audioUrl: form.audioUrl.trim(),
     };
 
     if (section === "fill-blanks-dropdown") {
@@ -258,14 +284,14 @@ function AdminDashboard({ onLogout, onBackToSite }) {
     setSaving(true);
     try {
       if (editingId) {
-        await updateQuestion(editingId, base);
+        updateQuestion(editingId, base);
       } else {
-        await addQuestion(base);
+        addQuestion(base);
       }
       closeForm();
-      await refresh();
+      refresh();
     } catch (error) {
-      alert(error.message || "Save failed. Are you logged in as admin?");
+      alert(error.message || "Save failed.");
     } finally {
       setSaving(false);
     }
@@ -275,49 +301,83 @@ function AdminDashboard({ onLogout, onBackToSite }) {
     <div className="admin_panel">
       <aside className="admin_sidebar admin_sidebar_v2">
         <div className="admin_sidebar_brand">
-          <span className="admin_brand_icon"><i className="fa-solid fa-graduation-cap" /></span>
-          <div><strong>PTE Academy</strong><small>ADMIN PANEL</small></div>
+          <span className="admin_brand_icon">
+            <i className="fa-solid fa-graduation-cap" />
+          </span>
+          <div>
+            <strong>PTE Academy</strong>
+            <small>ADMIN PANEL</small>
+          </div>
         </div>
 
         <button
           type="button"
           className={`admin_dashboard_link ${section === "home" ? "active" : ""}`}
-          onClick={() => { setSection("home"); closeForm(); }}
+          onClick={() => {
+            setSection("home");
+            closeForm();
+          }}
         >
           <i className="fa-solid fa-table-cells-large" /> Dashboard
         </button>
 
         <div className="admin_nav_caption">PRACTICE SPACE</div>
+
         <nav className="admin_group_nav" aria-label="Question management">
           {ADMIN_GROUPS.map((group, groupIndex) => {
             const expanded = expandedGroup === group.id;
             const selected = group.items.some(([id]) => id === section);
+
             return (
               <div className="admin_nav_group" key={group.id}>
-                {groupIndex === 1 && <div className="admin_nav_caption admin_nav_caption_other">OTHER PRACTICE</div>}
+                {groupIndex === 1 && (
+                  <div className="admin_nav_caption admin_nav_caption_other">
+                    OTHER PRACTICE
+                  </div>
+                )}
+
                 <button
                   type="button"
                   className={`admin_group_toggle ${expanded ? "expanded" : ""} ${selected ? "selected" : ""}`}
                   aria-expanded={expanded}
                   aria-controls={`admin-group-${group.id}`}
-                  onClick={() => setExpandedGroup(expanded ? null : group.id)}
+                  onClick={() =>
+                    setExpandedGroup(expanded ? null : group.id)
+                  }
                 >
-                  <span className="admin_group_icon"><i className={group.icon} /></span>
+                  <span className="admin_group_icon">
+                    <i className={group.icon} />
+                  </span>
                   <span className="admin_group_label">{group.label}</span>
-                  <i className={`fa-solid fa-chevron-down admin_group_chevron ${expanded ? "rotated" : ""}`} />
+                  <i
+                    className={`fa-solid fa-chevron-down admin_group_chevron ${expanded ? "rotated" : ""}`}
+                  />
                 </button>
-                <div id={`admin-group-${group.id}`} className={`admin_group_content ${expanded ? "open" : ""}`}>
+
+                <div
+                  id={`admin-group-${group.id}`}
+                  className={`admin_group_content ${expanded ? "open" : ""}`}
+                >
                   <div className="admin_group_content_inner">
                     {group.items.map(([id, label]) => {
-                      const implemented = QUESTION_TYPES.some((type) => type.id === id);
+                      const implemented = QUESTION_TYPES.some(
+                        (type) => type.id === id,
+                      );
                       return (
                         <button
                           type="button"
                           key={id}
-                          disabled={implemented}
-                          title={implemented ? label : `${label} — editor not yet available`}
+                          disabled={!implemented}
+                          title={
+                            implemented
+                              ? label
+                              : `${label} — editor not yet available`
+                          }
                           className={`admin_group_item ${section === id ? "active" : ""}`}
-                          onClick={() => { setSection(id); closeForm(); }}
+                          onClick={() => {
+                            setSection(id);
+                            closeForm();
+                          }}
                         >
                           <span>{label}</span>
                           <i className="fa-solid fa-chevron-right" />
@@ -332,10 +392,18 @@ function AdminDashboard({ onLogout, onBackToSite }) {
         </nav>
 
         <div className="admin_sidebar_footer">
-          <button type="button" className="admin_side_link" onClick={onBackToSite}>
+          <button
+            type="button"
+            className="admin_side_link"
+            onClick={onBackToSite}
+          >
             <i className="fa-solid fa-arrow-left" /> Website
           </button>
-          <button type="button" className="admin_side_logout" onClick={onLogout}>
+          <button
+            type="button"
+            className="admin_side_logout"
+            onClick={onLogout}
+          >
             <i className="fa-solid fa-right-from-bracket" /> Logout
           </button>
         </div>
@@ -413,18 +481,36 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                   />
                 </label>
 
-                {(section === "mcq-single" || section === "mcq-multiple") && (
+                {(READING_MCQ_TYPES.includes(section) ||
+                  LISTENING_MCQ_TYPES.includes(section)) && (
                   <>
-                    <label>
-                      <span>Passage (one line = one paragraph)</span>
-                      <textarea
-                        rows={3}
-                        value={form.passage}
-                        onChange={(e) => updateField("passage", e.target.value)}
-                        placeholder="Write passage..."
-                        required
-                      />
-                    </label>
+                    {LISTENING_MCQ_TYPES.includes(section) && (
+                      <label>
+                        <span>Audio URL</span>
+                        <input
+                          value={form.audioUrl}
+                          onChange={(e) =>
+                            updateField("audioUrl", e.target.value)
+                          }
+                          placeholder="https://example.com/audio.mp3"
+                        />
+                      </label>
+                    )}
+
+                    {READING_MCQ_TYPES.includes(section) && (
+                      <label>
+                        <span>Passage (one line = one paragraph)</span>
+                        <textarea
+                          rows={3}
+                          value={form.passage}
+                          onChange={(e) =>
+                            updateField("passage", e.target.value)
+                          }
+                          placeholder="Write passage..."
+                          required
+                        />
+                      </label>
+                    )}
 
                     <label>
                       <span>Question</span>
@@ -471,7 +557,20 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                       />
                     </label>
 
-                    {section === "mcq-single" ? (
+                    {section === "listening-mcq-multiple" && (
+                      <label>
+                        <span>Option E (optional)</span>
+                        <input
+                          value={form.optionE}
+                          onChange={(e) =>
+                            updateField("optionE", e.target.value)
+                          }
+                        />
+                      </label>
+                    )}
+
+                    {section === "mcq-single" ||
+                    LISTENING_SINGLE_TYPES.includes(section) ? (
                       <label>
                         <span>Correct Answer</span>
                         <select
@@ -484,6 +583,7 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                           <option value="B">B</option>
                           <option value="C">C</option>
                           <option value="D">D</option>
+                          <option value="E">E</option>
                         </select>
                       </label>
                     ) : (
@@ -563,6 +663,36 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                   </label>
                 )}
 
+                {!READING_MCQ_TYPES.includes(section) &&
+                  !LISTENING_MCQ_TYPES.includes(section) &&
+                  section !== "fill-blanks-dropdown" &&
+                  section !== "fill-blanks-drag" &&
+                  section !== "reorder-paragraphs" && (
+                    <>
+                      <label>
+                        <span>Audio URL (optional)</span>
+                        <input
+                          value={form.audioUrl}
+                          onChange={(e) =>
+                            updateField("audioUrl", e.target.value)
+                          }
+                          placeholder="https://example.com/audio.mp3"
+                        />
+                      </label>
+                      <label>
+                        <span>Prompt / Question text</span>
+                        <textarea
+                          rows={3}
+                          value={form.questionText}
+                          onChange={(e) =>
+                            updateField("questionText", e.target.value)
+                          }
+                          placeholder="Write the task prompt..."
+                        />
+                      </label>
+                    </>
+                  )}
+
                 <div className="admin_form_actions">
                   <button
                     type="button"
@@ -576,11 +706,7 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                     className="admin_save_btn"
                     disabled={saving}
                   >
-                    {saving
-                      ? "Saving..."
-                      : editingId
-                        ? "Update"
-                        : "Save"}
+                    {saving ? "Saving..." : editingId ? "Update" : "Save"}
                   </button>
                 </div>
               </form>

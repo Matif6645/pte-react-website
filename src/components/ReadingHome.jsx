@@ -6,11 +6,15 @@ import reorderIcon from "../assets/reorder-icon.png";
 import dropdownIcon from "../assets/fillindropdown.png";
 import dragDropIcon from "../assets/fillindragdrop.png";
 import multipleAnswerIcon from "../assets/multiplechoosemultipleanswer.png";
+import singleAnswerIcon from "../assets/multiplechoisesingleanswer.png";
 
+// All five cards use one shared structure. Change content here, not in JSX.
 const practiceTypes = [
   {
     id: "fill-blanks-dropdown",
     title: "Fill in the Blanks (Dropdown)",
+    description:
+      "Complete the passage by selecting the correct word from a drop-down list.",
     image: dropdownIcon,
     iconClass: "icon_purple",
     totalQuestions: 14,
@@ -30,6 +34,7 @@ const practiceTypes = [
   {
     id: "reorder-paragraphs",
     title: "Reorder Paragraphs",
+    description: "Arrange the sentences in the most logical order.",
     image: reorderIcon,
     iconClass: "icon_blue",
     totalQuestions: 6,
@@ -49,7 +54,8 @@ const practiceTypes = [
   {
     id: "mcq-multiple",
     title: "Multiple Choice (Multiple Answers)",
-    icon: "fa-solid fa-list-check",
+    description: "Select all the correct answers from the options.",
+    image: multipleAnswerIcon,
     iconClass: "icon_green",
     totalQuestions: 4,
     categoriesCount: 4,
@@ -68,6 +74,7 @@ const practiceTypes = [
   {
     id: "fill-blanks-drag",
     title: "Fill in the Blanks (Drag and Drop)",
+    description: "Drag the correct words into the blanks in the passage.",
     image: dragDropIcon,
     iconClass: "icon_orange",
     totalQuestions: 4,
@@ -87,7 +94,8 @@ const practiceTypes = [
   {
     id: "mcq-single",
     title: "Multiple Choice (Single Answer)",
-    icon: "fa-solid fa-list-ul",
+    description: "Choose the one correct answer from the options.",
+    image: singleAnswerIcon,
     iconClass: "icon_pink",
     totalQuestions: 4,
     categoriesCount: 4,
@@ -128,6 +136,8 @@ const readingFeatures = [
   },
 ];
 
+const difficultyLevels = ["Easy", "Medium", "Hard"];
+
 function ReadingHome({ onStartPractice }) {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState({
@@ -139,49 +149,30 @@ function ReadingHome({ onStartPractice }) {
   });
 
   function toggleDropdown(cardId) {
-    setOpenDropdownId((prev) => (prev === cardId ? null : cardId));
+    setOpenDropdownId((previous) => (previous === cardId ? null : cardId));
   }
 
   function selectCategory(cardId, value) {
-    setSelectedCategories((prev) => ({
-      ...prev,
-      [cardId]: value,
-    }));
+    setSelectedCategories((previous) => ({ ...previous, [cardId]: value }));
     setOpenDropdownId(null);
-  }
-
-  function getSelectedLabel(item) {
-    const selectedValue = selectedCategories[item.id];
-    const found = item.categoryOptions.find(
-      (opt) => opt.value === selectedValue,
-    );
-    if (found) {
-      return `${found.label} · Question set (${found.count})`;
-    }
-    return "Question Categories";
   }
 
   return (
     <div className="reading_home">
       <div className="reading_home_hero">
-        {/* LEFT SIDE - HEADING + FEATURES */}
         <div className="reading_home_hero_text">
           <p className="reading_home_eyebrow">READING PRACTICE</p>
-
           <h2 className="reading_home_title">Choose Your Reading Practice</h2>
-
           <p className="reading_home_subtitle">
             Select a question type to start practising.
           </p>
 
-          {/* FOUR FEATURE BOXES */}
           <div className="reading_home_features">
             {readingFeatures.map((feature) => (
               <div className="reading_home_feature" key={feature.title}>
                 <div className="reading_home_feature_icon">
-                  <i className={feature.icon}></i>
+                  <i className={feature.icon} aria-hidden="true" />
                 </div>
-
                 <div className="reading_home_feature_content">
                   <h4>{feature.title}</h4>
                   <p>{feature.description}</p>
@@ -191,7 +182,6 @@ function ReadingHome({ onStartPractice }) {
           </div>
         </div>
 
-        {/* RIGHT SIDE - CANVA IMAGE */}
         <div className="reading_home_hero_image">
           <img src={readingImage} alt="PTE Academy Reading Practice" />
         </div>
@@ -200,97 +190,127 @@ function ReadingHome({ onStartPractice }) {
       <div className="practice_cards_grid">
         {practiceTypes.map((item) => {
           const isOpen = openDropdownId === item.id;
-          const selected =
+          const selectedCategory =
             selectedCategories[item.id] || item.categoryOptions[0]?.value || "";
 
           return (
             <article key={item.id} className="practice_card">
-              <div className={`practice_card_icon ${item.iconClass}`}>
-                {item.image ? (
+              <div className="practice_card_header">
+                <div className={`practice_card_icon ${item.iconClass}`}>
                   <img
                     src={item.image}
                     alt=""
                     className="practice_card_icon_image"
                   />
-                ) : (
-                  <i className={item.icon}></i>
-                )}
-              </div>
-
-              <h3 className="practice_card_title">{item.title}</h3>
-
-              <div className="practice_card_stats">
-                <div>
-                  <p className="stat_label">Total Questions</p>
-                  <p className="stat_value">{item.totalQuestions ?? "—"}</p>
                 </div>
-                <div className="stat_right">
-                  <p className="stat_label">Categories</p>
-                  <p className="stat_value">{item.categoriesCount ?? "—"}</p>
+
+                <div className="practice_card_heading">
+                  <h3 className="practice_card_title">{item.title}</h3>
+                  <p className="practice_card_subtitle">{item.description}</p>
+                  <div
+                    className="practice_card_difficulties"
+                    aria-label="Difficulty levels"
+                  >
+                    {difficultyLevels.map((level) => (
+                      <span
+                        key={level}
+                        className={`practice_difficulty_tag ${level.toLowerCase()}`}
+                      >
+                        {level}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               <hr className="practice_card_divider" />
 
-              <div className="card_dropdown_wrap">
-                <button
-                  type="button"
-                  className={
-                    isOpen
-                      ? "card_dropdown_trigger open_trigger"
-                      : "card_dropdown_trigger"
-                  }
-                  onClick={() => toggleDropdown(item.id)}
-                  disabled={!item.ready && item.categoryOptions.length === 0}
-                >
-                  <span>Choose a Category</span>
-
+              <div className="practice_card_stats">
+                <div className="stat_item">
                   <i
-                    className={`fa-solid ${
-                      isOpen ? "fa-chevron-up" : "fa-chevron-down"
-                    }`}
-                  ></i>
-                </button>
+                    className="fa-solid fa-layer-group stat_icon"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <p className="stat_label">Total Questions</p>
+                    <p className="stat_value">{item.totalQuestions ?? "—"}</p>
+                  </div>
+                </div>
 
-                <div className={`card_dropdown_panel ${isOpen ? "show" : ""}`}>
-                  <div className="question_categories_list">
-                    {item.categoryOptions.length === 0 ? (
-                      <p className="category_empty">Coming soon</p>
-                    ) : (
-                      item.categoryOptions.map((opt) => (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          className={
-                            selected === opt.value
-                              ? "category_row active_category"
-                              : "category_row"
-                          }
-                          onClick={() => selectCategory(item.id, opt.value)}
-                          tabIndex={isOpen ? 0 : -1}
-                        >
-                          <span>{opt.label}</span>
-                          <span className="category_count">{opt.count}</span>
-                        </button>
-                      ))
-                    )}
+                <div className="stat_item stat_right">
+                  <i
+                    className="fa-regular fa-folder stat_icon"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <p className="stat_label">Categories</p>
+                    <p className="stat_value">{item.categoriesCount ?? "—"}</p>
                   </div>
                 </div>
               </div>
 
-              <button
-                type="button"
-                className="start_practice_btn"
-                onClick={() => {
-                  if (item.ready) {
-                    onStartPractice(item.id, selected);
-                  }
-                }}
-                disabled={!item.ready}
-              >
-                Start Practice
-                <span aria-hidden="true">→</span>
-              </button>
+              <div className="practice_card_actions">
+                <div className="card_dropdown_wrap">
+                  <button
+                    type="button"
+                    className={`card_dropdown_trigger ${isOpen ? "open_trigger" : ""}`}
+                    onClick={() => toggleDropdown(item.id)}
+                    disabled={!item.ready && item.categoryOptions.length === 0}
+                    aria-expanded={isOpen}
+                    aria-controls={`category-panel-${item.id}`}
+                    aria-label={`Choose a category for ${item.title}`}
+                  >
+                    <span>Choose a Category</span>
+                    <i
+                      className={`fa-solid ${isOpen ? "fa-chevron-up" : "fa-chevron-down"}`}
+                      aria-hidden="true"
+                    />
+                  </button>
+
+                  <div
+                    id={`category-panel-${item.id}`}
+                    className={`card_dropdown_panel ${isOpen ? "show" : ""}`}
+                  >
+                    <div className="question_categories_list">
+                      {item.categoryOptions.length === 0 ? (
+                        <p className="category_empty">Coming soon</p>
+                      ) : (
+                        item.categoryOptions.map((option) => (
+                          <button
+                            key={option.value}
+                            type="button"
+                            className={`category_row ${
+                              selectedCategory === option.value
+                                ? "active_category"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              selectCategory(item.id, option.value)
+                            }
+                            tabIndex={isOpen ? 0 : -1}
+                          >
+                            <span>{option.label}</span>
+                            <span className="category_count">
+                              {option.count}
+                            </span>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="start_practice_btn"
+                  disabled={!item.ready}
+                  onClick={() => {
+                    if (item.ready) onStartPractice(item.id, selectedCategory);
+                  }}
+                >
+                  Start Practice <span aria-hidden="true">→</span>
+                </button>
+              </div>
             </article>
           );
         })}

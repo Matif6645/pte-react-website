@@ -249,7 +249,7 @@ const categories = [
   "MEDICAL SCIENCE",
 ];
 
-function ListeningMcqSingle({ onBack, initialCategory }) {
+function ListeningMcqSingle({ onBack, initialCategory , questions : questionsProp , title = "Multiple Choice" , type = "Single" , description = "Listen to the recording and choose the one option that best answers the questions." }) {
   const audioRef = useRef(null);
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory)
@@ -264,7 +264,7 @@ function ListeningMcqSingle({ onBack, initialCategory }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  const questions = defaultQuestions;
+  const questions = questionsProp?.length ? questionsProp : defaultQuestions;
 
   const categoryCounts = useMemo(() => {
     const counts = {};
@@ -376,9 +376,9 @@ function ListeningMcqSingle({ onBack, initialCategory }) {
     <PracticeShared
       headingLabel="LISTENING PRACTICE"
       backLabel="Back"
-      title="Multiple Choice"
-      type="Single"
-      description="Listen to the recording and choose the one option that best answers the question."
+      title={title}
+      type={type}
+      description={description}
       icon="fa-solid fa-headphones"
       categories={categories}
       selectedCategory={selectedCategory}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import ReadingHome from "./components/ReadingHome";
@@ -14,10 +14,10 @@ import HighlightCorrectSummary from "./components/listening/HighlightCorrectSumm
 import ListeningMcqSingle from "./components/listening/ListeningMcqSingle";
 import SelectMissingWord from "./components/listening/SelectMissingWord";
 import HighlightIncorrectWords from "./components/listening/HighlightIncorrectWords";
-import WriteFromDictation from "./components/listening/WriteFromDictation";
+import WriteFromDictation from "./components/listening/WritefromDictation";
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
-import { getAdminSession, logout, onAuthChange } from "./admin/auth";
+import { isAdminLoggedIn, logout } from "./admin/auth";
 import "./App.css";
 
 const LISTENING_VIEWS = {
@@ -32,42 +32,12 @@ const LISTENING_VIEWS = {
 };
 
 function App() {
-  const [authReady, setAuthReady] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Always start on the student site. Admin opens only via Login.
   const [activeView, setActiveView] = useState("reading-home");
   const [activeItem, setActiveItem] = useState("");
   const [initialCategory, setInitialCategory] = useState(
     "SCIENCE & TECHNOLOGY",
   );
-
-  useEffect(() => {
-    let cancelled = false;
-
-    getAdminSession().then((session) => {
-      if (cancelled) return;
-      setIsLoggedIn(Boolean(session));
-      if (session) {
-        setActiveView((current) =>
-          current === "admin-login" ? "admin-dashboard" : current,
-        );
-      }
-      setAuthReady(true);
-    });
-
-    const unsubscribe = onAuthChange((session) => {
-      setIsLoggedIn(Boolean(session));
-      if (!session) {
-        setActiveView((current) =>
-          current === "admin-dashboard" ? "admin-login" : current,
-        );
-      }
-    });
-
-    return () => {
-      cancelled = true;
-      unsubscribe();
-    };
-  }, []);
 
   function openReadingHome() {
     setActiveView("reading-home");
@@ -75,7 +45,7 @@ function App() {
   }
 
   function openAdminLogin() {
-    if (isLoggedIn) {
+    if (isAdminLoggedIn()) {
       setActiveView("admin-dashboard");
       return;
     }
@@ -83,13 +53,11 @@ function App() {
   }
 
   function handleAdminLoginSuccess() {
-    setIsLoggedIn(true);
     setActiveView("admin-dashboard");
   }
 
-  async function handleAdminLogout() {
-    await logout();
-    setIsLoggedIn(false);
+  function handleAdminLogout() {
+    logout();
     setActiveView("admin-login");
   }
 
@@ -236,14 +204,6 @@ function App() {
     return <ReadingHome onStartPractice={startPractice} />;
   }
 
-  if (!authReady) {
-    return (
-      <div className="desktop_grid" style={{ padding: 40 }}>
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
   if (activeView === "admin-login") {
     return (
       <AdminLogin
@@ -254,7 +214,7 @@ function App() {
   }
 
   if (activeView === "admin-dashboard") {
-    if (!isLoggedIn) {
+    if (!isAdminLoggedIn()) {
       return (
         <AdminLogin
           onLoginSuccess={handleAdminLoginSuccess}
@@ -282,9 +242,7 @@ function App() {
           onOpenReadingHome={openReadingHome}
         />
 
-        <div className="practice-page-transition" key={activeView}>
-          {renderMain()}
-        </div>
+        {renderMain()}
       </main>
     </div>
   );

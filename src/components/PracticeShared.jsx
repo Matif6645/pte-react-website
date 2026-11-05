@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./PracticeShared.css";
+import dropdownIcon from "../assets/fillindropdown.png";
 
 function PracticeShared({
   // PAGE HEADING
@@ -8,6 +9,7 @@ function PracticeShared({
   description,
   icon = "fa-solid fa-book-open",
   headerImage = null,
+  headingImage = dropdownIcon,
   headingLabel = "READING PRACTICE",
   backLabel = "Back to Reading Practice",
 
@@ -101,23 +103,26 @@ function PracticeShared({
           </button>
         )}
 
-        {/* READING PRACTICE LABEL */}
+        <div
+          className={`practice_title_block ${headingImage ? "with_heading_image" : ""}`}
+        >
+          {headingImage && (
+            <img src={headingImage} alt="" className="practice_title_image" />
+          )}
 
-        <div className="reading_heading_row">
-          <i className={icon}></i>
-          <h2>{headingLabel}</h2>
+          <div className="practice_title_text">
+            <div className="reading_heading_row">
+              <h2>{headingLabel}</h2>
+            </div>
+
+            <h3 className="practice_heading">
+              {title}
+              {type && <span> ({type})</span>}
+            </h3>
+
+            <p className="practice_instruction">{description}</p>
+          </div>
         </div>
-
-        {/* MAIN PAGE HEADING */}
-
-        <h3 className="practice_heading">
-          {title}
-          {type && <span> ({type})</span>}
-        </h3>
-
-        {/* INSTRUCTIONS */}
-
-        <p className="practice_instruction">{description}</p>
 
         {/* ============================
             CATEGORY AND SEARCH
@@ -184,9 +189,35 @@ function PracticeShared({
           <>
             {/* QUESTION NUMBER */}
 
-            <p className="question_number">
-              Question {questionNumber} of {totalQuestions}
-            </p>
+            {/* QUESTION PROGRESS - ALL PRACTICE PAGES */}
+
+            <div className="question_progress">
+              <div className="question_progress_header">
+                <span>
+                  Question {questionNumber} of {totalQuestions}
+                </span>
+
+                <span>
+                  {totalQuestions > 0
+                    ? Math.round((questionNumber / totalQuestions) * 100)
+                    : 0}
+                  % Complete
+                </span>
+              </div>
+
+              <div className="question_progress_track">
+                <div
+                  className="question_progress_fill"
+                  style={{
+                    width: `${
+                      totalQuestions > 0
+                        ? Math.min(100, (questionNumber / totalQuestions) * 100)
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
 
             {/* QUESTION TITLE AND DIFFICULTY */}
 

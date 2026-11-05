@@ -33,13 +33,22 @@ function mapToPractice(adminQ, typeId) {
     fromAdmin: true,
   };
 
-  if (typeId === "mcq-single") {
+  if (
+    typeId === "mcq-single" ||
+    typeId === "listening-mcq-single" ||
+    typeId === "listening-hcs"
+  ) {
     return {
       ...base,
+      audioUrl: adminQ.audioUrl || "",
       passage: splitLines(adminQ.passage).length
         ? splitLines(adminQ.passage)
         : ["Passage not added yet."],
-      questionText: adminQ.questionText || "Choose the correct answer.",
+      questionText:
+        adminQ.questionText ||
+        (typeId === "listening-hcs"
+          ? "Click on the paragraph that best relates to the recording."
+          : "Choose the correct answer."),
       options: buildOptions(adminQ),
       correctAnswer: adminQ.correctAnswer || "A",
     };
