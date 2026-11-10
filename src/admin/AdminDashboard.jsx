@@ -7,10 +7,15 @@ import {
   getQuestions,
   updateQuestion,
 } from "./questionStore";
+import {
+  deleteSubmission,
+  getSubmissionsByType,
+  updateSubmission,
+} from "./submissonStore.js";
 import DropdownBlanksEditor, {
   buildDropdownSegments,
   validateDropdownBlanks,
-} from "./DropdownBlanksEditor.jsx";
+} from "./DropDownBlanksEditor.jsx";
 import "./AdminDashboard.css";
 
 const emptyForm = {
@@ -47,7 +52,6 @@ const LISTENING_SINGLE_TYPES = [
   "listening-smw",
 ];
 
-// Student sidebar groups — IDs must match questionStore QUESTION_TYPES
 const ADMIN_GROUPS = [
   {
     id: "reading",
@@ -161,11 +165,13 @@ function AdminDashboard({ onLogout, onBackToSite }) {
   const [section, setSection] = useState("home");
   const [expandedGroup, setExpandedGroup] = useState("reading");
   const [questions, setQuestions] = useState([]);
+  const [essaySubmissions, setEssaySubmissions] = useState([]);
   const [loadingQuestions, setLoadingQuestions] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [showNotif, setShowNotif] = useState(false);
 
   const stats = useMemo(() => {
     const all = questions;
@@ -178,17 +184,24 @@ function AdminDashboard({ onLogout, onBackToSite }) {
     };
   }, [questions]);
 
+  const pendingEssays = useMemo(
+    () => essaySubmissions.filter((item) => item.status !== "reviewed"),
+    [essaySubmissions],
+  );
+
   const activeType = QUESTION_TYPES.find((t) => t.id === section);
   const typeQuestions =
     section === "home" ? [] : questions.filter((q) => q.type === section);
 
-  function refresh() {
+  async function refresh() {
     setLoadingQuestions(true);
     try {
-      setQuestions(getQuestions());
+      setQuestions(await getQuestions());
+      setEssaySubmissions(getSubmissionsByType("write-essay"));
     } catch (error) {
-      console.error(error);
-      alert(error.message || "Could not load questions.");
+      console.error("Could not load questions:", error);
+      setQuestions([]);
+      setEssaySubmissions(getSubmissionsByType("write-essay"));
     } finally {
       setLoadingQuestions(false);
     }
@@ -197,6 +210,32 @@ function AdminDashboard({ onLogout, onBackToSite }) {
   useEffect(() => {
     refresh();
   }, []);
+
+  function openWritingChecks() {
+    setExpandedGroup("writing");
+    setSection("write-essay");
+    setShowNotif(false);
+    closeForm();
+  }
+
+  function handleReviewSubmission(id) {
+    const score = window.prompt("Enter score (optional):", "");
+    if (score === null) return;
+    const feedback = window.prompt("Enter feedback (optional):", "") || "";
+    updateSubmission(id, {
+      status: "reviewed",
+      score: String(score).trim(),
+      feedback: String(feedback).trim(),
+    });
+    refresh();
+  }
+
+  function handleDeleteSubmission(id) {
+    const ok = window.confirm("Delete this student essay submission?");
+    if (!ok) return;
+    deleteSubmission(id);
+    refresh();
+  }
 
   function updateField(key, value) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -220,20 +259,20 @@ function AdminDashboard({ onLogout, onBackToSite }) {
     setShowForm(true);
   }
 
-  function handleDelete(id) {
+  async function handleDelete(id) {
     const ok = window.confirm("Delete this question?");
     if (!ok) return;
 
     try {
-      deleteQuestion(id);
+      await deleteQuestion(id);
       if (editingId === id) closeForm();
-      refresh();
+      await refresh();
     } catch (error) {
       alert(error.message || "Delete failed.");
     }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!form.title.trim()) {
@@ -284,12 +323,12 @@ function AdminDashboard({ onLogout, onBackToSite }) {
     setSaving(true);
     try {
       if (editingId) {
-        updateQuestion(editingId, base);
+        await updateQuestion(editingId, base);
       } else {
-        addQuestion(base);
+        await addQuestion(base);
       }
       closeForm();
-      refresh();
+      await refresh();
     } catch (error) {
       alert(error.message || "Save failed.");
     } finally {
@@ -341,9 +380,7 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                   className={`admin_group_toggle ${expanded ? "expanded" : ""} ${selected ? "selected" : ""}`}
                   aria-expanded={expanded}
                   aria-controls={`admin-group-${group.id}`}
-                  onClick={() =>
-                    setExpandedGroup(expanded ? null : group.id)
-                  }
+                  onClick={() => setExpandedGroup(expanded ? null : group.id)}
                 >
                   <span className="admin_group_icon">
                     <i className={group.icon} />
@@ -410,10 +447,96 @@ function AdminDashboard({ onLogout, onBackToSite }) {
       </aside>
 
       <main className="admin_main">
+        <div className="admin_topbar">
+          <div className="admin_topbar_left">
+            <span className="admin_topbar_title">Admin Panel</span>
+            {pendingEssays.length > 0 && (
+              <span className="admin_topbar_hint">
+                {pendingEssays.length} essay
+                {pendingEssays.length === 1 ? "" : "s"} waiting for check
+              </span>
+            )}
+          </div>
+
+          <div className="admin_notif_wrap">
+            <button
+              type="button"
+              className="admin_notif_btn"
+              aria-label="Notifications"
+              onClick={() => setShowNotif((v) => !v)}
+            >
+              <i className="fa-solid fa-bell" />
+              {pendingEssays.length > 0 && (
+                <span className="admin_notif_badge">
+                  {pendingEssays.length > 9 ? "9+" : pendingEssays.length}
+                </span>
+              )}
+            </button>
+
+            {showNotif && (
+              <div className="admin_notif_dropdown">
+                <div className="admin_notif_head">
+                  <strong>Pending checks</strong>
+                  <button
+                    type="button"
+                    className="admin_notif_close"
+                    onClick={() => setShowNotif(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+
+                {pendingEssays.length === 0 ? (
+                  <p className="admin_notif_empty">No pending essay checks.</p>
+                ) : (
+                  <ul className="admin_notif_list">
+                    {pendingEssays.slice(0, 6).map((item) => (
+                      <li key={item.id}>
+                        <button
+                          type="button"
+                          className="admin_notif_item"
+                          onClick={openWritingChecks}
+                        >
+                          <span className="admin_notif_item_title">
+                            {item.questionTitle || "Essay"}
+                          </span>
+                          <span className="admin_status_pending">
+                            Pending Checking
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <button
+                  type="button"
+                  className="admin_notif_view_all"
+                  onClick={openWritingChecks}
+                >
+                  Open Write Essay checks
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
         {section === "home" ? (
           <section className="admin_welcome_card">
             <h1>Welcome to Admin Dashboard</h1>
             <p>Total Questions: {stats.total}</p>
+            <p>
+              Essay submissions pending: <strong>{pendingEssays.length}</strong>
+            </p>
+            {pendingEssays.length > 0 && (
+              <button
+                type="button"
+                className="admin_add_btn"
+                onClick={openWritingChecks}
+              >
+                Review pending essays
+              </button>
+            )}
           </section>
         ) : (
           <section className="admin_welcome_card">
@@ -629,7 +752,9 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                       <span>Word Bank (comma separated)</span>
                       <input
                         value={form.wordBank}
-                        onChange={(e) => updateField("wordBank", e.target.value)}
+                        onChange={(e) =>
+                          updateField("wordBank", e.target.value)
+                        }
                         placeholder="forest, visitors, trails, desert"
                         required
                       />
@@ -745,6 +870,85 @@ function AdminDashboard({ onLogout, onBackToSite }) {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {section === "write-essay" && (
+              <div className="admin_submissions_block">
+                <h2>Student Essay Submissions</h2>
+                <p className="admin_submissions_note">
+                  Essays submitted by students appear here for manual checking.
+                </p>
+
+                {essaySubmissions.length === 0 ? (
+                  <p className="admin_empty">No essay submissions yet.</p>
+                ) : (
+                  <div className="admin_question_table">
+                    {essaySubmissions.map((item) => {
+                      const isPending = item.status !== "reviewed";
+                      return (
+                        <div key={item.id} className="admin_submission_card">
+                          <div className="admin_submission_top">
+                            <div>
+                              <h3>{item.questionTitle || "Essay"}</h3>
+                              <p>
+                                {item.difficulty || "—"} ·{" "}
+                                {item.category || "—"} · {item.wordCount || 0}{" "}
+                                words ·{" "}
+                                <span
+                                  className={
+                                    isPending
+                                      ? "admin_status_pending"
+                                      : "admin_status_reviewed"
+                                  }
+                                >
+                                  {isPending ? "Pending Checking" : "Checked"}
+                                </span>
+                              </p>
+                            </div>
+                            <div className="admin_row_actions">
+                              {isPending && (
+                                <button
+                                  type="button"
+                                  className="admin_edit_btn"
+                                  onClick={() =>
+                                    handleReviewSubmission(item.id)
+                                  }
+                                >
+                                  Mark Checked
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                className="admin_delete_btn"
+                                onClick={() => handleDeleteSubmission(item.id)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                          {item.prompt && (
+                            <p className="admin_submission_meta">
+                              <strong>Topic:</strong> {item.prompt}
+                            </p>
+                          )}
+                          <p className="admin_submission_answer">
+                            {item.answerText}
+                          </p>
+                          {(item.score || item.feedback) && (
+                            <p className="admin_submission_meta">
+                              {item.score ? `Score: ${item.score}` : ""}
+                              {item.score && item.feedback ? " · " : ""}
+                              {item.feedback
+                                ? `Feedback: ${item.feedback}`
+                                : ""}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </section>

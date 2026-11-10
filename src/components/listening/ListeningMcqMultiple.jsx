@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
 import "../MultipleChoiceMultipleAnswer.css";
 import "./ListeningMcqMultiple.css";
@@ -88,8 +89,19 @@ function ListeningMcqMultiple({ onBack, initialCategory }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [questions, setQuestions] = useState(defaultQuestions);
 
-  const questions = defaultQuestions;
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("listening-mcq-multiple", defaultQuestions).then(
+      (merged) => {
+        if (!cancelled) setQuestions(merged);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const categoryCounts = useMemo(() => {
     const counts = {};

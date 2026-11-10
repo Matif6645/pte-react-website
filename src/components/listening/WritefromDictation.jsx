@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
 import "../MultipleChoiceMultipleAnswer.css";
 import "../MultipleChoiceSingleAnswer.css";
@@ -15,7 +16,7 @@ const CATS = [
   "GEOGRAPHY",
 ];
 
-const questions = [
+const defaultQuestions = [
   {
     id: 401,
     title: "SOLAR PANELS",
@@ -132,6 +133,7 @@ function scoreDictation(answerText, typedText) {
 
 function WriteFromDictation({ onBack, initialCategory }) {
   const audioRef = useRef(null);
+  const [questions, setQuestions] = useState(defaultQuestions);
   const [cat, setCat] = useState(
     CATS.includes(initialCategory) ? initialCategory : CATS[0],
   );
@@ -143,13 +145,23 @@ function WriteFromDictation({ onBack, initialCategory }) {
   const [t, setT] = useState(0);
   const [dur, setDur] = useState(0);
 
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("listening-wfd", defaultQuestions).then((merged) => {
+      if (!cancelled) setQuestions(merged);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const counts = useMemo(() => {
     const c = {};
     CATS.forEach((x) => {
       c[x] = questions.filter((q) => q.category === x).length;
     });
     return c;
-  }, []);
+  }, [questions]);
 
   const list = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -160,7 +172,7 @@ function WriteFromDictation({ onBack, initialCategory }) {
           q.title.toLowerCase().includes(term) ||
           String(q.id).includes(term)),
     );
-  }, [cat, search]);
+  }, [questions, cat, search]);
 
   const total = list.length;
   const safe = total ? Math.min(idx, total - 1) : 0;
@@ -310,7 +322,10 @@ function WriteFromDictation({ onBack, initialCategory }) {
                   <span className="wfd_empty">No words typed.</span>
                 ) : (
                   result.typedResult.map((word, i) => (
-                    <span key={`t-${i}`} className={`wfd_word ${word.status}`}>
+                    <span
+                      key={`t-${i}`}
+                      className={`wfd_word ${word.status}`}
+                    >
                       {word.text}
                     </span>
                   ))

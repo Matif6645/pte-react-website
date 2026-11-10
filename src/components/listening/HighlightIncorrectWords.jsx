@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
 import "../MultipleChoiceMultipleAnswer.css";
 import "../MultipleChoiceSingleAnswer.css";
@@ -32,7 +33,7 @@ function W(parts) {
   });
 }
 
-const questions = [
+const defaultQuestions = [
   {
     id: 301,
     title: "COMETS",
@@ -550,6 +551,7 @@ const fmt = (s) => {
 
 function HighlightIncorrectWords({ onBack, initialCategory }) {
   const audioRef = useRef(null);
+  const [questions, setQuestions] = useState(defaultQuestions);
   const [cat, setCat] = useState(
     CATS.includes(initialCategory) ? initialCategory : CATS[0],
   );
@@ -561,13 +563,23 @@ function HighlightIncorrectWords({ onBack, initialCategory }) {
   const [t, setT] = useState(0);
   const [dur, setDur] = useState(0);
 
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("listening-hiw", defaultQuestions).then((merged) => {
+      if (!cancelled) setQuestions(merged);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const counts = useMemo(() => {
     const c = {};
     CATS.forEach((x) => {
       c[x] = questions.filter((q) => q.category === x).length;
     });
     return c;
-  }, []);
+  }, [questions]);
 
   const list = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -578,7 +590,7 @@ function HighlightIncorrectWords({ onBack, initialCategory }) {
           q.title.toLowerCase().includes(term) ||
           String(q.id).includes(term)),
     );
-  }, [cat, search]);
+  }, [questions, cat, search]);
 
   const total = list.length;
   const safe = total ? Math.min(idx, total - 1) : 0;

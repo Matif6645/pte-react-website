@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { login } from "./auth";
-import "./AdminLogin.css";
+import "./AdminLogin.styles.css";
 
 function AdminLogin({ onLoginSuccess, onBackToSite }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -53,14 +54,26 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
 
           <label className="admin_field">
             <span>Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-              required
-              disabled={loading}
-            />
+            <div className="admin_password_wrap">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter password"
+                required
+                disabled={loading}
+              />
+              <button
+                type="button"
+                className="admin_password_eye"
+                onClick={() => setShowPassword((prev) => !prev)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                <i
+                  className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                />
+              </button>
+            </div>
           </label>
 
           {error && <p className="admin_login_error">{error}</p>}

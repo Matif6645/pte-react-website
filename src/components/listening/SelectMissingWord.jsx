@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
 import "../MultipleChoiceMultipleAnswer.css";
 import "../MultipleChoiceSingleAnswer.css";
@@ -17,7 +18,7 @@ const CATS = [
   "MATHEMATICS",
   "TECHNOLOGY",
 ];
-const questions = [
+const defaultQuestions = [
   {
     id: 201,
     title: "PHOTOSYNTHESIS",
@@ -272,11 +273,22 @@ const fmt = (s) => {
 
 function SelectMissingWord({ onBack, initialCategory }) {
   const audioRef = useRef(null);
+  const [questions, setQuestions] = useState(defaultQuestions);
   const [cat, setCat] = useState(
     CATS.includes(initialCategory) ? initialCategory : CATS[0],
   );
 
   const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("listening-smw", defaultQuestions).then((merged) => {
+      if (!cancelled) setQuestions(merged);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const [search, setSearch] = useState("");
   const [picked, setPicked] = useState({});
   const [checked, setChecked] = useState({});
@@ -289,7 +301,7 @@ function SelectMissingWord({ onBack, initialCategory }) {
       c[x] = questions.filter((q) => q.category === x).length;
     });
     return c;
-  }, []);
+  }, [questions]);
 
   const list = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -300,7 +312,7 @@ function SelectMissingWord({ onBack, initialCategory }) {
           q.title.toLowerCase().includes(term) ||
           String(q.id).includes(term)),
     );
-  }, [cat, search]);
+  }, [questions, cat, search]);
 
   const total = list.length;
   const safe = total ? Math.min(idx, total - 1) : 0;

@@ -728,7 +728,54 @@
 .practice_title_text .practice_instruction {
   margin: 0;
 }
+/* REORDER PARAGRAPHS ONLY */
 
+.reorder_practice_container {
+  background: linear-gradient(120deg, #f5f9ff 0%, #edf7ff 60%, #e7f4ff 100%);
+}
+
+/* Back button */
+.reorder_practice_container .practice_back_btn {
+  background: #dff0ff;
+  color: #1754b8;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.reorder_practice_container .practice_back_btn:hover {
+  background: #cce7ff;
+  color: #12458f;
+  border-color: #a9d4ff;
+  box-shadow: 0 4px 12px rgba(23, 84, 184, 0.12);
+}
+
+/* Main question card */
+.reorder_practice_container .bottom_section_reading {
+  border-color: #e0eaf5;
+  box-shadow: 0 8px 24px rgba(38, 83, 145, 0.06);
+}
+
+/* Question content */
+.reorder_practice_container .question_content {
+  background: #f3f9ff;
+}
+
+/* Category and search */
+.reorder_practice_container .question_set_select,
+.reorder_practice_container .fill_blanks_search {
+  border: 1px solid #dce7f5;
+  box-shadow: 0 2px 8px rgba(38, 83, 145, 0.06);
+}
+/* Temporary test: Reorder page only */
+.reorder_practice_container {
+  background: #eaf5ff !important;
+}
+
+.reorder_practice_container .practice_back_btn {
+  background: #dff0ff !important;
+  color: #1754b8 !important;
+  border: none !important;
+}
 /* Mobile responsive */
 
 @media (max-width: 480px) {

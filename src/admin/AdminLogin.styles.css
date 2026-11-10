@@ -231,6 +231,33 @@
   border-color: #7c3aed;
   color: #6d28d9;
 }
+.admin_password_wrap {
+  position: relative;
+  width: 100%;
+}
+
+.admin_password_wrap input {
+  width: 100%;
+  padding-right: 44px;
+  box-sizing: border-box;
+}
+
+.admin_password_eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #7c3aed;
+  cursor: pointer;
+  padding: 6px;
+  font-size: 16px;
+}
+
+.admin_password_eye:hover {
+  color: #5b21b6;
+}
 
 /* KEYBOARD ACCESSIBILITY */
 

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
 import "../MultipleChoiceMultipleAnswer.css";
 import "../MultipleChoiceSingleAnswer.css";
@@ -228,10 +229,7 @@ const defaultQuestions = [
         id: "A",
         text: "Antibiotic misuse can contribute to resistant infections.",
       },
-      {
-        id: "B",
-        text: "Antibiotics are effective against every viral illness.",
-      },
+      { id: "B", text: "Antibiotics are effective against every viral illness." },
       { id: "C", text: "Bacteria cannot adapt to antibiotic treatment." },
       {
         id: "D",
@@ -249,7 +247,14 @@ const categories = [
   "MEDICAL SCIENCE",
 ];
 
-function ListeningMcqSingle({ onBack, initialCategory , questions : questionsProp , title = "Multiple Choice" , type = "Single" , description = "Listen to the recording and choose the one option that best answers the questions." }) {
+function ListeningMcqSingle({
+  onBack,
+  initialCategory,
+  questions: questionsProp,
+  title = "Multiple Choice",
+  type = "Single",
+  description = "Listen to the recording and choose the one option that best answers the question.",
+}) {
   const audioRef = useRef(null);
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory)
@@ -263,8 +268,25 @@ function ListeningMcqSingle({ onBack, initialCategory , questions : questionsPro
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [questions, setQuestions] = useState(
+    questionsProp?.length ? questionsProp : defaultQuestions,
+  );
 
-  const questions = questionsProp?.length ? questionsProp : defaultQuestions;
+  useEffect(() => {
+    if (questionsProp?.length) {
+      setQuestions(questionsProp);
+      return;
+    }
+    let cancelled = false;
+    getMergedQuestions("listening-mcq-single", defaultQuestions).then(
+      (merged) => {
+        if (!cancelled) setQuestions(merged);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [questionsProp]);
 
   const categoryCounts = useMemo(() => {
     const counts = {};

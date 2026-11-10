@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
+import multipleAnswerIcon from "../assets/multiplechoosemultipleanswer.png";
 import "./MultipleChoiceMultipleAnswer.css";
 
 const defaultQuestions = [
@@ -232,7 +233,7 @@ function MultipleChoiceMultipleAnswer({ onBack, initialCategory }) {
       title="Multiple Choice"
       type="Multiple Answers"
       description="Read the passage and select all options that correctly answer the question."
-      icon="fa-solid fa-list-check"
+      headingImage={multipleAnswerIcon}
       categories={categories}
       selectedCategory={selectedCategory}
       categoryCounts={categoryCounts}

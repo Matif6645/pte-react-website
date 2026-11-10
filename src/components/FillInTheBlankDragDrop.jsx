@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
+import dragDropIcon from "../assets/fillindragdrop.png";
 import "./FillInTheBlankDragDrop.css";
 
 const defaultQuestions = [
@@ -304,7 +305,7 @@ function FillInTheBlankDragDrop({ onBack, initialCategory }) {
       title="Fill in the Blanks"
       type="Drag and Drop"
       description="Drag a word into each blank, or click a word then click a blank. Click a filled blank to remove the word."
-      icon="fa-solid fa-hand-pointer"
+      headingImage={dragDropIcon}
       categories={categories}
       selectedCategory={selectedCategory}
       categoryCounts={categoryCounts}

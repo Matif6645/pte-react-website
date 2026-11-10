@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
 import "../MultipleChoiceMultipleAnswer.css";
 import "../MultipleChoiceSingleAnswer.css";
@@ -20,7 +21,7 @@ const CATS = [
   "ECONOMICS",
 ];
 
-const questions = [
+const defaultQuestions = [
   {
     id: 117,
     title: "SODIUM",
@@ -394,6 +395,7 @@ const fmt = (s) => {
 
 function HighlightCorrectSummary({ onBack, initialCategory }) {
   const audioRef = useRef(null);
+  const [questions, setQuestions] = useState(defaultQuestions);
   const [cat, setCat] = useState(
     CATS.includes(initialCategory) ? initialCategory : CATS[0],
   );
@@ -405,13 +407,23 @@ function HighlightCorrectSummary({ onBack, initialCategory }) {
   const [t, setT] = useState(0);
   const [dur, setDur] = useState(0);
 
+  useEffect(() => {
+    let cancelled = false;
+    getMergedQuestions("listening-hcs", defaultQuestions).then((merged) => {
+      if (!cancelled) setQuestions(merged);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const counts = useMemo(() => {
     const c = {};
     CATS.forEach((x) => {
       c[x] = questions.filter((q) => q.category === x).length;
     });
     return c;
-  }, []);
+  }, [questions]);
 
   const list = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -422,7 +434,7 @@ function HighlightCorrectSummary({ onBack, initialCategory }) {
           q.title.toLowerCase().includes(term) ||
           String(q.id).includes(term)),
     );
-  }, [cat, search]);
+  }, [questions, cat, search]);
 
   const total = list.length;
   const safe = total ? Math.min(idx, total - 1) : 0;

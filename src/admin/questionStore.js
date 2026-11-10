@@ -1,4 +1,4 @@
-const STORAGE_KEY = "pte_admin_questions";
+import { supabase } from "./supabaseClient";
 
 export const QUESTION_TYPES = [
   // Reading
@@ -101,51 +101,116 @@ export const CATEGORIES = [
   "MEDICAL SCIENCE",
 ];
 
-export function getQuestions() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
+function fromDb(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    type: row.type,
+    title: row.title || "",
+    difficulty: row.difficulty || "Easy",
+    category: row.category || "SCIENCE & TECHNOLOGY",
+    time: row.time || "00:20",
+    passage: row.passage || "",
+    questionText: row.question_text || "",
+    optionA: row.option_a || "",
+    optionB: row.option_b || "",
+    optionC: row.option_c || "",
+    optionD: row.option_d || "",
+    optionE: row.option_e || "",
+    correctAnswer: row.correct_answer || "A",
+    correctAnswers: row.correct_answers || "",
+    wordBank: row.word_bank || "",
+    paragraphs: row.paragraphs || "",
+    audioUrl: row.audio_url || "",
+    segments: row.segments || null,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+function toDb(question) {
+  return {
+    type: question.type,
+    title: question.title || "",
+    difficulty: question.difficulty || "Easy",
+    category: question.category || "SCIENCE & TECHNOLOGY",
+    time: question.time || "00:20",
+    passage: question.passage || "",
+    question_text: question.questionText || "",
+    option_a: question.optionA || "",
+    option_b: question.optionB || "",
+    option_c: question.optionC || "",
+    option_d: question.optionD || "",
+    option_e: question.optionE || "",
+    correct_answer: question.correctAnswer || "A",
+    correct_answers: Array.isArray(question.correctAnswers)
+      ? question.correctAnswers.join(",")
+      : question.correctAnswers || "",
+    word_bank: question.wordBank || "",
+    paragraphs: question.paragraphs || "",
+    audio_url: question.audioUrl || "",
+    segments: question.segments || null,
+  };
+}
+
+export async function getQuestions() {
+  const { data, error } = await supabase
+    .from("questions")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  return (data || []).map(fromDb);
+}
+
+export async function addQuestion(question) {
+  const { data, error } = await supabase
+    .from("questions")
+    .insert(toDb(question))
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  return fromDb(data);
+}
+
+export async function updateQuestion(id, updates) {
+  const { data, error } = await supabase
+    .from("questions")
+    .update({
+      ...toDb(updates),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+
+  return fromDb(data);
+}
+
+export async function deleteQuestion(id) {
+  const { error } = await supabase.from("questions").delete().eq("id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error(error.message);
   }
 }
 
-export function saveQuestions(questions) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
-}
-
-export function addQuestion(question) {
-  const list = getQuestions();
-  const item = {
-    ...question,
-    id: Date.now(),
-    createdAt: new Date().toISOString(),
-  };
-  list.push(item);
-  saveQuestions(list);
-  return item;
-}
-
-export function updateQuestion(id, updates) {
-  const list = getQuestions();
-  const index = list.findIndex((q) => q.id === id);
-  if (index === -1) return null;
-
-  list[index] = {
-    ...list[index],
-    ...updates,
-    id: list[index].id,
-    updatedAt: new Date().toISOString(),
-  };
-  saveQuestions(list);
-  return list[index];
-}
-
-export function deleteQuestion(id) {
-  const list = getQuestions().filter((q) => q.id !== id);
-  saveQuestions(list);
-}
-
-export function getQuestionsByType(typeId) {
-  return getQuestions().filter((q) => q.type === typeId);
+export async function getQuestionsByType(typeId) {
+  const list = await getQuestions();
+  return list.filter((q) => q.type === typeId);
 }

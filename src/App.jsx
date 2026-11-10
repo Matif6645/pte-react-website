@@ -15,6 +15,7 @@ import ListeningMcqSingle from "./components/listening/ListeningMcqSingle";
 import SelectMissingWord from "./components/listening/SelectMissingWord";
 import HighlightIncorrectWords from "./components/listening/HighlightIncorrectWords";
 import WriteFromDictation from "./components/listening/WritefromDictation";
+import WriteEssay from "./components/writing/Essay";
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
 import { isAdminLoggedIn, logout } from "./admin/auth";
@@ -31,8 +32,11 @@ const LISTENING_VIEWS = {
   "Write from Dictation": "listening-wfd",
 };
 
+const WRITING_VIEWS = {
+  "Write Essay": "write-essay",
+};
+
 function App() {
-  // Always start on the student site. Admin opens only via Login.
   const [activeView, setActiveView] = useState("reading-home");
   const [activeItem, setActiveItem] = useState("");
   const [initialCategory, setInitialCategory] = useState(
@@ -127,6 +131,11 @@ function App() {
       return;
     }
 
+    if (WRITING_VIEWS[item]) {
+      setActiveView(WRITING_VIEWS[item]);
+      return;
+    }
+
     setActiveView("reading-home");
   }
 
@@ -199,6 +208,14 @@ function App() {
     }
     if (activeView === "listening-wfd") {
       return <WriteFromDictation onBack={openReadingHome} />;
+    }
+    if (activeView === "write-essay") {
+      return (
+        <WriteEssay
+          onBack={openReadingHome}
+          initialCategory={initialCategory}
+        />
+      );
     }
 
     return <ReadingHome onStartPractice={startPractice} />;

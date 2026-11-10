@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getMergedQuestions } from "../admin/practiceQuestions";
 import PracticeShared from "./PracticeShared.jsx";
+import reorderIcon from "../assets/reorder-icon.png";
 import "./ReorderParagraphs.css";
 
 const defaultQuestions = [
@@ -196,7 +197,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   const [selectedCategory, setSelectedCategory] = useState(
     initialCategory && categories.includes(initialCategory)
       ? initialCategory
-      : categories[0]
+      : categories[0],
   );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [search, setSearch] = useState("");
@@ -229,9 +230,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
   }, [questions]);
 
   const filteredQuestions = useMemo(() => {
-    const byCategory = questions.filter(
-      (q) => q.category === selectedCategory
-    );
+    const byCategory = questions.filter((q) => q.category === selectedCategory);
     const term = search.trim().toLowerCase();
     if (!term) return byCategory;
 
@@ -239,7 +238,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
       (q) =>
         q.title.toLowerCase().includes(term) ||
         String(q.id).includes(term) ||
-        q.difficulty.toLowerCase().includes(term)
+        q.difficulty.toLowerCase().includes(term),
     );
   }, [questions, selectedCategory, search]);
 
@@ -273,7 +272,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
 
   const usedIds = useMemo(
     () => new Set(answers.filter(Boolean).map((p) => p.id)),
-    [answers]
+    [answers],
   );
 
   const score = useMemo(() => {
@@ -393,7 +392,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
     <PracticeShared
       title="Reorder Paragraphs"
       description="Select the jumbled paragraphs on the left to place them in your answer. Use the arrows to change their order. You can also drag and drop."
-      icon="fa-solid fa-arrows-up-down"
+      headingImage={reorderIcon}
       categories={categories}
       selectedCategory={selectedCategory}
       categoryCounts={categoryCounts}
@@ -447,9 +446,7 @@ function ReorderParagraphs({ onBack, initialCategory }) {
                         used ? "jumble_card jumble_used" : "jumble_card"
                       }
                       draggable={!isChecked && !used}
-                      onDragStart={() =>
-                        onDragStartPara(para, "jumbled", null)
-                      }
+                      onDragStart={() => onDragStartPara(para, "jumbled", null)}
                       onDragEnd={onDragEnd}
                     >
                       <div className="jumble_card_top">

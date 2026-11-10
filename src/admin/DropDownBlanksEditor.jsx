@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import "./DropdownBlanksEditor.css";
+import "./DropDownBlanksEditor.css";
 
 const MARKER_SPLIT = /(\[\d+\])/;
 const MARKER_GLOBAL = /\[(\d+)\]/g;
