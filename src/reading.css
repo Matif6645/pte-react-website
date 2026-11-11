@@ -1,0 +1,485 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* header  */
+.header_grid {
+      background: linear-gradient(
+        90deg,
+        
+        
+        #E0DAFF 30%,
+        #7653E3 100%
+       
+     
+    );
+border:  #7653E3;
+box-shadow: 7px 4px 6.2px -3px rgba(0, 0, 0, 0.25);
+    
+    padding: 20px;
+    border-radius: 0 0 8px 8px;
+    
+}
+    
+ 
+.header_container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* COLUMN 2: NAVIGATION */
+.header_nav, .header_buttons {  
+    display: flex;
+    align-items: center;
+    gap: 30px;  
+}
+
+/* COLUMN 3: LOGIN AND SIGNUP */
+.practice_sidebar {
+    background-color: #E9DDF9;
+    border: 2px solid #168BFF;
+}
+/* COLUMN 3: BUTTONS */
+
+.header_menu{
+    background-color: #4D1DAD;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: none;
+}
+
+/* LOGIN BUTTON */
+.login_btn {
+    color: #374151;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* SIGNUP BUTTON */
+.signup_btn {
+    background-color: #7653E3;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+/* PARENT GRID */
+.practice_section_grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 75px);
+}
+
+/* COLUMN 1: SIDEBAR */
+/* LEFT SIDEBAR */
+.practice_sidebar {
+    border-radius: 8px;
+        background: linear-gradient(
+        180deg,
+        rgba(91, 33, 214, 0.1) 12%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(91, 33, 214, 0.1) 92%
+    );
+
+    border: 1px solid rgba(118, 83, 227, 0.1);
+   
+
+   
+    display: flex;
+flex-direction: column;
+ margin-top: 5px;
+ align-self: stretch;
+
+}
+    .practice_space {
+        padding-top: 10px;
+        padding-bottom: 10px;   
+         text-align: center;
+  font-family: "Urbanist", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+ 
+     background-color: #7653E3;
+    color: #FFFFFF;
+    border-radius: 8px 8px 0 0;
+
+}
+.practice_nav {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+ 
+  box-sizing: border-box;
+  padding: 8px
+ 
+
+}
+/* Main navigation bars */
+.speaking_bar,
+.writing_bar,
+.listening_bar,
+.reading_bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: #374151;
+  font-size: 16px;
+  font-weight: 700;
+  border: 1px solid #E5DBFC;
+  padding: 10px;
+  background-color: #E1D1FE;
+  border-radius: 8px;
+
+}
+
+/* Icon and text containers */
+.speaking_left,
+.writing_left,
+.listening_left,
+.reading_left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Icons */
+.speaking_icon,
+.writing_icon,
+.listening_icon,
+.reading_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+/* Individual icon backgrounds */
+.speaking_icon {
+  background-color: #e9d5ff;
+}
+
+.writing_icon {
+  background-color: #ffe4e6;
+}
+
+.listening_icon {
+  background-color: #dbeafe;
+}
+
+.reading_icon {
+  background-color: #dcfce7;
+}
+
+/* Right arrows */
+.speaking_arrow,
+.writing_arrow,
+.listening_arrow,
+.reading_arrow {
+  color: #6b7280;
+  font-size: 20px;
+}
+
+/* RIGHT PRACTICE AREA */
+
+.reading_practice{
+    display: flex;
+    color: #7653E3;
+    align-items: center;
+   gap: 10px;
+    
+    padding-top: 5px;
+ font-weight: 1000;
+
+
+}
+.reading_practice_top{
+  
+     display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+.reading-left {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-left: 20px;
+}
+.reading_practice i{
+    color: #4d1dad;
+    font-size: 20px;
+}
+
+
+@media (max-width: 800px){
+    .header_nav{
+        display: none;
+    }
+    .header_buttons {
+    display: none;
+    }   
+    .header_menu{
+        display: block;
+    }
+
+}
+.reading_practice_container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+  
+    min-height: 700px;
+     border: 1px solid rgba(118, 83, 227, 0.1);
+
+    background-color: #F0E8FF;
+      margin-left: 5px;
+    margin-top: 5px;
+    border-radius: 8px;
+}
+
+.desktop_grid {
+    
+     background-color: #F0E8FF;
+    width: 100%;
+    min-height: 100vh;
+}
+body {
+    font-family: "Urbanist", sans-serif;
+    width: 100%;
+    min-height: 100%;
+}
+
+.reading_heading_container {
+    display: flex;
+    flex-direction: row;
+
+     align-items: center;
+    gap: 10px;
+    background-color: #7653E3;
+     padding-left: 0;
+    border-radius: 8px 8px 0 0;
+    margin-left: -20px;
+    align-items: baseline;
+    padding-left: 10px;
+    
+}
+.practice_space,
+.reading_heading_container {
+    background-color: #7653E3;
+    height: 35px;
+    border-radius: 12px 12px 0 0;
+}
+.reading_practice h2,
+.reading_practice i {
+    color: #E9D5FF
+}
+
+.fill_blanks_title h3,
+.fill_blanks_title span {
+    color: white;
+}
+.fill_blanks_title {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    
+    
+    
+}
+
+
+.fill_blanks_title h3,
+.fill_blanks_title span {
+    white-space: nowrap;
+}
+/* PARENT */
+.category_search_container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 20px;
+    width: 100%;
+}
+
+/* BOTH CHILDREN */
+.category_question_container,
+.reading-right {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+/* HEADINGS */
+.category_title,
+.search_title {
+    font-family: "Urbanist", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 0;
+}
+
+/* DROPDOWN WRAPPER */
+.dropdown {
+    width: 100%;
+    min-width: 0;
+}
+
+/* BOTH INPUT BOXES */
+.dropdown select,
+.fill_blanks_search {
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+
+    background-color: #FFFFFF;
+    border: 1px solid #888888;
+    border-radius: 8px;
+}
+
+/* DROPDOWN */
+.dropdown select {
+    padding: 0 12px;
+    font-family: "Urbanist", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* SEARCH */
+.fill_blanks_search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+}
+
+.fill_blanks_search input {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+
+    border: none;
+    outline: none;
+    background: transparent;
+
+    font-family: "Urbanist", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+.question_number{
+    background-color: #E1D1FE;
+}
+.bottom_section_reading {
+    background-color: #FFFFFF;
+
+    width: auto;
+     min-height: calc(100vh - 250px);
+
+    margin: 5px;
+   
+ padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #E5DBFC;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.question_title
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    
+    
+}
+.difficulty
+{
+    background-color: #FFE990;
+    border-radius: 8px;
+     padding: 2px 8px;
+     font-size: 12px;
+     color: #9A4C0C;
+}
+
+.bottom_section_reading {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+/* Parent: all three groups */
+.question_details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Each icon and text group */
+.question_detail {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* All icons */
+.question_detail img {
+    width: 16px;
+    height: 16px;
+}
+
+/* All text */
+.question_detail span {
+    font-size: 10px;
+    font-weight: 400;
+    color: #374151;
+}
+.question_content {
+    width: 100%;
+}
+
+.question_content p {
+    font-size: 20px;
+    line-height: 2.5;
+    color: #374151;
+}
+
+.blank_dropdown {
+    display: inline-block;
+    width: 175px;
+    height: 40px;
+    padding: 5px 12px;
+    margin: 0 5px;
+    vertical-align: middle;
+
+    background-color: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+
+    font-family: "Urbanist", sans-serif;
+    font-size: 18px;
+    color: #374151;
+}

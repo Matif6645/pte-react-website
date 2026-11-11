@@ -1,0 +1,92 @@
+.desktop_grid {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+  background-color: #ede4fa;
+}
+
+.practice_section_grid {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+
+  max-width: 1200px;
+  width: calc(100% - 40px);
+  margin: 30px auto;
+
+  gap: 16px;
+  align-items: start;
+}
+/* Smooth transition when switching pages */
+.page-transition {
+  animation: pageFadeIn 0.5s ease-in-out both;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Smooth hover for practice cards */
+.practice-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.practice-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(83, 7, 131, 0.12);
+}
+
+/* =========================================
+   SMOOTH PRACTICE PAGE TRANSITIONS
+========================================= */
+
+.practice-page-transition {
+  width: 100%;
+  min-width: 0;
+
+  animation: practicePageEnter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes practicePageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .practice-page-transition {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none;
+  }
+}
+@media (max-width: 800px) {
+  .practice_section_grid {
+    grid-template-columns: 1fr;
+  }
+}

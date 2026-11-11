@@ -1,0 +1,471 @@
+/* ==========================================
+   MULTIPLE CHOICE - MULTIPLE ANSWERS
+   PTE ACADEMY
+========================================== */
+
+/* PAGE CONTAINER */
+
+.mcq_practice_container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  min-height: calc(100vh - 100px);
+
+  margin: 5px;
+  padding: 20px 24px 24px;
+
+  border-radius: 12px;
+  background-color: #f5f3ff;
+  box-sizing: border-box;
+}
+
+/* TOP SECTION */
+
+.mcq_practice_top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ==========================================
+   READING PASSAGE
+========================================== */
+
+.mcq_passage {
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.mcq_passage p {
+  margin: 0 0 12px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.8;
+
+  color: #24243b;
+}
+
+.mcq_passage p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================
+   QUESTION TEXT
+========================================== */
+
+.mcq_question_text {
+  margin: 22px 0 18px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.65;
+
+  color: #18162e;
+}
+
+/* ==========================================
+   ANSWER OPTIONS CONTAINER
+========================================== */
+
+.mcq_options_list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 100%;
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+/* ==========================================
+   INDIVIDUAL ANSWER CARD
+========================================== */
+
+.mcq_options_list .mcq_option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  width: 100%;
+  min-height: 68px;
+  padding: 14px 18px;
+  box-sizing: border-box;
+
+  background-color: #ffffff;
+  border: 1.5px solid #e5e2ef;
+  border-radius: 12px;
+
+  font-family: "Urbanist", sans-serif;
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* HOVER EFFECT */
+
+.mcq_options_list .mcq_option:hover:not(:disabled) {
+  background-color: #faf8ff;
+  border-color: #c4b5fd;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 5px 16px rgba(124, 58, 237, 0.08);
+}
+
+/* BUTTON PRESS EFFECT */
+
+.mcq_options_list .mcq_option:active:not(:disabled) {
+  transform: scale(0.995);
+}
+
+/* KEYBOARD FOCUS */
+
+.mcq_options_list .mcq_option:focus-visible {
+  outline: 3px solid #c4b5fd;
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   CUSTOM CHECKBOX
+========================================== */
+
+.mcq_checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 22px;
+  height: 22px;
+
+  background-color: #ffffff;
+  border: 2px solid #c4b5fd;
+  border-radius: 6px;
+
+  color: #ffffff;
+  font-size: 12px;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.mcq_checkbox i {
+  font-size: 12px;
+  color: inherit;
+}
+
+/* ==========================================
+   OPTION LETTER (A / B / C / D / E)
+========================================== */
+
+.mcq_option_label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  background-color: #f3f0fa;
+  border-radius: 9px;
+
+  color: #6b4ca5;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* ==========================================
+   ANSWER TEXT
+========================================== */
+
+.mcq_option_text {
+  flex: 1;
+  min-width: 0;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+
+  color: #29253e;
+
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   SELECTED ANSWER
+========================================== */
+
+.mcq_options_list .mcq_option.selected_option {
+  background-color: #f3efff;
+  border-color: #8b5cf6;
+
+  box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.08);
+}
+
+/* SELECTED CHECKBOX */
+
+.selected_option .mcq_checkbox {
+  background-color: #7c3aed;
+  border-color: #7c3aed;
+  color: #ffffff;
+}
+
+/* SELECTED LETTER */
+
+.selected_option .mcq_option_label {
+  background-color: #7c3aed;
+  color: #ffffff;
+}
+
+/* SELECTED TEXT */
+
+.selected_option .mcq_option_text {
+  color: #4c1d95;
+}
+
+/* ==========================================
+   CORRECT ANSWER
+========================================== */
+
+.mcq_options_list .mcq_option.option_correct {
+  background-color: #f0fdf4;
+  border-color: #22c55e;
+}
+
+/* CORRECT CHECKBOX */
+
+.option_correct .mcq_checkbox {
+  background-color: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+/* CORRECT LETTER */
+
+.option_correct .mcq_option_label {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+/* CORRECT TEXT */
+
+.option_correct .mcq_option_text {
+  color: #166534;
+}
+
+/* ==========================================
+   WRONG SELECTED ANSWER
+========================================== */
+
+.mcq_options_list .mcq_option.option_wrong {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+}
+
+/* WRONG CHECKBOX */
+
+.option_wrong .mcq_checkbox {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+/* WRONG LETTER */
+
+.option_wrong .mcq_option_label {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* WRONG TEXT */
+
+.option_wrong .mcq_option_text {
+  color: #991b1b;
+}
+
+/* ==========================================
+   MISSED CORRECT ANSWER
+========================================== */
+
+.mcq_options_list .mcq_option.option_missed {
+  background-color: #fffbeb;
+  border-color: #f59e0b;
+}
+
+/* MISSED LETTER */
+
+.option_missed .mcq_option_label {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* MISSED CHECKBOX */
+
+.option_missed .mcq_checkbox {
+  border-color: #f59e0b;
+  background-color: #ffffff;
+}
+
+/* MISSED TEXT */
+
+.option_missed .mcq_option_text {
+  color: #92400e;
+}
+
+/* ==========================================
+   DISABLED AFTER CHECKING
+========================================== */
+
+.mcq_options_list .mcq_option:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.mcq_options_list .mcq_option:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ==========================================
+   SCORE DISPLAY
+========================================== */
+
+.mcq_options_list ~ .score_text {
+  margin: 18px 0;
+  padding: 14px 18px;
+
+  background-color: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 10px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+
+  color: #6d28d9;
+}
+
+/* ==========================================
+   RESET & CHECK ANSWER CONTAINER
+========================================== */
+
+.mcq_footer_actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+/* BUTTON STYLING REMAINS IN GLOBAL CSS */
+
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 900px) {
+  .mcq_practice_container {
+    padding: 18px;
+  }
+
+  .mcq_options_list {
+    gap: 10px;
+  }
+
+  .mcq_options_list .mcq_option {
+    padding: 14px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+  .mcq_practice_container {
+    padding: 12px;
+    margin: 0;
+  }
+
+  .mcq_passage p {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .mcq_question_text {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .mcq_options_list {
+    gap: 10px;
+  }
+
+  .mcq_options_list .mcq_option {
+    gap: 10px;
+    padding: 12px;
+
+    min-height: 60px;
+    border-radius: 10px;
+  }
+
+  .mcq_checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mcq_option_label {
+    width: 32px;
+    height: 32px;
+
+    font-size: 14px;
+  }
+
+  .mcq_option_text {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .mcq_footer_actions {
+    gap: 10px;
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION ACCESSIBILITY
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .mcq_option,
+  .mcq_checkbox,
+  .mcq_option_label {
+    transition: none !important;
+  }
+
+  .mcq_options_list .mcq_option:hover {
+    transform: none;
+  }
+}

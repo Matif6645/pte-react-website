@@ -1,0 +1,769 @@
+/* ==========================================
+   PTE ACADEMY - READING HOME
+========================================== */
+
+.reading_home {
+  width: 100%;
+  min-width: 0;
+  padding: 24px;
+  box-sizing: border-box;
+
+  background: #f6f3ff;
+  border-radius: 16px;
+
+  font-family: "Urbanist", sans-serif;
+}
+
+/* ==========================================
+   HERO SECTION - HEADING + CANVA IMAGE
+========================================== */
+
+.reading_home_hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 8px 20px;
+
+  background: #f5f3ff;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+/* LEFT SIDE - HEADING */
+
+.reading_home_hero_text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  min-width: 0;
+  padding-top: 0;
+}
+
+/* READING PRACTICE LABEL */
+
+.reading_home_eyebrow {
+  margin: 0 0 6px;
+
+  color: #7653e3;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* MAIN HEADING */
+
+.reading_home_title {
+  margin: 0 0 4px;
+
+  color: #192744;
+  font-size: clamp(26px, 2.6vw, 32px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* DESCRIPTION */
+
+.reading_home_subtitle {
+  margin: 0;
+
+  color: #68748a;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* RIGHT SIDE - CANVA IMAGE */
+
+.reading_home_hero_image {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  min-width: 0;
+  overflow: hidden;
+}
+
+.reading_home_hero_image img {
+  display: block;
+
+  width: auto;
+  max-width: 100%;
+  height: 180px;
+
+  object-fit: contain;
+  object-position: top right;
+
+  border-radius: 10px;
+}
+
+/* ==========================================
+   PRACTICE CARDS - SHARED DESIGN (ALL 5 TYPES)
+========================================== */
+
+.practice_cards_grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
+}
+
+.practice_card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e5dbfc;
+  border-radius: 18px;
+  box-shadow: 0 4px 14px rgba(83, 7, 131, 0.04);
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.practice_card:hover {
+  border-color: #b9a0f8;
+  box-shadow: 0 8px 22px rgba(83, 7, 131, 0.09);
+  transform: translateY(-2px);
+}
+
+/* Icon beside heading, description and difficulty badges */
+.practice_card_header {
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+  min-height: 122px;
+}
+
+.practice_card_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  overflow: hidden;
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+.practice_card_icon_image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+}
+
+.icon_purple {
+  background: #eee7ff;
+  color: #7653e3;
+}
+.icon_blue {
+  background: #e4f2ff;
+  color: #287db3;
+}
+.icon_green {
+  background: #e1f7f0;
+  color: #15977e;
+}
+.icon_orange {
+  background: #fff0e1;
+  color: #d18131;
+}
+.icon_pink {
+  background: #fbe7f2;
+  color: #a04486;
+}
+
+.practice_card_heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.practice_card_title {
+  min-height: 0;
+  margin: 0;
+  color: #192744;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.practice_card_subtitle {
+  margin: 0;
+  color: #68748a;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.practice_card_difficulties {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.practice_difficulty_tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.practice_difficulty_tag.easy {
+  background: #d8f7e7;
+  color: #087443;
+}
+.practice_difficulty_tag.medium {
+  background: #ffead5;
+  color: #b54708;
+}
+.practice_difficulty_tag.hard {
+  background: #fbd4e5;
+  color: #a7194b;
+}
+
+/* Horizontal rule between header and statistics */
+.practice_card_divider {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: #e9e4f2;
+}
+
+.practice_card_stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  width: 100%;
+}
+
+.stat_item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.stat_item:first-child {
+  border-right: 1px solid #d9c9ff;
+}
+
+.stat_icon {
+  flex-shrink: 0;
+  color: #7653e3;
+  font-size: 22px;
+}
+
+.stat_label {
+  margin: 0 0 3px;
+  color: #68748a;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.stat_value {
+  margin: 0;
+  color: #192744;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.stat_right {
+  text-align: left;
+}
+
+/* Category dropdown and Start Practice on the same row */
+.practice_card_actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 14px;
+  width: 100%;
+  margin-top: auto;
+}
+
+.card_dropdown_wrap {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+}
+
+.card_dropdown_trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 50px;
+  padding: 11px 15px;
+  background: #f8f6ff;
+  color: #34244f;
+  border: 1px solid #e5dbfc;
+  border-radius: 11px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.card_dropdown_trigger span {
+  min-width: 0;
+}
+.card_dropdown_trigger i {
+  flex-shrink: 0;
+  color: #7653e3;
+  font-size: 14px;
+}
+.card_dropdown_trigger:hover:not(:disabled) {
+  background: #f0e9ff;
+  border-color: #b9a0f8;
+}
+.card_dropdown_trigger.open_trigger {
+  background: #eee7ff;
+  border-color: #a78bfa;
+}
+.card_dropdown_trigger:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.card_dropdown_panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  padding: 0 12px;
+  margin-top: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: #f8f6ff;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition:
+    grid-template-rows 0.3s ease,
+    opacity 0.3s ease,
+    margin-top 0.3s ease,
+    padding 0.3s ease,
+    border-color 0.3s ease,
+    visibility 0.3s;
+}
+
+.card_dropdown_panel.show {
+  grid-template-rows: 1fr;
+  margin-top: 8px;
+  padding: 12px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  border-color: #e5dbfc;
+}
+
+.question_categories_list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.category_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 10px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: #49516b;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.category_row:hover {
+  background: #ede4ff;
+}
+.category_row.active_category {
+  background: #e7daff;
+  color: #530783;
+  font-weight: 700;
+}
+.category_count {
+  flex-shrink: 0;
+  color: #7653e3;
+  font-weight: 700;
+}
+.category_empty {
+  margin: 0;
+  color: #8790a2;
+  font-size: 12px;
+}
+
+.start_practice_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 50px;
+  margin: 0;
+  padding: 11px 12px;
+  background: #7653e3;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.start_practice_btn span {
+  font-size: 18px;
+}
+.start_practice_btn:hover:not(:disabled) {
+  background: #530783;
+  box-shadow: 0 5px 14px rgba(83, 7, 131, 0.18);
+}
+.start_practice_btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.start_practice_btn:disabled {
+  background: #d8c8f5;
+  cursor: not-allowed;
+}
+
+.card_dropdown_trigger:focus-visible,
+.category_row:focus-visible,
+.start_practice_btn:focus-visible {
+  outline: 2px solid #7653e3;
+  outline-offset: 3px;
+}
+
+/* COMPACT HERO HEADING SPACING */
+
+.reading_home_eyebrow {
+  margin-bottom: 6px;
+}
+
+.reading_home_title {
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.reading_home_subtitle {
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* FOUR FEATURE GRID */
+
+.reading_home_features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+
+  width: 100%;
+  margin-top: 15px;
+}
+
+/* FEATURE BOX */
+
+.reading_home_feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  min-width: 0;
+  padding: 9px;
+
+  background: #f8f6ff;
+  border: 1px solid #e5dbfc;
+  border-radius: 12px;
+
+  box-sizing: border-box;
+}
+
+/* PURPLE ICON BACKGROUND */
+
+.reading_home_feature_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  background: #eee7ff;
+  border-radius: 10px;
+
+  color: #7653e3;
+  font-size: 17px;
+}
+
+/* FEATURE TEXT */
+
+.reading_home_feature_content {
+  min-width: 0;
+}
+
+.reading_home_feature_content h4 {
+  margin: 0 0 3px;
+
+  color: #192744;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.reading_home_feature_content p {
+  margin: 0;
+
+  color: #68748a;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+/* Reading - Purple */
+.reading_home_feature:nth-child(1) i {
+  color: #7653e3;
+}
+
+/* Speed - Blue */
+.reading_home_feature:nth-child(2) i {
+  color: #2196f3;
+}
+
+/* Smart Learning - Orange */
+.reading_home_feature:nth-child(3) i {
+  color: #f59e0b;
+}
+
+/* Video Tutorials - Red */
+.reading_home_feature:nth-child(4) i {
+  color: #ff0000;
+}
+
+/* TABLET */
+
+@media (max-width: 768px) {
+  .reading_home_features {
+    margin-top: 12px;
+  }
+}
+
+/* SMALL MOBILE */
+
+@media (max-width: 480px) {
+  .reading_home_features {
+    grid-template-columns: 1fr;
+  }
+
+  .reading_home_feature {
+    padding: 10px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - SMALL DESKTOP
+========================================== */
+
+@media (max-width: 1000px) {
+  .reading_home {
+    padding: 18px;
+  }
+
+  .reading_home_hero {
+    gap: 18px;
+    padding: 12px 16px;
+  }
+
+  .reading_home_hero_image img {
+    height: 160px;
+  }
+
+  .practice_cards_grid {
+    gap: 14px;
+  }
+
+  .practice_card {
+    padding: 16px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - TABLET
+========================================== */
+
+@media (max-width: 768px) {
+  .reading_home_hero {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .reading_home_hero_text {
+    padding-top: 0;
+  }
+
+  .reading_home_hero_image {
+    justify-content: center;
+  }
+
+  .reading_home_hero_image img {
+    height: 170px;
+    max-width: 100%;
+    object-position: center;
+  }
+
+  .reading_home_title {
+    font-size: 27px;
+  }
+
+  .reading_home_subtitle {
+    font-size: 15px;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE - MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+  .practice_cards_grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reading_home_title {
+    font-size: 25px;
+  }
+
+  .reading_home_subtitle {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reading_home {
+    padding: 12px;
+  }
+
+  .reading_home_hero {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+
+  .reading_home_hero_image img {
+    height: 145px;
+  }
+
+  .practice_card {
+    padding: 16px;
+  }
+
+  .practice_card_title {
+    font-size: 16px;
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .practice_card,
+  .card_dropdown_trigger,
+  .card_dropdown_panel,
+  .category_row,
+  .start_practice_btn {
+    transition: none;
+  }
+
+  .practice_card:hover,
+  .start_practice_btn:active {
+    transform: none;
+  }
+}
+
+/* Cards remain readable when the screen becomes narrower */
+@media (max-width: 1000px) {
+  .practice_card_header {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .practice_card_icon {
+    width: 76px;
+    height: 76px;
+  }
+  .practice_card_actions {
+    gap: 9px;
+  }
+  .practice_card_title {
+    font-size: 16px;
+  }
+  .start_practice_btn {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .practice_card_header {
+    grid-template-columns: 68px minmax(0, 1fr);
+    min-height: 0;
+  }
+  .practice_card_icon {
+    width: 68px;
+    height: 68px;
+  }
+  .practice_card_actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .practice_card_difficulties {
+    justify-content: flex-start;
+  }
+}
