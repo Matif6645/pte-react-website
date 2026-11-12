@@ -101,116 +101,264 @@ export const CATEGORIES = [
   "MEDICAL SCIENCE",
 ];
 
-function fromDb(row) {
+// ============================================
+// TYPE -> TABLE MAPPING
+// ============================================
+
+const OPT4 = ["option_a", "option_b", "option_c", "option_d"];
+const OPT5 = [...OPT4, "option_e"];
+const OPT6 = [...OPT5, "option_f"];
+
+const TABLES = {
+  // Reading
+  "fill-blanks-dropdown": { table: "fill_blanks_dropdown", columns: [] },
+  "fill-blanks-drag": { table: "fill_blanks_drag_drop", columns: [] },
+  "reorder-paragraphs": { table: "reorder_paragraphs", columns: [] },
+  "mcq-multiple": {
+    table: "multiple_choice_multiple",
+    columns: ["question_text", ...OPT5],
+  },
+  "mcq-single": {
+    table: "multiple_choice_single",
+    columns: ["question_text", ...OPT4],
+  },
+
+  // Speaking
+  "read-aloud": { table: "speaking_read_aloud", columns: ["passage"] },
+  "repeat-sentence": {
+    table: "speaking_repeat_sentence",
+    columns: ["audio_url", "transcript"],
+  },
+  "describe-image": {
+    table: "speaking_describe_image",
+    columns: ["image_url", "sample_answer"],
+  },
+  "retell-lecture": {
+    table: "speaking_retell_lecture",
+    columns: ["audio_url", "image_url", "transcript", "sample_answer"],
+  },
+  "answer-short-question": {
+    table: "speaking_answer_short_question",
+    columns: ["question_text", "audio_url", "correct_answer"],
+  },
+
+  // Writing
+  "summarize-written-text": {
+    table: "writing_summarize_written_text",
+    columns: ["passage", "sample_answer"],
+  },
+  "write-essay": {
+    table: "writing_write_essay",
+    columns: ["question_text", "sample_answer"],
+  },
+
+  // Listening
+  "listening-sst": {
+    table: "listening_summarize_spoken_text",
+    columns: ["question_text", "audio_url", "transcript", "correct_answer"],
+  },
+  "listening-mcq-multiple": {
+    table: "listening_mcq_multiple",
+    columns: ["question_text", "audio_url", ...OPT6, "correct_answers"],
+  },
+  "listening-fib": {
+    table: "listening_fill_blanks",
+    columns: ["question_text", "audio_url", "transcript", "blanks"],
+  },
+  "listening-hcs": {
+    table: "listening_highlight_correct_summary",
+    columns: ["question_text", "audio_url", ...OPT4, "correct_answer"],
+  },
+  "listening-mcq-single": {
+    table: "listening_mcq_single",
+    columns: ["question_text", "audio_url", ...OPT4, "correct_answer"],
+  },
+  "listening-smw": {
+    table: "listening_select_missing_word",
+    columns: ["question_text", "audio_url", ...OPT4, "correct_answer"],
+  },
+  "listening-hiw": {
+    table: "listening_highlight_incorrect_words",
+    columns: ["question_text", "audio_url", "transcript", "incorrect_words"],
+  },
+  "listening-wfd": {
+    table: "listening_write_from_dictation",
+    columns: ["question_text", "audio_url", "transcript", "correct_answer"],
+  },
+};
+
+// db column -> app field
+const FIELD_MAP = {
+  passage: "passage",
+  question_text: "questionText",
+  option_a: "optionA",
+  option_b: "optionB",
+  option_c: "optionC",
+  option_d: "optionD",
+  option_e: "optionE",
+  option_f: "optionF",
+  correct_answer: "correctAnswer",
+  correct_answers: "correctAnswers",
+  audio_url: "audioUrl",
+  image_url: "imageUrl",
+  transcript: "transcript",
+  sample_answer: "sampleAnswer",
+  blanks: "blanks",
+  incorrect_words: "incorrectWords",
+};
+
+// jsonb array columns
+const ARRAY_COLUMNS = ["correct_answers", "blanks", "incorrect_words"];
+
+function getTable(type) {
+  const config = TABLES[type];
+  if (!config) throw new Error(`Unknown question type: ${type}`);
+  return config;
+}
+
+function toArray(value) {
+  if (Array.isArray(value)) return value;
+  if (!value) return [];
+  return String(value)
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function handleError(error, label) {
+  if (error) {
+    console.error(label, error);
+    throw new Error(label ? `${label}: ${error.message}` : error.message);
+  }
+}
+
+// ============================================
+// CONVERTERS
+// ============================================
+
+function fromDb(row, type) {
   if (!row) return null;
-  return {
+  const { columns } = getTable(type);
+
+  const question = {
+    passage: "",
+    questionText: "",
+    optionA: "",
+    optionB: "",
+    optionC: "",
+    optionD: "",
+    optionE: "",
+    correctAnswer: "A",
+    correctAnswers: "",
+    wordBank: "",
+    paragraphs: "",
+    audioUrl: "",
+    segments: null,
+    // payload mein jo bhi save hai (wordBank, paragraphs, segments...)
+    ...(row.payload || {}),
     id: row.id,
-    type: row.type,
+    type,
     title: row.title || "",
     difficulty: row.difficulty || "Easy",
     category: row.category || "SCIENCE & TECHNOLOGY",
     time: row.time || "00:20",
-    passage: row.passage || "",
-    questionText: row.question_text || "",
-    optionA: row.option_a || "",
-    optionB: row.option_b || "",
-    optionC: row.option_c || "",
-    optionD: row.option_d || "",
-    optionE: row.option_e || "",
-    correctAnswer: row.correct_answer || "A",
-    correctAnswers: row.correct_answers || "",
-    wordBank: row.word_bank || "",
-    paragraphs: row.paragraphs || "",
-    audioUrl: row.audio_url || "",
-    segments: row.segments || null,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
+
+  // asli columns payload se zyada important hain
+  for (const col of columns) {
+    const value = row[col];
+    if (value === null || value === undefined || value === "") continue;
+    question[FIELD_MAP[col]] =
+      col === "correct_answers" ? toArray(value).join(",") : value;
+  }
+
+  return question;
 }
 
 function toDb(question) {
-  return {
+  const { columns } = getTable(question.type);
+
+  const payload = { ...question };
+  delete payload.id;
+  delete payload.createdAt;
+  delete payload.updatedAt;
+
+  const row = {
     type: question.type,
     title: question.title || "",
     difficulty: question.difficulty || "Easy",
     category: question.category || "SCIENCE & TECHNOLOGY",
     time: question.time || "00:20",
-    passage: question.passage || "",
-    question_text: question.questionText || "",
-    option_a: question.optionA || "",
-    option_b: question.optionB || "",
-    option_c: question.optionC || "",
-    option_d: question.optionD || "",
-    option_e: question.optionE || "",
-    correct_answer: question.correctAnswer || "A",
-    correct_answers: Array.isArray(question.correctAnswers)
-      ? question.correctAnswers.join(",")
-      : question.correctAnswers || "",
-    word_bank: question.wordBank || "",
-    paragraphs: question.paragraphs || "",
-    audio_url: question.audioUrl || "",
-    segments: question.segments || null,
+    payload,
   };
+
+  for (const col of columns) {
+    const value = question[FIELD_MAP[col]];
+    row[col] = ARRAY_COLUMNS.includes(col) ? toArray(value) : value || "";
+  }
+
+  return row;
 }
 
+// ============================================
+// CRUD
+// ============================================
+
 export async function getQuestions() {
+  const results = await Promise.all(
+    Object.entries(TABLES).map(async ([type, { table }]) => {
+      const { data, error } = await supabase.from(table).select("*");
+      handleError(error, table);
+      return (data || []).map((row) => fromDb(row, type));
+    }),
+  );
+
+  return results
+    .flat()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
+export async function getQuestionsByType(typeId) {
+  const { table } = getTable(typeId);
   const { data, error } = await supabase
-    .from("questions")
+    .from(table)
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error(error);
-    throw new Error(error.message);
-  }
-
-  return (data || []).map(fromDb);
+  handleError(error, table);
+  return (data || []).map((row) => fromDb(row, typeId));
 }
 
 export async function addQuestion(question) {
+  const { table } = getTable(question.type);
   const { data, error } = await supabase
-    .from("questions")
+    .from(table)
     .insert(toDb(question))
     .select()
     .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error(error.message);
-  }
-
-  return fromDb(data);
+  handleError(error, table);
+  return fromDb(data, question.type);
 }
 
 export async function updateQuestion(id, updates) {
+  const { table } = getTable(updates.type);
   const { data, error } = await supabase
-    .from("questions")
-    .update({
-      ...toDb(updates),
-      updated_at: new Date().toISOString(),
-    })
+    .from(table)
+    .update(toDb(updates))
     .eq("id", id)
     .select()
     .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error(error.message);
-  }
-
-  return fromDb(data);
+  handleError(error, table);
+  return fromDb(data, updates.type);
 }
 
-export async function deleteQuestion(id) {
-  const { error } = await supabase.from("questions").delete().eq("id", id);
+export async function deleteQuestion(id, type) {
+  const { table } = getTable(type);
+  const { error } = await supabase.from(table).delete().eq("id", id);
 
-  if (error) {
-    console.error(error);
-    throw new Error(error.message);
-  }
-}
-
-export async function getQuestionsByType(typeId) {
-  const list = await getQuestions();
-  return list.filter((q) => q.type === typeId);
+  handleError(error, table);
 }

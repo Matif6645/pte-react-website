@@ -262,9 +262,10 @@ function AdminDashboard({ onLogout, onBackToSite }) {
   async function handleDelete(id) {
     const ok = window.confirm("Delete this question?");
     if (!ok) return;
+    
 
     try {
-      await deleteQuestion(id);
+      await deleteQuestion(id, section);
       if (editingId === id) closeForm();
       await refresh();
     } catch (error) {
