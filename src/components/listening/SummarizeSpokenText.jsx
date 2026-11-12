@@ -3,6 +3,7 @@ import { getMergedQuestions } from "../../admin/practiceQuestions";
 import { scoreListening } from "../../admin/aiScore.js";
 import { addSubmission, updateSubmission } from "../../admin/submissonStore.js";
 import PracticeShared from "../PracticeShared.jsx";
+import AiEvaluationResultSST from "./AiEvaluationResultSST";
 import "../MultipleChoiceMultipleAnswer.css";
 import "../MultipleChoiceSingleAnswer.css";
 import "./ListeningMcqMultiple.css";
@@ -21,10 +22,10 @@ const CATS = [
 const defaultQuestions = [
   {
     id: 601,
-    title: "MELATONIN",
+    title: "RENEWABLE ENERGY",
     difficulty: "Medium",
     time: "01:00",
-    category: "MEDICAL SCIENCE",
+    category: "SCIENCE & TECHNOLOGY",
     audioUrl: DEMO,
     questionText:
       "You will hear a short lecture. Write a summary for a fellow student who was not present. You should write 50–70 words.",
@@ -325,30 +326,16 @@ function SummarizeSpokenText({ onBack, initialCategory }) {
           />
           <p className="sst_word_count">Word Count: {count}</p>
 
-          {submitted && (
-            <div className="sst_result_box">
-              {aiError && <p className="sst_submit_ok">AI error: {aiError}</p>}
-              {aiResult ? (
-                <>
-                  <p className="sst_submit_ok">AI Score: {aiResult.score}</p>
-                  <p>{aiResult.feedback}</p>
-                  {aiResult.mistakes?.length > 0 && (
-                    <ul>
-                      {aiResult.mistakes.map((m, i) => (
-                        <li key={i}>{m}</li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              ) : (
-                !aiError && (
-                  <p className="sst_submit_ok">
-                    Submitted. Waiting for AI feedback...
-                  </p>
-                )
-              )}
-            </div>
+          {/* Show loading while AI is scoring */}
+          {aiLoading && (
+            <p className="sst_submit_ok">AI is evaluating your answer...</p>
           )}
+
+          {/* Show error if AI scoring fails */}
+          {aiError && <p className="sst_error">AI error: {aiError}</p>}
+
+          {/* Show new SST AI Evaluation Result */}
+          {aiResult && <AiEvaluationResultSST result={aiResult} />}
         </>
       )}
     </PracticeShared>
