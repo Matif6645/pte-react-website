@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 
 import { SST_PROMPT, getSstResult } from "./sstPrompt.js";
+import { ESSAY_PROMPT, getEssayResult } from "./essayPrompt.js";
 
 dotenv.config();
 
@@ -62,19 +63,7 @@ Return valid JSON only:
 
     // Essay instructions (temporary)
     if (isEssay) {
-      systemPrompt = `
-You are a PTE Writing practice evaluator.
-
-Evaluate the student's Write Essay answer.
-Give an estimated practice score from 0 to 90.
-
-Return valid JSON only:
-{
-  "score": 0,
-  "feedback": "",
-  "mistakes": []
-}
-`;
+      systemPrompt = ESSAY_PROMPT;
     }
 
     // SST prompt from separate file
@@ -115,6 +104,15 @@ Return valid JSON only:
 
     // Convert JSON into JavaScript object
     const aiData = JSON.parse(content);
+
+    if (isEssay) {
+      const essayResult = getEssayResult(aiData, studentAnswer);
+
+      return res.json({
+        ...essayResult,
+        tokenUsage: result.usage?.total_tokens ?? 0,
+      });
+    }
 
     // Calculate SST marks using sstPrompt.js
     if (isSst) {

@@ -1,8 +1,19 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { getMergedQuestions } from "../../admin/practiceQuestions";
 import { scoreListening } from "../../admin/aiScore.js";
-import { addSubmission, updateSubmission } from "../../admin/submissonStore.js";
+import {
+  addSubmission,
+  updateSubmission
+} from "../../admin/submissonStore.js";
+
 import PracticeShared from "../PracticeShared.jsx";
+import AiEvaluationResultEssay from "./AiEvaluationResultEssay.jsx";
+
+
+// =====================================
+// ESSAY CATEGORIES
+// =====================================
 
 const CATS = [
   "SCIENCE & TECHNOLOGY",
@@ -13,6 +24,11 @@ const CATS = [
   "GEOGRAPHY",
   "EDUCATION",
 ];
+
+
+// =====================================
+// DEFAULT ESSAY QUESTIONS
+// =====================================
 
 const defaultQuestions = [
   {
@@ -26,7 +42,6 @@ const defaultQuestions = [
     questionText:
       "You will have 20 minutes to plan, write and revise an essay about the topic below. Your response will be judged on how well you develop a position, organize your ideas, present supporting details, and control the elements of standard written English. You should write 200–300 words.",
   },
-  // SCIENCE & TECHNOLOGY
   {
     id: 472,
     title: "ARTIFICIAL INTELLIGENCE",
@@ -60,7 +75,6 @@ const defaultQuestions = [
     questionText:
       "You will have 20 minutes to plan, write and revise an essay about the topic below. Write 200–300 words.",
   },
-  // HISTORY
   {
     id: 475,
     title: "LEARNING FROM HISTORY",
@@ -94,7 +108,6 @@ const defaultQuestions = [
     questionText:
       "You will have 20 minutes to plan, write and revise an essay about the topic below. Write 200–300 words.",
   },
-  // BIOLOGY
   {
     id: 478,
     title: "GENETIC ENGINEERING",
@@ -128,7 +141,6 @@ const defaultQuestions = [
     questionText:
       "You will have 20 minutes to plan, write and revise an essay about the topic below. Write 200–300 words.",
   },
-  // MEDICAL SCIENCE
   {
     id: 481,
     title: "PUBLIC HEALTHCARE",
@@ -162,7 +174,6 @@ const defaultQuestions = [
     questionText:
       "You will have 20 minutes to plan, write and revise an essay about the topic below. Write 200–300 words.",
   },
-  // ENVIRONMENT
   {
     id: 484,
     title: "CLIMATE CHANGE",
@@ -196,7 +207,6 @@ const defaultQuestions = [
     questionText:
       "You will have 20 minutes to plan, write and revise an essay about the topic below. Write 200–300 words.",
   },
-  // GEOGRAPHY
   {
     id: 487,
     title: "URBANISATION",
@@ -230,7 +240,6 @@ const defaultQuestions = [
     questionText:
       "You will have 20 minutes to plan, write and revise an essay about the topic below. Write 200–300 words.",
   },
-  // EDUCATION
   {
     id: 490,
     title: "ONLINE LEARNING",
@@ -266,6 +275,12 @@ const defaultQuestions = [
   },
 ];
 
+
+// =====================================
+// HELPER FUNCTIONS
+// =====================================
+
+// Count words
 function wordCount(text) {
   return String(text || "")
     .trim()
@@ -273,196 +288,420 @@ function wordCount(text) {
     .filter(Boolean).length;
 }
 
+// Convert time string to seconds
 function parseSeconds(timeStr) {
   const parts = String(timeStr || "20:00")
     .split(":")
     .map((n) => Number(n));
-  if (parts.length === 2 && parts.every((n) => Number.isFinite(n))) {
+
+  if (
+    parts.length === 2 &&
+    parts.every((n) => Number.isFinite(n))
+  ) {
     return parts[0] * 60 + parts[1];
   }
+
   return 20 * 60;
 }
 
+// Format timer
 function fmt(s) {
   const n = Math.max(0, Math.floor(s));
-  return `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(n % 60).padStart(2, "0")}`;
+
+  return `${String(Math.floor(n / 60)).padStart(2, "0")}:${String(
+    n % 60
+  ).padStart(2, "0")}`;
 }
 
+
+// =====================================
+// WRITE ESSAY COMPONENT
+// =====================================
+
 function WriteEssay({ onBack, initialCategory }) {
+
   const [questions, setQuestions] = useState(defaultQuestions);
+
   const [cat, setCat] = useState(
-    CATS.includes(initialCategory) ? initialCategory : CATS[0],
+    CATS.includes(initialCategory)
+      ? initialCategory
+      : CATS[0]
   );
+
   const [idx, setIdx] = useState(0);
   const [search, setSearch] = useState("");
+
   const [typedMap, setTypedMap] = useState({});
   const [submittedMap, setSubmittedMap] = useState({});
+  const [resultMap, setResultMap] = useState({});
+  const [errorMap, setErrorMap] = useState({});
+
   const [remain, setRemain] = useState(20 * 60);
-  const [aiResult, setAiResult] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiError, setAiError] = useState("");
+  const [loadingQuestionId, setLoadingQuestionId] = useState(null);
+
+
+  // =====================================
+  // LOAD QUESTIONS
+  // =====================================
 
   useEffect(() => {
     let cancelled = false;
-    getMergedQuestions("write-essay", defaultQuestions).then((merged) => {
-      if (!cancelled) setQuestions(merged);
-    });
+
+    getMergedQuestions("write-essay", defaultQuestions)
+      .then((merged) => {
+        if (!cancelled) {
+          setQuestions(merged);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load essay questions:", error);
+      });
+
     return () => {
       cancelled = true;
     };
   }, []);
 
+
+  // =====================================
+  // CATEGORY COUNTS
+  // =====================================
+
   const counts = useMemo(() => {
     const c = {};
+
     CATS.forEach((x) => {
-      c[x] = questions.filter((q) => q.category === x).length;
+      c[x] = questions.filter(
+        (q) => q.category === x
+      ).length;
     });
+
     return c;
   }, [questions]);
 
+
+  // =====================================
+  // FILTER QUESTIONS
+  // =====================================
+
   const list = useMemo(() => {
     const term = search.trim().toLowerCase();
+
     return questions.filter(
       (q) =>
         q.category === cat &&
-        (!term ||
+        (
+          !term ||
           q.title.toLowerCase().includes(term) ||
-          String(q.id).includes(term)),
+          String(q.id).includes(term)
+        )
     );
   }, [questions, cat, search]);
+
+
+  // =====================================
+  // CURRENT QUESTION
+  // =====================================
 
   const total = list.length;
   const safe = total ? Math.min(idx, total - 1) : 0;
   const q = list[safe];
-  const submitted = q ? !!submittedMap[q.id] : false;
-  const typed = q ? typedMap[q.id] || "" : "";
+
+  const submitted = q
+    ? Boolean(submittedMap[q.id])
+    : false;
+
+  const typed = q
+    ? typedMap[q.id] || ""
+    : "";
+
   const count = wordCount(typed);
+
+  const aiResult = q
+    ? resultMap[q.id] || null
+    : null;
+
+  const aiError = q
+    ? errorMap[q.id] || ""
+    : "";
+
+  const isCurrentLoading =
+    aiLoading && loadingQuestionId === q?.id;
+
+
+  // =====================================
+  // TIMER
+  // =====================================
 
   useEffect(() => {
     if (!q) return;
+
     setRemain(parseSeconds(q.time));
   }, [q?.id]);
 
   useEffect(() => {
-    if (!q || submitted) return;
-    const id = setInterval(() => {
-      setRemain((prev) => (prev > 0 ? prev - 1 : 0));
+    if (!q || submitted || aiLoading) return;
+
+    const timer = setInterval(() => {
+      setRemain((prev) =>
+        prev > 0 ? prev - 1 : 0
+      );
     }, 1000);
-    return () => clearInterval(id);
-  }, [q?.id, submitted]);
+
+    return () => clearInterval(timer);
+  }, [q?.id, submitted, aiLoading]);
+
+
+  // =====================================
+  // SUBMIT ESSAY FOR AI SCORING
+  // =====================================
 
   async function handleSubmit() {
-    if (!q || !typed.trim() || submitted || aiLoading) return;
+    if (
+      !q ||
+      !typed.trim() ||
+      submitted ||
+      aiLoading
+    ) {
+      return;
+    }
+
+    const questionId = q.id;
+    const answer = typed.trim();
 
     setAiLoading(true);
-    setAiError("");
-    setAiResult(null);
+    setLoadingQuestionId(questionId);
 
+    setErrorMap((prev) => ({
+      ...prev,
+      [questionId]: "",
+    }));
+
+    setResultMap((prev) => ({
+      ...prev,
+      [questionId]: null,
+    }));
+
+    // Save initial student submission
     const item = addSubmission({
       type: "write-essay",
-      questionId: q.id,
+      questionId,
       questionTitle: q.title,
       difficulty: q.difficulty,
       category: q.category,
       prompt: q.prompt,
-      answerText: typed.trim(),
-      wordCount: count,
+      answerText: answer,
+      wordCount: wordCount(answer),
     });
 
     try {
+
+      // Send essay to OpenAI via Express backend
       const data = await scoreListening({
         type: "write-essay",
         question: q.prompt,
         correctAnswer: "",
-        studentAnswer: typed.trim(),
+        studentAnswer: answer,
       });
 
-      setAiResult(data);
+      // Save AI result for this question
+      setResultMap((prev) => ({
+        ...prev,
+        [questionId]: data,
+      }));
+
+      // Update admin submission record
       updateSubmission(item.id, {
         status: "ai-scored",
         score: data.score,
+        maxScore: data.maxScore,
         feedback: data.feedback,
-        mistakes: data.mistakes,
+        criteria: data.criteria,
+        strengths: data.strengths,
+        weaknesses: data.weaknesses,
+        suggestions: data.suggestions,
+        languageAnalysis: data.languageAnalysis,
       });
+
+      // Mark question as completed only on success
+      setSubmittedMap((prev) => ({
+        ...prev,
+        [questionId]: true,
+      }));
+
     } catch (err) {
-      setAiError(err.message || "AI scoring failed");
+
+      console.error("Essay scoring failed:", err);
+
+      setErrorMap((prev) => ({
+        ...prev,
+        [questionId]:
+          err.message || "AI scoring failed",
+      }));
+
+      if (item?.id != null) {
+        updateSubmission(item.id, {
+          status: "ai-error",
+          feedback: err.message || "AI scoring failed",
+        });
+      }
+
     } finally {
       setAiLoading(false);
-      setSubmittedMap((p) => ({ ...p, [q.id]: true }));
+      setLoadingQuestionId(null);
     }
   }
 
+
+  // =====================================
+  // RE-DO ESSAY
+  // =====================================
+
   function handleRedo() {
-    if (!q) return;
-    setSubmittedMap((p) => {
-      const next = { ...p };
-      delete next[q.id];
+    if (!q || aiLoading) return;
+
+    const questionId = q.id;
+
+    setSubmittedMap((prev) => {
+      const next = { ...prev };
+      delete next[questionId];
       return next;
     });
-    setTypedMap((p) => ({ ...p, [q.id]: "" }));
-    setAiResult(null);
-    setAiError("");
-    setAiLoading(false);
+
+    setTypedMap((prev) => ({
+      ...prev,
+      [questionId]: "",
+    }));
+
+    setResultMap((prev) => ({
+      ...prev,
+      [questionId]: null,
+    }));
+
+    setErrorMap((prev) => ({
+      ...prev,
+      [questionId]: "",
+    }));
+
     setRemain(parseSeconds(q.time));
   }
+
+
+  // =====================================
+  // DISPLAY PRACTICE PAGE
+  // =====================================
 
   return (
     <PracticeShared
       headingLabel="WRITING PRACTICE"
       backLabel="Back"
       title="Write Essay"
-      description="Write a 200–300 word essay. After submit, AI will score your answer."
+      description="Write a 200–300 word essay. After submission, AI will evaluate your answer."
       icon="fa-solid fa-pen"
+
       categories={CATS}
       selectedCategory={cat}
       categoryCounts={counts}
+
       onCategoryChange={(c) => {
         setCat(c);
         setIdx(0);
         setSearch("");
       }}
+
       search={search}
       onSearchChange={(v) => {
         setSearch(v);
         setIdx(0);
       }}
+
       question={q}
       questionNumber={safe + 1}
       totalQuestions={total}
+
       details={
         q
           ? [
-              { icon: "fa-regular fa-clock", text: `Remain: ${fmt(remain)}` },
-              { icon: "fa-solid fa-align-left", text: "200–300 WORDS" },
-              { icon: "fa-solid fa-tag", text: q.category },
+              {
+                icon: "fa-regular fa-clock",
+                text: `Remain: ${fmt(remain)}`,
+              },
+              {
+                icon: "fa-solid fa-align-left",
+                text: "200–300 WORDS",
+              },
+              {
+                icon: "fa-solid fa-tag",
+                text: q.category,
+              },
             ]
           : []
       }
+
       onBack={onBack}
       onReset={handleRedo}
-      resetDisabled={!q}
+      resetDisabled={!q || aiLoading}
+
       onCheck={handleSubmit}
-      checkDisabled={submitted || !typed.trim() || aiLoading}
-      checkLabel={aiLoading ? "Scoring..." : submitted ? "Submitted" : "Submit"}
-      onPrevious={() => safe > 0 && setIdx(safe - 1)}
-      onNext={() => safe < total - 1 && setIdx(safe + 1)}
+      checkDisabled={
+        submitted ||
+        !typed.trim() ||
+        aiLoading
+      }
+      checkLabel={
+        isCurrentLoading
+          ? "Scoring..."
+          : submitted
+          ? "Submitted"
+          : "Submit"
+      }
+
+      onPrevious={() => {
+        if (safe > 0) {
+          setIdx(safe - 1);
+        }
+      }}
+
+      onNext={() => {
+        if (safe < total - 1) {
+          setIdx(safe + 1);
+        }
+      }}
+
       previousDisabled={!safe}
       nextDisabled={safe >= total - 1}
     >
+
       {q && (
         <>
+
+          {/* QUESTION INSTRUCTIONS */}
           <p className="mcq_question_text essay_instruction">
             {q.questionText}
           </p>
 
+
+          {/* ESSAY TOPIC */}
           <div className="essay_prompt_box">
-            <p className="essay_prompt_label">Essay topic</p>
-            <p className="essay_prompt_text">{q.prompt}</p>
+            <p className="essay_prompt_label">
+              Essay topic
+            </p>
+
+            <p className="essay_prompt_text">
+              {q.prompt}
+            </p>
           </div>
 
-          <label className="sst_label" htmlFor={`essay-input-${q.id}`}>
+
+          {/* STUDENT ESSAY TEXTAREA */}
+          <label
+            className="sst_label"
+            htmlFor={`essay-input-${q.id}`}
+          >
             Write your essay
           </label>
+
           <textarea
             id={`essay-input-${q.id}`}
             className="sst_textarea essay_textarea"
@@ -470,40 +709,62 @@ function WriteEssay({ onBack, initialCategory }) {
             placeholder="Type your essay here..."
             value={typed}
             disabled={submitted || aiLoading}
+
             onChange={(e) =>
-              setTypedMap((p) => ({ ...p, [q.id]: e.target.value }))
+              setTypedMap((prev) => ({
+                ...prev,
+                [q.id]: e.target.value,
+              }))
             }
           />
+
+
+          {/* WORD COUNT */}
           <p
             className={`sst_word_count ${
-              count > 0 && (count < 200 || count > 300) ? "essay_wc_warn" : ""
+              count > 0 &&
+              (count < 200 || count > 300)
+                ? "essay_wc_warn"
+                : ""
             }`}
           >
             Word Count: {count}
           </p>
 
-          {submitted && (
-            <div className="sst_result_box">
-              {aiError && <p className="sst_submit_ok">AI error: {aiError}</p>}
-              {aiResult ? (
-                <>
-                  <p className="sst_submit_ok">AI Score: {aiResult.score}</p>
-                  <p>{aiResult.feedback}</p>
-                  {aiResult.mistakes?.length > 0 && (
-                    <ul>
-                      {aiResult.mistakes.map((m, i) => (
-                        <li key={i}>{m}</li>
-                      ))}
-                    </ul>
-                  )}
-                </>
-              ) : (
-                !aiError && (
-                  <p className="sst_submit_ok">
-                    Submitted. Waiting for AI feedback...
-                  </p>
-                )
-              )}
+
+          {/* AI LOADING MESSAGE */}
+          {isCurrentLoading && (
+            <div className="essay_ai_loading">
+              <p className="sst_submit_ok">
+                AI is evaluating your essay...
+              </p>
+            </div>
+          )}
+
+
+          {/* AI ERROR MESSAGE */}
+          {aiError && (
+            <div className="essay_error_message">
+              <p>
+                AI error: {aiError}
+              </p>
+
+              <p>
+                You can click Submit again to retry.
+              </p>
+            </div>
+          )}
+
+
+          {/* DETAILED AI ESSAY RESULT */}
+          {submitted && aiResult && (
+            <div className="essay_result_container">
+
+              <AiEvaluationResultEssay
+                result={aiResult}
+              />
+
+              {/* RE-DO BUTTON */}
               <button
                 type="button"
                 className="essay_redo_btn"
@@ -511,10 +772,13 @@ function WriteEssay({ onBack, initialCategory }) {
               >
                 Re-do
               </button>
+
             </div>
           )}
+
         </>
       )}
+
     </PracticeShared>
   );
 }
