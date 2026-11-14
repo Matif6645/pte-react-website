@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import ReadAloud from "./components/Speaking/ReadAloud";
 import ReadingHome from "./components/ReadingHome";
 import FillInTheBlanksDropdown from "./components/FillInTheBlanksDropdown";
 import ReorderParagraphs from "./components/ReorderParagraphs";
@@ -36,6 +37,9 @@ const LISTENING_VIEWS = {
 const WRITING_VIEWS = {
   "Summarize Written Text": "summarize-written-text",
   "Write Essay": "write-essay",
+};
+const SPEAKING_VIEWS = {
+  "Read Aloud": "speaking-read-aloud",
 };
 
 function App() {
@@ -137,6 +141,10 @@ function App() {
       setActiveView(WRITING_VIEWS[item]);
       return;
     }
+    if (SPEAKING_VIEWS[item]) {
+      setActiveView(SPEAKING_VIEWS[item]);
+      return;
+    }
 
     setActiveView("reading-home");
   }
@@ -226,6 +234,9 @@ function App() {
           initialCategory={initialCategory}
         />
       );
+    }
+    if (activeView === "speaking-read-aloud") {
+      return <ReadAloud onBack={openReadingHome} />;
     }
 
     return <ReadingHome onStartPractice={startPractice} />;

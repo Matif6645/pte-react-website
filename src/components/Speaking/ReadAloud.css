@@ -1,0 +1,283 @@
+/* ==========================================
+   PTE ACADEMY - READ ALOUD
+   Speaking Practice
+========================================== */
+
+/* Main speaking question */
+
+.speaking_question {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 20px 0 26px;
+  padding: 28px 30px;
+
+  background: #ffffff;
+  border: 1px solid #e5dcfa;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 18px rgba(93, 52, 155, 0.05);
+
+  font-family: "Urbanist", sans-serif;
+}
+
+/* Question heading */
+
+.speaking_question h3 {
+  margin: 0 0 20px;
+
+  color: #39246f;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+/* Reading passage */
+
+.speaking_question > p:first-of-type {
+  margin: 0;
+  padding: 22px 24px;
+
+  background: #faf8ff;
+  border: 1px solid #e9e1fb;
+  border-radius: 12px;
+
+  color: #192744;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 2;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Temporary recording message */
+
+.speaking_question > p:last-of-type {
+  margin: 20px 0 0;
+
+  color: #80758f;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+/* ==========================================
+   MICROPHONE AREA
+   For upcoming recording functionality
+========================================== */
+
+.readaloud_recorder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  padding: 25px;
+  margin-top: 24px;
+
+  background: #f8f5ff;
+  border: 1px dashed #c9b8fa;
+  border-radius: 16px;
+}
+
+.readaloud_mic_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 70px;
+  height: 70px;
+
+  background: #ede6ff;
+  color: #7653e3;
+  border-radius: 50%;
+
+  font-size: 28px;
+}
+
+.readaloud_mic_icon.recording {
+  background: #fee2e2;
+  color: #dc2626;
+
+  animation: readaloud-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes readaloud-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.24);
+  }
+
+  70% {
+    box-shadow: 0 0 0 14px rgba(220, 38, 38, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+/* Recorder status */
+
+.readaloud_status {
+  margin: 0;
+
+  color: #615873;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Recording buttons */
+
+.readaloud_controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.readaloud_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+  padding: 11px 20px;
+
+  background: #7653e3;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 12px;
+
+  font-family: "Urbanist", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.readaloud_btn:hover:not(:disabled) {
+  background: #6241ce;
+  transform: translateY(-1px);
+}
+
+.readaloud_btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.readaloud_btn.stop {
+  background: #dc2626;
+}
+
+.readaloud_btn.stop:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+/* Playback */
+
+.readaloud_playback {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 100%;
+  max-width: 500px;
+  margin-top: 15px;
+}
+
+.readaloud_playback audio {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* ==========================================
+   FEEDBACK
+========================================== */
+
+.readaloud_feedback {
+  margin-top: 22px;
+  padding: 18px 20px;
+
+  background: #f4efff;
+  border: 1px solid #e2d7ff;
+  border-radius: 12px;
+
+  color: #39246f;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.readaloud_error {
+  margin-top: 16px;
+  padding: 14px 18px;
+
+  background: #fff0f1;
+  color: #b82f44;
+
+  border: 1px solid #ffcbd2;
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+  .speaking_question {
+    padding: 20px;
+  }
+
+  .speaking_question h3 {
+    font-size: 16px;
+  }
+
+  .speaking_question > p:first-of-type {
+    padding: 18px;
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .readaloud_recorder {
+    padding: 20px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .speaking_question {
+    padding: 16px;
+  }
+
+  .speaking_question > p:first-of-type {
+    padding: 15px;
+    font-size: 16px;
+  }
+
+  .readaloud_controls {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .readaloud_btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .readaloud_mic_icon.recording {
+    animation: none;
+  }
+
+  .readaloud_btn {
+    transition: none;
+  }
+}
