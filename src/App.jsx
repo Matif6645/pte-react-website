@@ -16,6 +16,7 @@ import SelectMissingWord from "./components/listening/SelectMissingWord";
 import HighlightIncorrectWords from "./components/listening/HighlightIncorrectWords";
 import WriteFromDictation from "./components/listening/WritefromDictation";
 import WriteEssay from "./components/writing/Essay";
+import SummarizeWrittenText from "./components/writing/SummarizeWrittenText";
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
 import { isAdminLoggedIn, logout } from "./admin/auth";
@@ -33,6 +34,7 @@ const LISTENING_VIEWS = {
 };
 
 const WRITING_VIEWS = {
+  "Summarize Written Text": "summarize-written-text",
   "Write Essay": "write-essay",
 };
 
@@ -208,6 +210,14 @@ function App() {
     }
     if (activeView === "listening-wfd") {
       return <WriteFromDictation onBack={openReadingHome} />;
+    }
+    if (activeView === "summarize-written-text") {
+      return (
+        <SummarizeWrittenText
+          onBack={openReadingHome}
+          initialCategory={initialCategory}
+        />
+      );
     }
     if (activeView === "write-essay") {
       return (

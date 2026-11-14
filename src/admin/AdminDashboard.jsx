@@ -37,6 +37,7 @@ const emptyForm = {
   audioUrl: "",
   dropdownPassage: "",
   dropdownBlanks: {},
+  sstAiResponse: "",
 };
 
 const READING_MCQ_TYPES = ["mcq-single", "mcq-multiple"];
@@ -158,6 +159,10 @@ function questionToForm(question) {
     paragraphs: question.paragraphs || "",
     audioUrl: question.audioUrl || "",
     ...dropdownFields,
+    sstAiResponse:
+      question.type === "listening-sst"
+        ? localStorage.getItem(`pte_sst_ai_${question.id}`) || ""
+        : "",
   };
 }
 
@@ -171,6 +176,7 @@ function AdminDashboard({ onLogout, onBackToSite }) {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [sstTab, setSstTab] = useState("details");
   const [showNotif, setShowNotif] = useState(false);
 
   const stats = useMemo(() => {
@@ -250,19 +256,20 @@ function AdminDashboard({ onLogout, onBackToSite }) {
   function openAddForm() {
     setEditingId(null);
     setForm(emptyForm);
+    setSstTab("details");
     setShowForm(true);
   }
 
   function openEditForm(question) {
     setEditingId(question.id);
     setForm(questionToForm(question));
+    setSstTab("details");
     setShowForm(true);
   }
 
   async function handleDelete(id) {
     const ok = window.confirm("Delete this question?");
     if (!ok) return;
-    
 
     try {
       await deleteQuestion(id, section);
@@ -311,7 +318,9 @@ function AdminDashboard({ onLogout, onBackToSite }) {
       paragraphs: form.paragraphs.trim(),
       audioUrl: form.audioUrl.trim(),
     };
-
+    if (section === "listening-sst") {
+      base.correctAnswer = "";
+    }
     if (section === "fill-blanks-dropdown") {
       const { segments, correctAnswers } = buildDropdownSegments(
         form.dropdownPassage,
@@ -323,11 +332,22 @@ function AdminDashboard({ onLogout, onBackToSite }) {
 
     setSaving(true);
     try {
+      let savedQuestion;
+
       if (editingId) {
-        await updateQuestion(editingId, base);
+        savedQuestion = await updateQuestion(editingId, base);
       } else {
-        await addQuestion(base);
+        savedQuestion = await addQuestion(base);
       }
+
+      // Save SST AI Response in localStorage only
+      if (section === "listening-sst") {
+        localStorage.setItem(
+          `pte_sst_ai_${savedQuestion.id}`,
+          form.sstAiResponse.trim(),
+        );
+      }
+
       closeForm();
       await refresh();
     } catch (error) {
@@ -560,264 +580,322 @@ function AdminDashboard({ onLogout, onBackToSite }) {
               <form className="admin_form_card" onSubmit={handleSubmit}>
                 <h2>{editingId ? "Edit Question" : "Add Question"}</h2>
 
-                <label>
-                  <span>Title</span>
-                  <input
-                    value={form.title}
-                    onChange={(e) => updateField("title", e.target.value)}
-                    placeholder="Question title"
-                    required
-                  />
-                </label>
+                {section === "listening-sst" && (
+                  <div className="admin_sst_tabs">
+                    <button
+                      type="button"
+                      className={sstTab === "details" ? "active" : ""}
+                      onClick={() => setSstTab("details")}
+                    >
+                      Question Details
+                    </button>
 
-                <label>
-                  <span>Difficulty</span>
-                  <select
-                    value={form.difficulty}
-                    onChange={(e) => updateField("difficulty", e.target.value)}
-                  >
-                    <option>Easy</option>
-                    <option>Medium</option>
-                    <option>Hard</option>
-                  </select>
-                </label>
+                    <button
+                      type="button"
+                      className={sstTab === "ai" ? "active" : ""}
+                      onClick={() => setSstTab("ai")}
+                    >
+                      <i className="fa-solid fa-wand-magic-sparkles" />
+                      AI Response
+                    </button>
+                  </div>
+                )}
 
-                <label>
-                  <span>Category</span>
-                  <select
-                    value={form.category}
-                    onChange={(e) => updateField("category", e.target.value)}
-                  >
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-
-                <label>
-                  <span>Time</span>
-                  <input
-                    value={form.time}
-                    onChange={(e) => updateField("time", e.target.value)}
-                    placeholder="00:20"
-                  />
-                </label>
-
-                {(READING_MCQ_TYPES.includes(section) ||
-                  LISTENING_MCQ_TYPES.includes(section)) && (
+                {/* Show existing Question Details */}
+                {(section !== "listening-sst" || sstTab === "details") && (
                   <>
-                    {LISTENING_MCQ_TYPES.includes(section) && (
-                      <label>
-                        <span>Audio URL</span>
-                        <input
-                          value={form.audioUrl}
-                          onChange={(e) =>
-                            updateField("audioUrl", e.target.value)
-                          }
-                          placeholder="https://example.com/audio.mp3"
-                        />
-                      </label>
+                    <label>
+                      <span>Title</span>
+                      <input
+                        value={form.title}
+                        onChange={(e) => updateField("title", e.target.value)}
+                        placeholder="Question title"
+                        required
+                      />
+                    </label>
+
+                    <label>
+                      <span>Difficulty</span>
+                      <select
+                        value={form.difficulty}
+                        onChange={(e) =>
+                          updateField("difficulty", e.target.value)
+                        }
+                      >
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                      </select>
+                    </label>
+
+                    <label>
+                      <span>Category</span>
+                      <select
+                        value={form.category}
+                        onChange={(e) =>
+                          updateField("category", e.target.value)
+                        }
+                      >
+                        {CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+
+                    <label>
+                      <span>Time</span>
+                      <input
+                        value={form.time}
+                        onChange={(e) => updateField("time", e.target.value)}
+                        placeholder="00:20"
+                      />
+                    </label>
+
+                    {(READING_MCQ_TYPES.includes(section) ||
+                      LISTENING_MCQ_TYPES.includes(section)) && (
+                      <>
+                        {LISTENING_MCQ_TYPES.includes(section) && (
+                          <label>
+                            <span>Audio URL</span>
+                            <input
+                              value={form.audioUrl}
+                              onChange={(e) =>
+                                updateField("audioUrl", e.target.value)
+                              }
+                              placeholder="https://example.com/audio.mp3"
+                            />
+                          </label>
+                        )}
+
+                        {READING_MCQ_TYPES.includes(section) && (
+                          <label>
+                            <span>Passage (one line = one paragraph)</span>
+                            <textarea
+                              rows={3}
+                              value={form.passage}
+                              onChange={(e) =>
+                                updateField("passage", e.target.value)
+                              }
+                              placeholder="Write passage..."
+                              required
+                            />
+                          </label>
+                        )}
+
+                        <label>
+                          <span>Question</span>
+                          <input
+                            value={form.questionText}
+                            onChange={(e) =>
+                              updateField("questionText", e.target.value)
+                            }
+                            placeholder="Question text"
+                            required
+                          />
+                        </label>
+
+                        <label>
+                          <span>Option A</span>
+                          <input
+                            value={form.optionA}
+                            onChange={(e) =>
+                              updateField("optionA", e.target.value)
+                            }
+                            required
+                          />
+                        </label>
+                        <label>
+                          <span>Option B</span>
+                          <input
+                            value={form.optionB}
+                            onChange={(e) =>
+                              updateField("optionB", e.target.value)
+                            }
+                            required
+                          />
+                        </label>
+                        <label>
+                          <span>Option C</span>
+                          <input
+                            value={form.optionC}
+                            onChange={(e) =>
+                              updateField("optionC", e.target.value)
+                            }
+                            required
+                          />
+                        </label>
+                        <label>
+                          <span>Option D</span>
+                          <input
+                            value={form.optionD}
+                            onChange={(e) =>
+                              updateField("optionD", e.target.value)
+                            }
+                            required
+                          />
+                        </label>
+
+                        {section === "listening-mcq-multiple" && (
+                          <label>
+                            <span>Option E (optional)</span>
+                            <input
+                              value={form.optionE}
+                              onChange={(e) =>
+                                updateField("optionE", e.target.value)
+                              }
+                            />
+                          </label>
+                        )}
+
+                        {section === "mcq-single" ||
+                        LISTENING_SINGLE_TYPES.includes(section) ? (
+                          <label>
+                            <span>Correct Answer</span>
+                            <select
+                              value={form.correctAnswer}
+                              onChange={(e) =>
+                                updateField("correctAnswer", e.target.value)
+                              }
+                            >
+                              <option value="A">A</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="D">D</option>
+                              <option value="E">E</option>
+                            </select>
+                          </label>
+                        ) : (
+                          <label>
+                            <span>Correct Answers (e.g. A,C)</span>
+                            <input
+                              value={form.correctAnswers}
+                              onChange={(e) =>
+                                updateField("correctAnswers", e.target.value)
+                              }
+                              placeholder="A,C"
+                              required
+                            />
+                          </label>
+                        )}
+                      </>
                     )}
 
-                    {READING_MCQ_TYPES.includes(section) && (
+                    {section === "fill-blanks-dropdown" && (
+                      <DropdownBlanksEditor
+                        passage={form.dropdownPassage}
+                        blanks={form.dropdownBlanks}
+                        onPassageChange={(value) =>
+                          updateField("dropdownPassage", value)
+                        }
+                        onBlanksChange={(value) =>
+                          updateField("dropdownBlanks", value)
+                        }
+                      />
+                    )}
+
+                    {section === "fill-blanks-drag" && (
+                      <>
+                        <label>
+                          <span>Passage intro</span>
+                          <input
+                            value={form.passage}
+                            onChange={(e) =>
+                              updateField("passage", e.target.value)
+                            }
+                            placeholder="Complete the blanks:"
+                          />
+                        </label>
+                        <label>
+                          <span>Word Bank (comma separated)</span>
+                          <input
+                            value={form.wordBank}
+                            onChange={(e) =>
+                              updateField("wordBank", e.target.value)
+                            }
+                            placeholder="forest, visitors, trails, desert"
+                            required
+                          />
+                        </label>
+                        <label>
+                          <span>Correct Answers (comma, in blank order)</span>
+                          <input
+                            value={form.correctAnswers}
+                            onChange={(e) =>
+                              updateField("correctAnswers", e.target.value)
+                            }
+                            placeholder="forest, visitors, trails"
+                            required
+                          />
+                        </label>
+                      </>
+                    )}
+
+                    {section === "reorder-paragraphs" && (
                       <label>
-                        <span>Passage (one line = one paragraph)</span>
+                        <span>Paragraphs (one per line, correct order)</span>
                         <textarea
-                          rows={3}
-                          value={form.passage}
+                          rows={4}
+                          value={form.paragraphs}
                           onChange={(e) =>
-                            updateField("passage", e.target.value)
+                            updateField("paragraphs", e.target.value)
                           }
-                          placeholder="Write passage..."
+                          placeholder={"Para 1\nPara 2\nPara 3"}
                           required
                         />
                       </label>
                     )}
 
-                    <label>
-                      <span>Question</span>
-                      <input
-                        value={form.questionText}
-                        onChange={(e) =>
-                          updateField("questionText", e.target.value)
-                        }
-                        placeholder="Question text"
-                        required
-                      />
-                    </label>
-
-                    <label>
-                      <span>Option A</span>
-                      <input
-                        value={form.optionA}
-                        onChange={(e) => updateField("optionA", e.target.value)}
-                        required
-                      />
-                    </label>
-                    <label>
-                      <span>Option B</span>
-                      <input
-                        value={form.optionB}
-                        onChange={(e) => updateField("optionB", e.target.value)}
-                        required
-                      />
-                    </label>
-                    <label>
-                      <span>Option C</span>
-                      <input
-                        value={form.optionC}
-                        onChange={(e) => updateField("optionC", e.target.value)}
-                        required
-                      />
-                    </label>
-                    <label>
-                      <span>Option D</span>
-                      <input
-                        value={form.optionD}
-                        onChange={(e) => updateField("optionD", e.target.value)}
-                        required
-                      />
-                    </label>
-
-                    {section === "listening-mcq-multiple" && (
-                      <label>
-                        <span>Option E (optional)</span>
-                        <input
-                          value={form.optionE}
-                          onChange={(e) =>
-                            updateField("optionE", e.target.value)
-                          }
-                        />
-                      </label>
-                    )}
-
-                    {section === "mcq-single" ||
-                    LISTENING_SINGLE_TYPES.includes(section) ? (
-                      <label>
-                        <span>Correct Answer</span>
-                        <select
-                          value={form.correctAnswer}
-                          onChange={(e) =>
-                            updateField("correctAnswer", e.target.value)
-                          }
-                        >
-                          <option value="A">A</option>
-                          <option value="B">B</option>
-                          <option value="C">C</option>
-                          <option value="D">D</option>
-                          <option value="E">E</option>
-                        </select>
-                      </label>
-                    ) : (
-                      <label>
-                        <span>Correct Answers (e.g. A,C)</span>
-                        <input
-                          value={form.correctAnswers}
-                          onChange={(e) =>
-                            updateField("correctAnswers", e.target.value)
-                          }
-                          placeholder="A,C"
-                          required
-                        />
-                      </label>
-                    )}
+                    {!READING_MCQ_TYPES.includes(section) &&
+                      !LISTENING_MCQ_TYPES.includes(section) &&
+                      section !== "fill-blanks-dropdown" &&
+                      section !== "fill-blanks-drag" &&
+                      section !== "reorder-paragraphs" && (
+                        <>
+                          <label>
+                            <span>Audio URL (optional)</span>
+                            <input
+                              value={form.audioUrl}
+                              onChange={(e) =>
+                                updateField("audioUrl", e.target.value)
+                              }
+                              placeholder="https://example.com/audio.mp3"
+                            />
+                          </label>
+                          <label>
+                            <span>Prompt / Question text</span>
+                            <textarea
+                              rows={3}
+                              value={form.questionText}
+                              onChange={(e) =>
+                                updateField("questionText", e.target.value)
+                              }
+                              placeholder="Write the task prompt..."
+                            />
+                          </label>
+                        </>
+                      )}
                   </>
                 )}
 
-                {section === "fill-blanks-dropdown" && (
-                  <DropdownBlanksEditor
-                    passage={form.dropdownPassage}
-                    blanks={form.dropdownBlanks}
-                    onPassageChange={(value) =>
-                      updateField("dropdownPassage", value)
-                    }
-                    onBlanksChange={(value) =>
-                      updateField("dropdownBlanks", value)
-                    }
-                  />
-                )}
+                {section === "listening-sst" && sstTab === "ai" && (
+                  <div className="admin_sst_ai_panel">
+                    <h3>AI Response</h3>
 
-                {section === "fill-blanks-drag" && (
-                  <>
                     <label>
-                      <span>Passage intro</span>
-                      <input
-                        value={form.passage}
-                        onChange={(e) => updateField("passage", e.target.value)}
-                        placeholder="Complete the blanks:"
-                      />
-                    </label>
-                    <label>
-                      <span>Word Bank (comma separated)</span>
-                      <input
-                        value={form.wordBank}
+                      <span>Reference AI Response</span>
+                      <textarea
+                        rows={7}
+                        value={form.sstAiResponse}
                         onChange={(e) =>
-                          updateField("wordBank", e.target.value)
+                          updateField("sstAiResponse", e.target.value)
                         }
-                        placeholder="forest, visitors, trails, desert"
-                        required
+                        placeholder="Enter the ideal summary here..."
                       />
                     </label>
-                    <label>
-                      <span>Correct Answers (comma, in blank order)</span>
-                      <input
-                        value={form.correctAnswers}
-                        onChange={(e) =>
-                          updateField("correctAnswers", e.target.value)
-                        }
-                        placeholder="forest, visitors, trails"
-                        required
-                      />
-                    </label>
-                  </>
+                  </div>
                 )}
-
-                {section === "reorder-paragraphs" && (
-                  <label>
-                    <span>Paragraphs (one per line, correct order)</span>
-                    <textarea
-                      rows={4}
-                      value={form.paragraphs}
-                      onChange={(e) =>
-                        updateField("paragraphs", e.target.value)
-                      }
-                      placeholder={"Para 1\nPara 2\nPara 3"}
-                      required
-                    />
-                  </label>
-                )}
-
-                {!READING_MCQ_TYPES.includes(section) &&
-                  !LISTENING_MCQ_TYPES.includes(section) &&
-                  section !== "fill-blanks-dropdown" &&
-                  section !== "fill-blanks-drag" &&
-                  section !== "reorder-paragraphs" && (
-                    <>
-                      <label>
-                        <span>Audio URL (optional)</span>
-                        <input
-                          value={form.audioUrl}
-                          onChange={(e) =>
-                            updateField("audioUrl", e.target.value)
-                          }
-                          placeholder="https://example.com/audio.mp3"
-                        />
-                      </label>
-                      <label>
-                        <span>Prompt / Question text</span>
-                        <textarea
-                          rows={3}
-                          value={form.questionText}
-                          onChange={(e) =>
-                            updateField("questionText", e.target.value)
-                          }
-                          placeholder="Write the task prompt..."
-                        />
-                      </label>
-                    </>
-                  )}
 
                 <div className="admin_form_actions">
                   <button
