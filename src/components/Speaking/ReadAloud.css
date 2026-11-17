@@ -1,9 +1,11 @@
 /* ==========================================
    PTE ACADEMY - READ ALOUD
-   Speaking Practice
+   Speaking Practice Page
 ========================================== */
 
-/* Main speaking question */
+/* ==========================================
+   1. QUESTION CARD
+========================================== */
 
 .speaking_question {
   width: 100%;
@@ -50,7 +52,7 @@
   overflow-wrap: anywhere;
 }
 
-/* Temporary recording message */
+/* Instructions below passage */
 
 .speaking_question > p:last-of-type {
   margin: 20px 0 0;
@@ -62,8 +64,7 @@
 }
 
 /* ==========================================
-   MICROPHONE AREA
-   For upcoming recording functionality
+   2. MICROPHONE RECORDING CARD
 ========================================== */
 
 .readaloud_recorder {
@@ -72,7 +73,10 @@
   align-items: center;
   gap: 16px;
 
-  padding: 25px;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 30px 24px;
   margin-top: 24px;
 
   background: #f8f5ff;
@@ -80,35 +84,50 @@
   border-radius: 16px;
 }
 
+/* ==========================================
+   3. MICROPHONE ICON
+========================================== */
+
 .readaloud_mic_icon {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  width: 70px;
-  height: 70px;
+  width: 76px;
+  height: 76px;
 
-  background: #ede6ff;
+  background: #eee7ff;
   color: #7653e3;
+
+  border: 1px solid #e0d4ff;
   border-radius: 50%;
 
-  font-size: 28px;
+  font-size: 30px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
+
+/* Active recording icon */
 
 .readaloud_mic_icon.recording {
   background: #fee2e2;
   color: #dc2626;
+  border-color: #fecaca;
 
   animation: readaloud-pulse 1.4s ease-in-out infinite;
 }
 
+/* Recording animation */
+
 @keyframes readaloud-pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.24);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.25);
   }
 
   70% {
-    box-shadow: 0 0 0 14px rgba(220, 38, 38, 0);
+    box-shadow: 0 0 0 16px rgba(220, 38, 38, 0);
   }
 
   100% {
@@ -116,18 +135,24 @@
   }
 }
 
-/* Recorder status */
+/* ==========================================
+   4. RECORDING STATUS / TIMER
+========================================== */
 
 .readaloud_status {
   margin: 0;
 
   color: #615873;
-  font-size: 14px;
+  font-family: "Urbanist", sans-serif;
+  font-size: 15px;
   font-weight: 700;
   text-align: center;
+  line-height: 1.6;
 }
 
-/* Recording buttons */
+/* ==========================================
+   5. RECORDING BUTTONS
+========================================== */
 
 .readaloud_controls {
   display: flex;
@@ -135,16 +160,19 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+
+  width: 100%;
+  margin-top: 4px;
 }
 
 .readaloud_btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 9px;
 
-  min-height: 44px;
-  padding: 11px 20px;
+  min-height: 46px;
+  padding: 12px 22px;
 
   background: #7653e3;
   color: #ffffff;
@@ -157,14 +185,21 @@
   font-weight: 800;
 
   cursor: pointer;
+
   transition:
     background 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .readaloud_btn:hover:not(:disabled) {
   background: #6241ce;
   transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(118, 83, 227, 0.18);
+}
+
+.readaloud_btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .readaloud_btn:disabled {
@@ -172,51 +207,90 @@
   cursor: not-allowed;
 }
 
+/* Stop recording button */
+
 .readaloud_btn.stop {
   background: #dc2626;
 }
 
 .readaloud_btn.stop:hover:not(:disabled) {
   background: #b91c1c;
+  box-shadow: 0 5px 14px rgba(220, 38, 38, 0.18);
 }
 
-/* Playback */
+/* Button icons */
+
+.readaloud_btn i {
+  font-size: 14px;
+}
+
+/* ==========================================
+   6. AUDIO PLAYBACK
+========================================== */
 
 .readaloud_playback {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
 
   width: 100%;
-  max-width: 500px;
-  margin-top: 15px;
+  max-width: 520px;
+  box-sizing: border-box;
+
+  margin-top: 12px;
+  padding: 16px;
+
+  background: #ffffff;
+  border: 1px solid #e7defa;
+  border-radius: 14px;
 }
 
 .readaloud_playback audio {
+  display: block;
   width: 100%;
+  max-width: 100%;
   border-radius: 10px;
 }
 
 /* ==========================================
-   FEEDBACK
+   7. AI FEEDBACK / SUBMISSION MESSAGE
 ========================================== */
 
 .readaloud_feedback {
   margin-top: 22px;
-  padding: 18px 20px;
+  padding: 20px 22px;
 
   background: #f4efff;
   border: 1px solid #e2d7ff;
-  border-radius: 12px;
+  border-radius: 14px;
 
   color: #39246f;
+  font-family: "Urbanist", sans-serif;
   font-size: 14px;
   line-height: 1.7;
 }
 
+.readaloud_feedback strong {
+  display: block;
+  margin-bottom: 8px;
+
+  color: #5e35c8;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.readaloud_feedback p {
+  margin: 6px 0;
+}
+
+/* ==========================================
+   8. ERROR MESSAGE
+========================================== */
+
 .readaloud_error {
   margin-top: 16px;
-  padding: 14px 18px;
+  padding: 15px 18px;
 
   background: #fff0f1;
   color: #b82f44;
@@ -224,17 +298,33 @@
   border: 1px solid #ffcbd2;
   border-radius: 12px;
 
+  font-family: "Urbanist", sans-serif;
   font-size: 14px;
   font-weight: 700;
+  line-height: 1.6;
 }
 
 /* ==========================================
-   RESPONSIVE
+   9. ACCESSIBILITY
+========================================== */
+
+.readaloud_btn:focus-visible {
+  outline: 3px solid rgba(118, 83, 227, 0.45);
+  outline-offset: 3px;
+}
+
+.readaloud_btn.stop:focus-visible {
+  outline-color: rgba(220, 38, 38, 0.4);
+}
+
+/* ==========================================
+   10. TABLET RESPONSIVENESS
 ========================================== */
 
 @media (max-width: 768px) {
   .speaking_question {
     padding: 20px;
+    margin: 18px 0 22px;
   }
 
   .speaking_question h3 {
@@ -244,33 +334,66 @@
   .speaking_question > p:first-of-type {
     padding: 18px;
     font-size: 17px;
-    line-height: 1.8;
+    line-height: 1.85;
   }
 
   .readaloud_recorder {
-    padding: 20px 14px;
+    padding: 24px 18px;
+  }
+
+  .readaloud_mic_icon {
+    width: 68px;
+    height: 68px;
+    font-size: 26px;
   }
 }
+
+/* ==========================================
+   11. MOBILE RESPONSIVENESS
+========================================== */
 
 @media (max-width: 480px) {
   .speaking_question {
     padding: 16px;
+    border-radius: 12px;
   }
 
   .speaking_question > p:first-of-type {
     padding: 15px;
     font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .speaking_question > p:last-of-type {
+    font-size: 13px;
+  }
+
+  .readaloud_recorder {
+    padding: 22px 14px;
+    border-radius: 12px;
   }
 
   .readaloud_controls {
-    width: 100%;
     flex-direction: column;
+    align-items: stretch;
   }
 
   .readaloud_btn {
     width: 100%;
   }
+
+  .readaloud_playback {
+    padding: 12px;
+  }
+
+  .readaloud_feedback {
+    padding: 16px;
+  }
 }
+
+/* ==========================================
+   12. REDUCED MOTION
+========================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .readaloud_mic_icon.recording {

@@ -1,0 +1,93 @@
+.student_signup_page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background: #f0eaff;
+  font-family: Urbanist, sans-serif;
+}
+
+.student_signup_card {
+  width: 100%;
+  max-width: 440px;
+  padding: 36px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(80, 50, 150, 0.1);
+}
+
+.student_signup_brand {
+  color: #7653e3;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.student_signup_card h1 {
+  color: #142447;
+  font-size: 28px;
+  margin: 12px 0;
+}
+
+.student_signup_subtitle {
+  color: #69758d;
+  margin-bottom: 26px;
+}
+
+.student_signup_card form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.student_signup_card label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #142447;
+  font-weight: 600;
+}
+
+.student_signup_card input {
+  padding: 13px;
+  border: 1px solid #ddd5f7;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.student_signup_card input:focus {
+  outline: 2px solid #7653e3;
+}
+
+.student_signup_card form button {
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #7653e3;
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.student_signup_card button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.student_signup_error {
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+.student_back_btn {
+  margin-top: 20px;
+  background: none;
+  border: none;
+  color: #7653e3;
+  cursor: pointer;
+}
+.student_signup_success {
+  color: #16803c;
+  font-size: 14px;
+}

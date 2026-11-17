@@ -1,0 +1,213 @@
+
+/* =========================================
+   PTE ACADEMY - STUDENT HOME
+========================================= */
+
+/* Welcome Banner */
+.student-welcome {
+  background: linear-gradient(
+    115deg,
+    #e0daff 0%,
+    #f3efff 65%,
+    #ffffff 100%
+  );
+
+  border: 1px solid #e5dcff;
+  border-radius: 20px;
+
+  padding: 40px;
+  margin-bottom: 30px;
+
+  box-shadow: 0 5px 20px rgba(83, 7, 131, 0.05);
+}
+
+.student-welcome h1 {
+  margin: 0 0 12px;
+
+  color: #192744;
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.student-welcome p {
+  margin: 0;
+
+  color: #647089;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   FEATURE CARDS CONTAINER
+========================================= */
+
+.student-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* =========================================
+   INDIVIDUAL FEATURE CARDS
+========================================= */
+
+.student-card {
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px;
+
+  background: #ffffff;
+  border: 1px solid #e9e3ff;
+  border-radius: 18px;
+
+  box-shadow: 0 5px 18px rgba(83, 7, 131, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.student-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(83, 7, 131, 0.1);
+  border-color: #c7b7ff;
+}
+
+.student-card h2 {
+  margin: 0 0 12px;
+
+  color: #192744;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.student-card p {
+  margin: 0 0 24px;
+
+  color: #647089;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   FEATURE CARD BUTTONS
+========================================= */
+
+.student-card button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 45px;
+
+  margin-top: auto;
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #7653e3;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.student-card button:hover {
+  background: #633bd5;
+  transform: translateY(-2px);
+}
+
+.student-card button:active {
+  transform: translateY(0);
+}
+
+.student-card button:focus-visible {
+  outline: 3px solid #b9a6ff;
+  outline-offset: 3px;
+}
+
+/* =========================================
+   TABLET RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+  .student-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .student-welcome {
+    padding: 32px;
+  }
+
+  .student-welcome h1 {
+    font-size: 28px;
+  }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+  .student-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .student-welcome {
+    padding: 25px 20px;
+    margin-bottom: 22px;
+    border-radius: 16px;
+  }
+
+  .student-welcome h1 {
+    font-size: 25px;
+  }
+
+  .student-welcome p {
+    font-size: 14px;
+  }
+
+  .student-card {
+    padding: 22px;
+  }
+
+  .student-card h2 {
+    font-size: 19px;
+  }
+
+  .student-card p {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .student-card,
+  .student-card button {
+    transition: none;
+  }
+
+  .student-card:hover,
+  .student-card button:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,322 @@
+/* =========================================
+   PTE ACADEMY - WEEKLY GROUP CLASSES
+========================================= */
+
+.weekly-classes-page {
+  width: 100%;
+  min-width: 0;
+  font-family: "Urbanist", sans-serif;
+  color: #192744;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.weekly-classes-header {
+  margin-bottom: 26px;
+}
+
+.weekly-classes-header h1 {
+  margin: 0 0 10px;
+  color: #192744;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.weekly-classes-header p {
+  margin: 0;
+  color: #647089;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   FIXED TIMETABLE INFORMATION
+========================================= */
+
+.weekly-classes-notice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 22px 24px;
+  margin-bottom: 26px;
+
+  background: linear-gradient(110deg, #e0daff 0%, #f5f1ff 100%);
+
+  border: 1px solid #ded4ff;
+  border-radius: 16px;
+}
+
+.weekly-classes-notice > span {
+  font-size: 30px;
+  flex-shrink: 0;
+}
+
+.weekly-classes-notice strong {
+  display: block;
+  color: #530783;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.weekly-classes-notice p {
+  margin: 6px 0 0;
+  color: #647089;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   WEEKLY CLASS LIST
+========================================= */
+
+.weekly-classes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================================
+   INDIVIDUAL CLASS CARD
+========================================= */
+
+.weekly-class-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  padding: 24px;
+  min-width: 0;
+
+  background: #ffffff;
+  border: 1px solid #e9e3ff;
+  border-radius: 18px;
+
+  box-shadow: 0 5px 18px rgba(83, 7, 131, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.weekly-class-card:hover {
+  transform: translateY(-2px);
+  border-color: #c9b9fa;
+  box-shadow: 0 10px 26px rgba(83, 7, 131, 0.08);
+}
+
+/* =========================================
+   CLASS DAY
+========================================= */
+
+.weekly-class-day {
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f1ebff;
+  color: #7653e3;
+
+  border: 1px solid #e2d8ff;
+  border-radius: 14px;
+
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* =========================================
+   CLASS INFORMATION
+========================================= */
+
+.weekly-class-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.weekly-class-info h2 {
+  margin: 0 0 8px;
+  color: #192744;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.weekly-class-info p {
+  margin: 0 0 7px;
+  color: #37415a;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.weekly-class-info span {
+  display: block;
+  color: #647089;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   CLASS ACCESS STATUS
+========================================= */
+
+.weekly-class-action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weekly-class-status,
+.weekly-class-locked {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 11px 16px;
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Eligible subscription */
+
+.weekly-class-status {
+  background: #f1ebff;
+  color: #7653e3;
+  border: 1px solid #ded4ff;
+}
+
+/* Subscription required */
+
+.weekly-class-locked {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+/* =========================================
+   FOOTER INFORMATION
+========================================= */
+
+.weekly-classes-footer {
+  margin: 24px 0 0;
+  padding: 16px 20px;
+
+  background: #ffffff;
+  border: 1px solid #e9e3ff;
+  border-radius: 12px;
+
+  color: #647089;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   TABLET RESPONSIVE
+========================================= */
+
+@media (max-width: 1024px) {
+  .weekly-classes-header h1 {
+    font-size: 27px;
+  }
+
+  .weekly-class-card {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .weekly-class-day {
+    width: 60px;
+    height: 60px;
+  }
+
+  .weekly-class-info h2 {
+    font-size: 18px;
+  }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+  .weekly-classes-header h1 {
+    font-size: 24px;
+  }
+
+  .weekly-classes-header p {
+    font-size: 14px;
+  }
+
+  .weekly-classes-notice {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .weekly-classes-notice strong {
+    font-size: 15px;
+  }
+
+  .weekly-class-card {
+    flex-wrap: wrap;
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .weekly-class-day {
+    width: 54px;
+    height: 54px;
+    font-size: 13px;
+  }
+
+  .weekly-class-info {
+    flex: 1;
+  }
+
+  .weekly-class-info h2 {
+    font-size: 17px;
+  }
+
+  .weekly-class-info p {
+    font-size: 13px;
+  }
+
+  .weekly-class-action {
+    width: 100%;
+  }
+
+  .weekly-class-status,
+  .weekly-class-locked {
+    width: 100%;
+    text-align: center;
+  }
+
+  .weekly-classes-footer {
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .weekly-class-card {
+    transition: none;
+  }
+
+  .weekly-class-card:hover {
+    transform: none;
+  }
+}

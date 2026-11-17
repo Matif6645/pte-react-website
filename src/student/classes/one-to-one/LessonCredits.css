@@ -1,0 +1,219 @@
+/* =========================================
+   PTE ACADEMY - LESSON CREDITS
+========================================= */
+
+/* Main Subscription Card */
+
+.lesson-credits {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+  margin-bottom: 24px;
+
+  background: linear-gradient(120deg, #f1ebff 0%, #f8f6ff 100%);
+
+  border: 1px solid #e0d5ff;
+  border-radius: 18px;
+
+  box-shadow: 0 4px 18px rgba(83, 7, 131, 0.04);
+
+  font-family: "Urbanist", sans-serif;
+}
+
+/* =========================================
+   SUBSCRIPTION HEADER
+========================================= */
+
+.lesson-credits-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.lesson-credits-label {
+  display: block;
+  margin-bottom: 7px;
+
+  color: #7653e3;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+.lesson-credits-top h2 {
+  margin: 0;
+
+  color: #192744;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.lesson-credits-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 14px;
+
+  background: #ffffff;
+  color: #7653e3;
+
+  border: 1px solid #ded4ff;
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================
+   LESSON STATISTICS
+========================================= */
+
+.lesson-credits-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.lesson-credits-stats > div {
+  padding: 18px 12px;
+
+  background: #ffffff;
+  border: 1px solid #eee9ff;
+  border-radius: 14px;
+
+  text-align: center;
+}
+
+.lesson-credits-stats strong {
+  display: block;
+
+  color: #7653e3;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.lesson-credits-stats span {
+  display: block;
+  margin-top: 8px;
+
+  color: #647089;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Highlight Remaining Lessons */
+
+.lesson-credits-stats > div:last-child {
+  background: #f9f7ff;
+  border-color: #cbbaff;
+}
+
+/* =========================================
+   PROGRESS BAR
+========================================= */
+
+.lesson-credits-progress {
+  width: 100%;
+  height: 10px;
+
+  overflow: hidden;
+
+  background: #ded6f5;
+  border-radius: 20px;
+}
+
+.lesson-credits-progress > div {
+  height: 100%;
+
+  background: linear-gradient(90deg, #530783, #7653e3);
+
+  border-radius: inherit;
+
+  transition: width 0.3s ease;
+}
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.lesson-credits > p {
+  margin: 14px 0 0;
+
+  color: #647089;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 768px) {
+  .lesson-credits {
+    padding: 20px;
+  }
+
+  .lesson-credits-stats {
+    gap: 10px;
+  }
+
+  .lesson-credits-stats strong {
+    font-size: 24px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .lesson-credits {
+    padding: 16px;
+    border-radius: 15px;
+  }
+
+  .lesson-credits-top h2 {
+    font-size: 17px;
+  }
+
+  .lesson-credits-badge {
+    padding: 6px 9px;
+    font-size: 11px;
+  }
+
+  .lesson-credits-stats {
+    gap: 7px;
+  }
+
+  .lesson-credits-stats > div {
+    padding: 13px 5px;
+  }
+
+  .lesson-credits-stats strong {
+    font-size: 22px;
+  }
+
+  .lesson-credits-stats span {
+    font-size: 11px;
+  }
+
+  .lesson-credits > p {
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .lesson-credits-progress > div {
+    transition: none;
+  }
+}

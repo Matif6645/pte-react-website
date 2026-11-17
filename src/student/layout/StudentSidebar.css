@@ -1,0 +1,230 @@
+
+/* =========================================
+   PTE ACADEMY - STUDENT SIDEBAR
+========================================= */
+
+.student-sidebar {
+  width: 250px;
+  min-height: 100vh;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 30px 18px;
+
+  background: linear-gradient(
+    180deg,
+    #530783 0%,
+    #7653e3 100%
+  );
+
+  color: #ffffff;
+  font-family: "Urbanist", sans-serif;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   LOGO
+========================================= */
+
+.student-logo {
+  margin: 0 0 32px;
+  padding: 0 10px;
+
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.student-logo span {
+  color: #e0daff;
+}
+
+/* =========================================
+   STUDENT PROFILE
+========================================= */
+
+.student-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px 12px;
+  margin-bottom: 28px;
+
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+}
+
+.student-avatar {
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #9470eb;
+  color: #ffffff;
+
+  border-radius: 50%;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.student-account > div:last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.student-account strong {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+
+  overflow-wrap: anywhere;
+}
+
+.student-account p {
+  margin: 5px 0 0;
+  color: #e0daff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+.student-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.student-navigation button {
+  display: block;
+  width: 100%;
+
+  padding: 15px 16px;
+
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.student-navigation button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.student-navigation button.active {
+  background: rgba(255, 255, 255, 0.23);
+  font-weight: 800;
+}
+
+.student-navigation button:focus-visible,
+.student-logout:focus-visible {
+  outline: 3px solid #e0daff;
+  outline-offset: 3px;
+}
+
+/* =========================================
+   LOGOUT BUTTON
+========================================= */
+
+.student-logout {
+  width: 100%;
+  margin-top: auto;
+  padding: 14px 18px;
+
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 12px;
+
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.student-logout:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+  .student-sidebar {
+    width: 215px;
+    padding: 25px 12px;
+  }
+
+  .student-logo {
+    font-size: 21px;
+  }
+
+  .student-navigation button {
+    padding: 13px 12px;
+    font-size: 14px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .student-sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 20px 16px;
+  }
+
+  .student-logo {
+    margin-bottom: 16px;
+  }
+
+  .student-account {
+    margin-bottom: 16px;
+  }
+
+  .student-navigation {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .student-navigation button {
+    width: auto;
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+
+  .student-logout {
+    margin-top: 16px;
+  }
+}

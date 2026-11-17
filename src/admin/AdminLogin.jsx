@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { login } from "./auth";
+import { supabase } from "./supabaseClient";
 import "./AdminLogin.styles.css";
 
 function AdminLogin({ onLoginSuccess, onBackToSite }) {
@@ -15,14 +15,28 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
     setLoading(true);
 
     try {
-      const result = await login(email.trim(), password);
+      // Step 1: Authenticate with Supabase
+      const { data, error: loginError } =
+        await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
 
-      if (!result.ok) {
-        setError(result.message);
-        return;
-      }
+      if (loginError) throw loginError;
 
-      onLoginSuccess?.();
+      // Step 2: Retrieve the authenticated user's role
+      const { data: roleData, error: roleError } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+      if (roleError) throw roleError;
+
+      // Step 3: Route according to role
+      const role = roleData?.role || "student";
+
+      onLoginSuccess?.(role);
     } catch (err) {
       setError(err.message || "Login failed");
     } finally {
@@ -34,9 +48,11 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
     <div className="admin_login_page">
       <div className="admin_login_card">
         <p className="admin_login_eyebrow">PTE ACADEMY</p>
-        <h1 className="admin_login_title">Admin Login</h1>
+
+        <h1 className="admin_login_title">Login</h1>
+
         <p className="admin_login_subtitle">
-          Sign in to manage questions and practice content.
+          Sign in to your PTE Academy account.
         </p>
 
         <form className="admin_login_form" onSubmit={handleSubmit}>
@@ -46,7 +62,7 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@yourdomain.com"
+              placeholder="Enter your email"
               required
               disabled={loading}
             />
@@ -54,6 +70,7 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
 
           <label className="admin_field">
             <span>Password</span>
+
             <div className="admin_password_wrap">
               <input
                 type={showPassword ? "text" : "password"}
@@ -63,6 +80,7 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
                 required
                 disabled={loading}
               />
+
               <button
                 type="button"
                 className="admin_password_eye"
@@ -70,7 +88,9 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 <i
-                  className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
+                  className={`fa-solid ${
+                    showPassword ? "fa-eye-slash" : "fa-eye"
+                  }`}
                 />
               </button>
             </div>
@@ -96,7 +116,7 @@ function AdminLogin({ onLoginSuccess, onBackToSite }) {
         </button>
 
         <p className="admin_login_hint">
-          Use the admin email and password from your Supabase Auth users.
+          Sign in using your registered email and password.
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import "./Header.css";
 import logo from "../assets/PTE logo.gif";
 
-function Header({ onLoginClick }) {
+function Header({ onLoginClick, onSignupClick }) {
   return (
     <header className="header_grid">
       {/* Decorative waves */}
@@ -50,15 +50,12 @@ function Header({ onLoginClick }) {
             Login
           </button>
 
-          <button type="button" className="signup_btn">
+          <button type="button" className="signup_btn" onClick={onSignupClick}>
             Sign Up
           </button>
         </div>
 
         {/* Mobile Menu */}
-        <button type="button" className="header_menu">
-          Menu
-        </button>
       </div>
     </header>
   );

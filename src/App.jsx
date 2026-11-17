@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
+import StudentSignup from "./student/StudentSignup";
 import Sidebar from "./components/Sidebar";
 import ReadAloud from "./components/Speaking/ReadAloud";
 import ReadingHome from "./components/ReadingHome";
@@ -20,7 +21,10 @@ import WriteEssay from "./components/writing/Essay";
 import SummarizeWrittenText from "./components/writing/SummarizeWrittenText";
 import AdminLogin from "./admin/AdminLogin";
 import AdminDashboard from "./admin/AdminDashboard";
-import { isAdminLoggedIn, logout } from "./admin/auth";
+import StudentDashboard from "./student/StudentDashboard";
+import { supabase } from "./admin/supabaseClient";
+import ResetPassword from "./student/ResetPassword";
+
 import "./App.css";
 
 const LISTENING_VIEWS = {
@@ -43,6 +47,9 @@ const SPEAKING_VIEWS = {
 };
 
 function App() {
+  const [authUser, setAuthUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [activeView, setActiveView] = useState("reading-home");
   const [activeItem, setActiveItem] = useState("");
   const [initialCategory, setInitialCategory] = useState(
@@ -54,20 +61,99 @@ function App() {
     setActiveItem("");
   }
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadUser(user) {
+      if (!active) return;
+
+      if (!user) {
+        setAuthUser(null);
+        setUserRole(null);
+        setAuthLoading(false);
+        return;
+      }
+
+      setAuthLoading(true);
+
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (!active) return;
+
+      setAuthUser(user);
+      setUserRole(error ? null : (data?.role ?? "student"));
+      setAuthLoading(false);
+    }
+
+    supabase.auth.getUser().then(({ data, error }) => {
+      loadUser(error ? null : data.user);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setActiveView("reset-password");
+      }
+
+      if (event === "SIGNED_OUT") {
+        loadUser(null);
+        setActiveView((current) =>
+          current === "reset-password" ? current : "reading-home",
+        );
+      }
+    });
+
+    return () => {
+      active = false;
+      listener.subscription.unsubscribe();
+    };
+  }, []);
+
+  function openStudentSignup() {
+    setActiveView("student-signup");
+  }
+
   function openAdminLogin() {
-    if (isAdminLoggedIn()) {
+    if (authUser && userRole === "admin") {
       setActiveView("admin-dashboard");
+    } else if (authUser && userRole === "student") {
+      setActiveView("student-dashboard");
+    } else {
+      setActiveView("admin-login");
+    }
+  }
+
+  async function handleAdminLoginSuccess(role) {
+    const { data, error } = await supabase.auth.getUser();
+
+    if (error || !data.user) {
+      setActiveView("admin-login");
       return;
     }
-    setActiveView("admin-login");
+
+    setAuthUser(data.user);
+    setUserRole(role);
+
+    if (role === "admin") {
+      setActiveView("admin-dashboard");
+    } else {
+      setActiveView("student-dashboard");
+    }
   }
 
-  function handleAdminLoginSuccess() {
-    setActiveView("admin-dashboard");
-  }
+  async function handleAdminLogout() {
+    const { error } = await supabase.auth.signOut();
 
-  function handleAdminLogout() {
-    logout();
+    if (error) {
+      console.error("Logout failed:", error.message);
+      return;
+    }
+
+    setAuthUser(null);
+    setUserRole(null);
     setActiveView("admin-login");
   }
 
@@ -241,6 +327,21 @@ function App() {
 
     return <ReadingHome onStartPractice={startPractice} />;
   }
+  if (authLoading) {
+    return <p style={{ padding: "30px" }}>Loading...</p>;
+  }
+  if (activeView === "reset-password") {
+    return <ResetPassword onSuccess={() => setActiveView("admin-login")} />;
+  }
+
+  if (activeView === "student-signup") {
+    return (
+      <StudentSignup
+        onBackToSite={openReadingHome}
+        onSignupSuccess={openReadingHome}
+      />
+    );
+  }
 
   if (activeView === "admin-login") {
     return (
@@ -252,7 +353,7 @@ function App() {
   }
 
   if (activeView === "admin-dashboard") {
-    if (!isAdminLoggedIn()) {
+    if (!authUser || userRole !== "admin") {
       return (
         <AdminLogin
           onLoginSuccess={handleAdminLoginSuccess}
@@ -269,9 +370,27 @@ function App() {
     );
   }
 
+  if (activeView === "student-dashboard") {
+    if (!authUser || userRole !== "student") {
+      return (
+        <AdminLogin
+          onLoginSuccess={handleAdminLoginSuccess}
+          onBackToSite={openReadingHome}
+        />
+      );
+    }
+
+    return (
+      <StudentDashboard
+        onLogout={handleAdminLogout}
+        onStartPractice={openReadingHome}
+      />
+    );
+  }
+
   return (
     <div className="desktop_grid">
-      <Header onLoginClick={openAdminLogin} />
+      <Header onLoginClick={openAdminLogin} onSignupClick={openStudentSignup} />
 
       <main className="practice_section_grid">
         <Sidebar

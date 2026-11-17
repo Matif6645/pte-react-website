@@ -1,0 +1,383 @@
+/* =========================================
+   PTE ACADEMY - BOOKING DETAILS
+========================================= */
+
+/* Main Booking Card */
+
+.booking-details {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+
+  position: sticky;
+  top: 20px;
+
+  padding: 24px;
+
+  background: #ffffff;
+  border: 1px solid #e9e3ff;
+  border-radius: 18px;
+
+  box-shadow: 0 4px 18px rgba(83, 7, 131, 0.05);
+
+  font-family: "Urbanist", sans-serif;
+  color: #192744;
+}
+
+/* =========================================
+   BOOKING HEADER
+========================================= */
+
+.booking-details-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 22px;
+}
+
+.booking-details-heading h2 {
+  margin: 0;
+
+  color: #192744;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.booking-details-heading > span {
+  padding: 7px 11px;
+
+  background: #f1ebff;
+  color: #7653e3;
+
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================
+   SELECTED LESSON
+========================================= */
+
+.booking-selected-lesson {
+  padding: 20px;
+  margin-bottom: 20px;
+
+  background: linear-gradient(135deg, #f1ebff, #faf8ff);
+
+  border: 1px solid #e4dcff;
+  border-radius: 14px;
+}
+
+.booking-selected-lesson > span {
+  display: block;
+
+  color: #7653e3;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+
+  margin-bottom: 10px;
+}
+
+.booking-selected-lesson h3 {
+  margin: 0 0 10px;
+
+  color: #192744;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.booking-selected-lesson p {
+  margin: 0;
+
+  color: #7653e3;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+/* =========================================
+   EMPTY SELECTION
+========================================= */
+
+.booking-empty {
+  padding: 24px 18px;
+  margin-bottom: 20px;
+
+  background: #f8f7ff;
+  border: 1px dashed #d7cbf7;
+  border-radius: 14px;
+
+  text-align: center;
+}
+
+.booking-empty p {
+  margin: 0;
+
+  color: #647089;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   REPEAT WEEKLY OPTION
+========================================= */
+
+.booking-repeat-option {
+  padding: 20px 0;
+
+  border-top: 1px solid #eee9ff;
+  border-bottom: 1px solid #eee9ff;
+}
+
+.booking-repeat-option label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  cursor: pointer;
+}
+
+.booking-repeat-option input {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+
+  margin: 2px 0 0;
+
+  accent-color: #7653e3;
+  cursor: pointer;
+}
+
+.booking-repeat-option label > span {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+.booking-repeat-option strong {
+  display: block;
+
+  color: #192744;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.booking-repeat-option small {
+  display: block;
+  margin-top: 6px;
+
+  color: #647089;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================================
+   RECURRING LESSON INFORMATION
+========================================= */
+
+.booking-repeat-info {
+  margin-top: 16px;
+  padding: 16px;
+
+  background: #f1ebff;
+  border: 1px solid #e5dcff;
+  border-radius: 12px;
+}
+
+.booking-repeat-info p {
+  margin: 0 0 10px;
+
+  color: #59647e;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.booking-repeat-info p:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   REMAINING LESSON CREDITS
+========================================= */
+
+.booking-balance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin: 22px 0 16px;
+  padding: 15px 17px;
+
+  background: #faf8ff;
+  border: 1px solid #eee9ff;
+  border-radius: 12px;
+}
+
+.booking-balance span {
+  color: #647089;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.booking-balance strong {
+  color: #7653e3;
+  font-size: 24px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================
+   NO LESSONS WARNING
+========================================= */
+
+.booking-warning {
+  margin: 12px 0;
+
+  padding: 12px 15px;
+
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+
+  color: #9a3412;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================
+   CONFIRM BOOKING BUTTON
+========================================= */
+
+.booking-confirm-button {
+  width: 100%;
+  min-height: 48px;
+
+  padding: 14px 20px;
+
+  background: #7653e3;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 12px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.booking-confirm-button:hover:not(:disabled) {
+  background: #633bd5;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(118, 83, 227, 0.2);
+}
+
+.booking-confirm-button:disabled {
+  background: #c8b9f0;
+  color: #ffffff;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.booking-confirm-button:focus-visible,
+.booking-repeat-option input:focus-visible {
+  outline: 3px solid #b5a0ff;
+  outline-offset: 3px;
+}
+
+/* =========================================
+   DEMO BOOKING CONFIRMATION
+========================================= */
+
+.booking-success {
+  margin-top: 18px;
+  padding: 15px;
+
+  background: #e9f9ef;
+  border: 1px solid #bbebcc;
+  border-radius: 12px;
+
+  color: #166534;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* =========================================
+   DEMO INFORMATION
+========================================= */
+
+.booking-demo-note {
+  margin: 16px 0 0;
+
+  color: #8a90a0;
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 1100px) {
+  .booking-details {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .booking-details {
+    padding: 18px;
+    border-radius: 15px;
+  }
+
+  .booking-details-heading h2 {
+    font-size: 18px;
+  }
+
+  .booking-selected-lesson {
+    padding: 16px;
+  }
+
+  .booking-selected-lesson h3 {
+    font-size: 15px;
+  }
+
+  .booking-repeat-info {
+    padding: 13px;
+  }
+
+  .booking-balance {
+    padding: 13px;
+  }
+
+  .booking-balance strong {
+    font-size: 21px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .booking-confirm-button {
+    transition: none;
+  }
+
+  .booking-confirm-button:hover {
+    transform: none;
+  }
+}
