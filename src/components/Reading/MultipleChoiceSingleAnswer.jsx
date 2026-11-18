@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { getMergedQuestions } from "../admin/practiceQuestions";
-import PracticeShared from "./PracticeShared.jsx";
-import singleAnswerIcon from "../assets/multiplechoisesingleanswer.png";
-import "./MultipleChoiceSingleAnswer.css";
+import { getMergedQuestions } from "../../admin/practiceQuestions.js";
+import PracticeShared from "../PracticeShared.jsx";
 
+import singleAnswerIcon from "../../assets/multiplechoisesingleanswer.png";
+
+import "./MultipleChoiceSingleAnswer.css";
 const defaultQuestions = [
   {
     id: 1,

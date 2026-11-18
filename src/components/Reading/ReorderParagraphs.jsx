@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { getMergedQuestions } from "../admin/practiceQuestions";
-import PracticeShared from "./PracticeShared.jsx";
-import reorderIcon from "../assets/reorder-icon.png";
+import { getMergedQuestions } from "../../admin/practiceQuestions.js";
+import PracticeShared from "../PracticeShared.jsx";
+import reorderIcon from "../../assets/reorder-icon.png";
 import "./ReorderParagraphs.css";
 
 const defaultQuestions = [

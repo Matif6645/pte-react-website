@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
-import "../MultipleChoiceMultipleAnswer.css";
-import "../MultipleChoiceSingleAnswer.css";
+
+import "../Reading/MultipleChoiceMultipleAnswer.css";
+import "../Reading/MultipleChoiceSingleAnswer.css";
 import "./ListeningMcqMultiple.css";
 
 const DEMO = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
@@ -322,10 +323,7 @@ function WriteFromDictation({ onBack, initialCategory }) {
                   <span className="wfd_empty">No words typed.</span>
                 ) : (
                   result.typedResult.map((word, i) => (
-                    <span
-                      key={`t-${i}`}
-                      className={`wfd_word ${word.status}`}
-                    >
+                    <span key={`t-${i}`} className={`wfd_word ${word.status}`}>
                       {word.text}
                     </span>
                   ))

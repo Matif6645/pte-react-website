@@ -1,12 +1,14 @@
 import { useState } from "react";
-import "./PracticeShared.css";
+
+import "../PracticeShared.css";
 import "./ReadingHome.css";
-import readingImage from "../assets/reading-practice.svg";
-import reorderIcon from "../assets/reorder-icon.png";
-import dropdownIcon from "../assets/fillindropdown.png";
-import dragDropIcon from "../assets/fillindragdrop.png";
-import multipleAnswerIcon from "../assets/multiplechoosemultipleanswer.png";
-import singleAnswerIcon from "../assets/multiplechoisesingleanswer.png";
+
+import readingImage from "../../assets/reading-practice.svg";
+import reorderIcon from "../../assets/reorder-icon.png";
+import dropdownIcon from "../../assets/fillindropdown.png";
+import dragDropIcon from "../../assets/fillindragdrop.png";
+import multipleAnswerIcon from "../../assets/multiplechoosemultipleanswer.png";
+import singleAnswerIcon from "../../assets/multiplechoisesingleanswer.png";
 
 // All five cards use one shared structure. Change content here, not in JSX.
 const practiceTypes = [

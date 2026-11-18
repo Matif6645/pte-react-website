@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
-import "../MultipleChoiceMultipleAnswer.css";
-import "../MultipleChoiceSingleAnswer.css";
+
+import "../Reading/MultipleChoiceMultipleAnswer.css";
+import "../Reading/MultipleChoiceSingleAnswer.css";
 import "./ListeningMcqMultiple.css";
 
 const DEMO = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
@@ -44,7 +45,8 @@ const defaultQuestions = [
       { type: "blank", answer: "fascinating" },
       {
         type: "text",
-        value: " it was for him when he first saw his father dealing with complex ",
+        value:
+          " it was for him when he first saw his father dealing with complex ",
       },
       { type: "blank", answer: "circuits" },
       { type: "text", value: " at work." },
@@ -100,7 +102,10 @@ const defaultQuestions = [
     segments: [
       { type: "text", value: "Vaccines help the body recognise harmful " },
       { type: "blank", answer: "germs" },
-      { type: "text", value: " before a real infection begins. As a result, the " },
+      {
+        type: "text",
+        value: " before a real infection begins. As a result, the ",
+      },
       { type: "blank", answer: "immune" },
       { type: "text", value: " system can respond faster and reduce serious " },
       { type: "blank", answer: "illness" },
@@ -121,7 +126,10 @@ const defaultQuestions = [
       { type: "blank", answer: "water" },
       { type: "text", value: " around the planet and help shape regional " },
       { type: "blank", answer: "climates" },
-      { type: "text", value: ". Scientists study these flows to understand long-term " },
+      {
+        type: "text",
+        value: ". Scientists study these flows to understand long-term ",
+      },
       { type: "blank", answer: "changes" },
       { type: "text", value: " in weather patterns." },
     ],
@@ -138,7 +146,10 @@ const defaultQuestions = [
     segments: [
       { type: "text", value: "A good map shows scale, " },
       { type: "blank", answer: "direction" },
-      { type: "text", value: ", and key landmarks so travellers can plan a safe " },
+      {
+        type: "text",
+        value: ", and key landmarks so travellers can plan a safe ",
+      },
       { type: "blank", answer: "route" },
       { type: "text", value: ". Without these details, it is easy to lose " },
       { type: "blank", answer: "direction" },
@@ -292,7 +303,10 @@ function ListeningFillBlanks({ onBack, initialCategory }) {
         q
           ? [
               { icon: "fa-regular fa-clock", text: q.time },
-              { icon: "fa-solid fa-pen-to-square", text: `${blanks.length} BLANKS` },
+              {
+                icon: "fa-solid fa-pen-to-square",
+                text: `${blanks.length} BLANKS`,
+              },
               { icon: "fa-solid fa-tag", text: q.category },
             ]
           : []

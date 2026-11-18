@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import TeacherAvailability from "./teacherAvailability";
+import LessonBooking from "./lessonBooking";
+import SubscriptionPlans from "./plans/SubscriptionPlans";
 import {
   CATEGORIES,
   QUESTION_TYPES,
@@ -449,6 +452,43 @@ function AdminDashboard({ onLogout, onBackToSite }) {
           })}
         </nav>
 
+        <div className="admin_nav_caption">ONLINE CLASSES</div>
+        <nav className="admin_group_nav" aria-label="Classes management">
+          <button
+            type="button"
+            className={`admin_dashboard_link ${section === "teacher-availability" ? "active" : ""}`}
+            onClick={() => {
+              setSection("teacher-availability");
+              closeForm();
+            }}
+          >
+            <i className="fa-solid fa-calendar-days" /> Teacher Availability
+          </button>
+          <button
+            type="button"
+            className={`admin_dashboard_link ${section === "lesson-bookings" ? "active" : ""}`}
+            onClick={() => {
+              setSection("lesson-bookings");
+              closeForm();
+            }}
+          >
+            <i className="fa-solid fa-calendar-check" /> Lesson Bookings
+          </button>
+          <button
+            type="button"
+            className={`admin_dashboard_link ${
+              section === "subscription-plans" ? "active" : ""
+            }`}
+            onClick={() => {
+              setSection("subscription-plans");
+              closeForm();
+            }}
+          >
+            <i className="fa-solid fa-credit-card" />
+            Subscription Plans
+          </button>
+        </nav>
+
         <div className="admin_sidebar_footer">
           <button
             type="button"
@@ -542,7 +582,13 @@ function AdminDashboard({ onLogout, onBackToSite }) {
           </div>
         </div>
 
-        {section === "home" ? (
+        {section === "subscription-plans" ? (
+          <SubscriptionPlans />
+        ) : section === "teacher-availability" ? (
+          <TeacherAvailability />
+        ) : section === "lesson-bookings" ? (
+          <LessonBooking />
+        ) : section === "home" ? (
           <section className="admin_welcome_card">
             <h1>Welcome to Admin Dashboard</h1>
             <p>Total Questions: {stats.total}</p>

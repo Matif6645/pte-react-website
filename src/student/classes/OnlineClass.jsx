@@ -2,92 +2,186 @@ import { useState } from "react";
 
 import OneToOneBooking from "./one-to-one/OneToOneBooking";
 import WeeklyClasses from "./WeeklyClasses";
+import MyBookings from "./MyBookings";
 
 import "./OnlineClass.css";
 
-function OnlineClass() {
+function OnlineClass({
+  loadingAccess = true,
+  planName = "Free",
+  canAccessGroupClasses = false,
+  canBookPrivateLessons = false,
+  privateLessons = 0,
+  onViewPlans,
+}) {
   const [activePage, setActivePage] = useState("home");
 
-  // Open One-to-One Booking
-  if (activePage === "one-to-one") {
+  // =====================================
+  // MY BOOKINGS
+  // =====================================
+
+  if (activePage === "my-bookings") {
+    return (
+      <div className="online-class-home">
+        <MyBookings onBack={() => setActivePage("home")} />
+      </div>
+    );
+  }
+
+  // =====================================
+  // WEEKLY GROUP CLASSES
+  // =====================================
+
+  if (activePage === "weekly" && canAccessGroupClasses && !loadingAccess) {
     return (
       <div className="online-class-home">
         <button
+          type="button"
           className="online-class-back"
           onClick={() => setActivePage("home")}
         >
           ← Back to Online Classes
         </button>
 
-        <OneToOneBooking />
+        <WeeklyClasses hasAccess={true} />
       </div>
     );
   }
 
-  // Open Weekly Classes
-  if (activePage === "weekly") {
+  // =====================================
+  // ONE-TO-ONE PRIVATE LESSONS
+  // =====================================
+
+  if (activePage === "one-to-one" && canBookPrivateLessons && !loadingAccess) {
     return (
       <div className="online-class-home">
         <button
+          type="button"
           className="online-class-back"
           onClick={() => setActivePage("home")}
         >
           ← Back to Online Classes
         </button>
 
-        <WeeklyClasses />
+        <OneToOneBooking planName={planName} privateLessons={privateLessons} />
       </div>
     );
   }
+
+  // =====================================
+  // ONLINE CLASSES HOME PAGE
+  // =====================================
 
   return (
     <div className="online-class-home">
+      {/* PAGE HEADER */}
+
       <div className="online-class-heading">
         <h1>Online Classes</h1>
+
         <p>
           Improve your PTE skills with live teacher-led classes and individual
           lessons.
         </p>
       </div>
 
+      {/* CLASS CARDS */}
+
       <div className="online-class-cards">
-        {/* Weekly Group Classes */}
+        {/* WEEKLY GROUP CLASSES */}
+
         <div className="online-class-card">
           <div className="online-class-icon">📅</div>
 
           <h2>Weekly Group Classes</h2>
 
           <p>
-            Join scheduled PTE classes covering Speaking, Writing, Reading and
-            Listening.
+            Join scheduled Speaking, Writing, Reading and Listening classes with
+            your teacher.
           </p>
 
+          {!loadingAccess && !canAccessGroupClasses && (
+            <p className="online-class-locked">🔒 Subscription Required</p>
+          )}
+
           <button
+            type="button"
             className="online-class-button"
-            onClick={() => setActivePage("weekly")}
+            disabled={loadingAccess}
+            onClick={() => {
+              if (canAccessGroupClasses) {
+                setActivePage("weekly");
+              } else {
+                onViewPlans?.();
+              }
+            }}
           >
-            View Weekly Classes
+            {loadingAccess
+              ? "Checking Subscription..."
+              : canAccessGroupClasses
+                ? "View Weekly Classes"
+                : "🔒 Unlock Group Classes"}
           </button>
         </div>
 
-        {/* One-to-One Booking */}
+        {/* ONE-TO-ONE LESSONS */}
+
         <div className="online-class-card">
           <div className="online-class-icon">👩‍🏫</div>
 
-          <h2>One-to-One Booking</h2>
+          <h2>One-to-One Lessons</h2>
 
           <p>
-            Book a private PTE lesson with your teacher using an available time
-            slot.
+            Book private PTE coaching sessions with your teacher using available
+            appointment times.
           </p>
 
+          {!loadingAccess && !canBookPrivateLessons && (
+            <p className="online-class-locked">🔒 Subscription Required</p>
+          )}
+
           <button
+            type="button"
             className="online-class-button"
-            onClick={() => setActivePage("one-to-one")}
+            disabled={loadingAccess}
+            onClick={() => {
+              if (canBookPrivateLessons) {
+                setActivePage("one-to-one");
+              } else {
+                onViewPlans?.();
+              }
+            }}
           >
-            Book Private Lesson →
+            {loadingAccess
+              ? "Checking Subscription..."
+              : canBookPrivateLessons
+                ? "Book Private Lesson →"
+                : "🔒 Unlock Private Lessons"}
           </button>
         </div>
+      </div>
+
+      {/* =====================================
+          MY PRIVATE LESSON BOOKINGS
+      ===================================== */}
+
+      <div className="online-my-bookings">
+        <div className="online-my-bookings-info">
+          <h2>My Private Lesson Bookings</h2>
+
+          <p>
+            View your upcoming and previous lessons, booking status, teacher
+            notes and meeting links.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="online-class-button"
+          onClick={() => setActivePage("my-bookings")}
+        >
+          📅 View My Bookings
+        </button>
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
-import "../MultipleChoiceMultipleAnswer.css";
+
+import "../Reading/MultipleChoiceMultipleAnswer.css";
 import "./ListeningMcqMultiple.css";
 
 const defaultQuestions = [
@@ -12,7 +13,8 @@ const defaultQuestions = [
     time: "01:03",
     category: "SCIENCE & TECHNOLOGY",
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    questionText: "According to the speaker, which of the options below are right?",
+    questionText:
+      "According to the speaker, which of the options below are right?",
     options: [
       {
         id: "A",
@@ -46,7 +48,10 @@ const defaultQuestions = [
     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
     questionText: "Which statements are supported by the recording?",
     options: [
-      { id: "A", text: "Buses became more popular after the city added new routes." },
+      {
+        id: "A",
+        text: "Buses became more popular after the city added new routes.",
+      },
       { id: "B", text: "Trams were removed from every city in the country." },
       { id: "C", text: "Cycling lanes helped reduce short car trips." },
       { id: "D", text: "Ticket prices increased every month." },
@@ -65,7 +70,10 @@ const defaultQuestions = [
     options: [
       { id: "A", text: "Sleep helps the brain store new information." },
       { id: "B", text: "Adults never need more than three hours of sleep." },
-      { id: "C", text: "Late-night study is always better than morning study." },
+      {
+        id: "C",
+        text: "Late-night study is always better than morning study.",
+      },
       { id: "D", text: "Short naps can improve focus for some people." },
       { id: "E", text: "Memory is not affected by rest at all." },
     ],
@@ -73,7 +81,12 @@ const defaultQuestions = [
   },
 ];
 
-const categories = ["SCIENCE & TECHNOLOGY", "HISTORY", "BIOLOGY", "MEDICAL SCIENCE"];
+const categories = [
+  "SCIENCE & TECHNOLOGY",
+  "HISTORY",
+  "BIOLOGY",
+  "MEDICAL SCIENCE",
+];
 
 function ListeningMcqMultiple({ onBack, initialCategory }) {
   const audioRef = useRef(null);
@@ -159,7 +172,9 @@ function ListeningMcqMultiple({ onBack, initialCategory }) {
   }, [question?.id]);
 
   function formatAudioTime(seconds) {
-    const safe = Number.isFinite(seconds) ? Math.max(0, Math.floor(seconds)) : 0;
+    const safe = Number.isFinite(seconds)
+      ? Math.max(0, Math.floor(seconds))
+      : 0;
     const mins = String(Math.floor(safe / 60)).padStart(2, "0");
     const secs = String(safe % 60).padStart(2, "0");
     return `${mins}:${secs}`;
@@ -276,8 +291,12 @@ function ListeningMcqMultiple({ onBack, initialCategory }) {
               ref={audioRef}
               src={question.audioUrl}
               preload="metadata"
-              onLoadedMetadata={(e) => setDuration(e.currentTarget.duration || 0)}
-              onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime || 0)}
+              onLoadedMetadata={(e) =>
+                setDuration(e.currentTarget.duration || 0)
+              }
+              onTimeUpdate={(e) =>
+                setCurrentTime(e.currentTarget.currentTime || 0)
+              }
               onEnded={() => setIsPlaying(false)}
             />
 
@@ -286,7 +305,9 @@ function ListeningMcqMultiple({ onBack, initialCategory }) {
               className="listening_play_btn"
               onClick={togglePlay}
             >
-              <i className={`fa-solid ${isPlaying ? "fa-pause" : "fa-play"}`}></i>
+              <i
+                className={`fa-solid ${isPlaying ? "fa-pause" : "fa-play"}`}
+              ></i>
             </button>
 
             <div className="listening_audio_track">

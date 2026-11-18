@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { getMergedQuestions } from "../admin/practiceQuestions";
-import PracticeShared from "./PracticeShared.jsx";
-import dragDropIcon from "../assets/fillindragdrop.png";
+import { getMergedQuestions } from "../../admin/practiceQuestions.js";
+import PracticeShared from "../PracticeShared.jsx";
+import dragDropIcon from "../../assets/fillindragdrop.png";
 import "./FillInTheBlankDragDrop.css";
 
 const defaultQuestions = [

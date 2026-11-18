@@ -1,24 +1,39 @@
 /* =====================================================
+
    PTE ACADEMY — ADMIN DASHBOARD
+
    Clean, modern, responsive purple theme
+
 ===================================================== */
 
 :root {
   --admin-primary: #7653e3;
+
   --admin-primary-dark: #623bd1;
+
   --admin-primary-light: #f0eaff;
+
   --admin-background: #f6f3ff;
+
   --admin-white: #ffffff;
+
   --admin-heading: #192744;
+
   --admin-text: #423957;
+
   --admin-muted: #7b7490;
+
   --admin-border: #e8e0fa;
+
   --admin-radius: 16px;
+
   --admin-shadow: 0 6px 24px rgba(73, 44, 139, 0.055);
 }
 
 /* =====================================================
+
    1. MAIN LAYOUT
+
 ===================================================== */
 
 .admin_panel,
@@ -28,10 +43,15 @@
 
 .admin_panel {
   display: flex;
+
   width: 100%;
+
   min-height: 100vh;
+
   background: var(--admin-background);
+
   color: var(--admin-text);
+
   font-family: "Urbanist", sans-serif;
 }
 
@@ -48,6 +68,7 @@
 
 .admin_panel button:disabled {
   opacity: 0.55;
+
   cursor: not-allowed;
 }
 
@@ -56,25 +77,38 @@
 .admin_panel select:focus-visible,
 .admin_panel textarea:focus-visible {
   outline: 3px solid #c8b5ff;
+
   outline-offset: 2px;
 }
 
 /* =====================================================
+
    2. SIDEBAR
+
 ===================================================== */
 
 .admin_panel .admin_sidebar,
 .admin_panel .admin_sidebar_v2 {
   position: sticky;
+
   top: 0;
+
   display: flex;
+
   flex-direction: column;
+
   flex: 0 0 250px;
+
   width: 250px;
+
   min-width: 250px;
+
   height: 100vh;
+
   padding: 20px 12px 16px;
+
   overflow-y: auto;
+
   overflow-x: hidden;
 
   background:
@@ -89,36 +123,55 @@
 
 .admin_sidebar_brand {
   display: flex;
+
   align-items: center;
+
   gap: 11px;
+
   margin: 0 7px 25px;
 }
 
 .admin_brand_icon {
   display: grid;
+
   place-items: center;
+
   flex-shrink: 0;
+
   width: 40px;
+
   height: 40px;
+
   border-radius: 12px;
+
   background: var(--admin-primary);
+
   color: white;
+
   font-size: 19px;
 }
 
 .admin_sidebar_brand strong {
   display: block;
+
   color: #21143d;
+
   font-size: 15px;
+
   font-weight: 800;
 }
 
 .admin_sidebar_brand small {
   display: block;
+
   margin-top: 3px;
+
   color: #8168a8;
+
   font-size: 10px;
+
   font-weight: 700;
+
   letter-spacing: 1.5px;
 }
 
@@ -126,9 +179,13 @@
 
 .admin_nav_caption {
   margin: 20px 12px 12px;
+
   color: #8d75b5;
+
   font-size: 11px;
+
   font-weight: 800;
+
   letter-spacing: 1.4px;
 }
 
@@ -141,17 +198,29 @@
 .admin_sidebar_v2 .admin_dashboard_link,
 .admin_sidebar_v2 .admin_group_toggle {
   display: flex;
+
   align-items: center;
+
   width: 100%;
+
   gap: 11px;
+
   padding: 11px 12px;
+
   background: transparent;
+
   color: #24124c;
+
   border: none;
+
   border-radius: 14px;
+
   text-align: left;
+
   font-size: 13px;
+
   font-weight: 650;
+
   transition:
     background 0.2s ease,
     box-shadow 0.2s ease;
@@ -164,6 +233,7 @@
 .admin_sidebar_v2 .admin_dashboard_link.active,
 .admin_sidebar_v2 .admin_group_toggle.expanded {
   background: white;
+
   box-shadow: 0 3px 14px rgba(93, 52, 155, 0.06);
 }
 
@@ -176,25 +246,37 @@
 
 .admin_group_icon {
   display: grid;
+
   place-items: center;
+
   flex: 0 0 36px;
+
   width: 36px;
+
   height: 36px;
+
   border-radius: 11px;
+
   background: #eee5ff;
+
   color: var(--admin-primary);
+
   font-size: 17px;
 }
 
 .admin_group_label {
   flex: 1;
+
   font-size: 13px;
+
   font-weight: 700;
 }
 
 .admin_group_chevron {
   color: #906ac8;
+
   font-size: 10px;
+
   transition: transform 0.25s ease;
 }
 
@@ -211,8 +293,11 @@
 
 .admin_group_content {
   display: grid;
+
   grid-template-rows: 0fr;
+
   opacity: 0;
+
   transition:
     grid-template-rows 0.3s ease,
     opacity 0.25s ease;
@@ -220,12 +305,15 @@
 
 .admin_group_content.open {
   grid-template-rows: 1fr;
+
   opacity: 1;
 }
 
 .admin_group_content_inner {
   min-height: 0;
+
   overflow: hidden;
+
   padding-left: 10px;
 }
 
@@ -233,29 +321,45 @@
 
 .admin_sidebar_v2 .admin_group_item {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   width: 100%;
+
   gap: 8px;
+
   padding: 11px 10px 11px 14px;
+
   background: transparent;
+
   border: none;
+
   border-radius: 10px;
+
   color: #4a316c;
+
   text-align: left;
+
   font-size: 12.5px;
+
   line-height: 1.4;
+
   transition: background 0.2s ease;
 }
 
 .admin_group_item i {
   color: #9675cb;
+
   font-size: 9px;
 }
 
 .admin_sidebar_v2 .admin_group_item.active {
   background: #f7f1ff;
+
   color: #5e35c8;
+
   font-weight: 800;
 }
 
@@ -267,24 +371,38 @@
 
 .admin_sidebar_footer {
   display: grid;
+
   gap: 8px;
+
   margin-top: auto;
+
   padding-top: 22px;
 }
 
 .admin_sidebar_v2 .admin_side_link,
 .admin_sidebar_v2 .admin_side_logout {
   display: flex;
+
   align-items: center;
+
   width: 100%;
+
   gap: 10px;
+
   padding: 12px;
+
   border: none;
+
   border-radius: 12px;
+
   background: rgba(255, 255, 255, 0.58);
+
   color: #4d317c;
+
   text-align: left;
+
   font-size: 13px;
+
   font-weight: 700;
 }
 
@@ -298,78 +416,120 @@
 }
 
 /* =====================================================
+
    3. MAIN CONTENT
+
 ===================================================== */
 
 .admin_main {
   flex: 1;
+
   min-width: 0;
+
   min-height: 100vh;
+
   padding: 30px 34px;
 }
 
 /* =====================================================
+
    4. TOP HEADER
+
 ===================================================== */
 
 .admin_topbar {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 20px;
+
   min-height: 74px;
+
   margin-bottom: 26px;
+
   padding: 15px 22px;
+
   background: var(--admin-white);
+
   border: 1px solid var(--admin-border);
+
   border-radius: var(--admin-radius);
+
   box-shadow: var(--admin-shadow);
 }
 
 .admin_topbar_left {
   display: flex;
+
   align-items: center;
+
   flex-wrap: wrap;
+
   gap: 12px;
 }
 
 .admin_topbar_title {
   color: var(--admin-heading);
+
   font-size: 19px;
+
   font-weight: 800;
 }
 
 .admin_topbar_hint {
   display: inline-flex;
+
   align-items: center;
+
   padding: 8px 13px;
+
   background: var(--admin-primary-light);
+
   color: var(--admin-primary);
+
   border-radius: 20px;
+
   font-size: 12px;
+
   font-weight: 800;
 }
 
 /* =====================================================
+
    5. NOTIFICATIONS
+
 ===================================================== */
 
 .admin_notif_wrap {
   position: relative;
+
   flex-shrink: 0;
 }
 
 .admin_notif_btn {
   position: relative;
+
   display: grid;
+
   place-items: center;
+
   width: 44px;
+
   height: 44px;
+
   background: #f1ebff;
+
   color: var(--admin-primary);
+
   border: 1px solid #e5d8ff;
+
   border-radius: 12px;
+
   font-size: 17px;
+
   transition: background 0.2s ease;
 }
 
@@ -379,81 +539,129 @@
 
 .admin_notif_badge {
   position: absolute;
+
   top: -6px;
+
   right: -6px;
+
   display: grid;
+
   place-items: center;
+
   min-width: 20px;
+
   height: 20px;
+
   padding: 0 4px;
+
   border-radius: 20px;
+
   background: #ef4444;
+
   color: white;
+
   font-size: 11px;
+
   font-weight: 800;
 }
 
 .admin_notif_dropdown {
   position: absolute;
+
   top: calc(100% + 12px);
+
   right: 0;
+
   z-index: 100;
+
   width: 340px;
+
   max-width: calc(100vw - 32px);
+
   padding: 18px;
+
   background: white;
+
   border: 1px solid var(--admin-border);
+
   border-radius: 15px;
+
   box-shadow: 0 15px 40px rgba(55, 30, 110, 0.16);
 }
 
 .admin_notif_head {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 12px;
+
   margin-bottom: 14px;
 }
 
 .admin_notif_head strong {
   color: var(--admin-heading);
+
   font-size: 15px;
 }
 
 .admin_notif_close {
   padding: 7px 11px;
+
   border: none;
+
   border-radius: 8px;
+
   background: var(--admin-primary-light);
+
   color: var(--admin-primary);
+
   font-weight: 700;
 }
 
 .admin_notif_list {
   display: flex;
+
   flex-direction: column;
+
   gap: 9px;
+
   margin: 0 0 14px;
+
   padding: 0;
+
   list-style: none;
 }
 
 .admin_notif_list li {
   margin: 0;
+
   padding: 0;
+
   list-style: none;
 }
 
 .admin_notif_item {
   display: flex;
+
   flex-direction: column;
+
   align-items: flex-start;
+
   gap: 8px;
+
   width: 100%;
+
   padding: 13px;
+
   background: #faf8ff;
+
   border: 1px solid #ece4ff;
+
   border-radius: 10px;
+
   text-align: left;
 }
 
@@ -463,44 +671,67 @@
 
 .admin_notif_item_title {
   color: var(--admin-heading);
+
   font-size: 13px;
+
   font-weight: 800;
+
   overflow-wrap: anywhere;
 }
 
 .admin_status_pending {
   display: inline-flex;
+
   padding: 5px 9px;
+
   background: #fff3dd;
+
   color: #966400;
+
   border-radius: 7px;
+
   font-size: 11px;
+
   font-weight: 800;
 }
 
 .admin_status_reviewed {
   display: inline-flex;
+
   padding: 5px 9px;
+
   background: #e8f8ef;
+
   color: #18794e;
+
   border-radius: 7px;
+
   font-size: 11px;
+
   font-weight: 800;
 }
 
 .admin_notif_empty {
   color: var(--admin-muted);
+
   font-size: 13px;
 }
 
 .admin_notif_view_all {
   width: 100%;
+
   padding: 12px;
+
   background: var(--admin-primary);
+
   color: white;
+
   border: none;
+
   border-radius: 10px;
+
   font-size: 13px;
+
   font-weight: 800;
 }
 
@@ -509,29 +740,42 @@
 }
 
 /* =====================================================
+
    6. MAIN DASHBOARD CARD
+
 ===================================================== */
 
 .admin_welcome_card {
   width: 100%;
+
   padding: 30px;
+
   background: var(--admin-white);
+
   border: 1px solid var(--admin-border);
+
   border-radius: 20px;
+
   box-shadow: var(--admin-shadow);
 }
 
 .admin_welcome_card h1 {
   margin: 0 0 16px;
+
   color: var(--admin-heading);
+
   font-size: 30px;
+
   font-weight: 800;
+
   line-height: 1.3;
 }
 
 .admin_welcome_card > p {
   margin: 0 0 10px;
+
   color: var(--admin-muted);
+
   font-size: 15px;
 }
 
@@ -539,9 +783,13 @@
 
 .admin_main_header {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 20px;
+
   margin-bottom: 28px;
 }
 
@@ -551,28 +799,45 @@
 
 .admin_main_header p {
   margin: 0;
+
   color: var(--admin-muted);
+
   font-size: 14px;
 }
 
 /* =====================================================
+
    7. ADD QUESTION BUTTON
+
 ===================================================== */
 
 .admin_add_btn {
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 8px;
+
   min-height: 46px;
+
   padding: 12px 22px;
+
   background: var(--admin-primary);
+
   color: white;
+
   border: 1px solid var(--admin-primary);
+
   border-radius: 12px;
+
   font-size: 14px;
+
   font-weight: 800;
+
   white-space: nowrap;
+
   transition:
     background 0.2s ease,
     box-shadow 0.2s ease;
@@ -580,42 +845,61 @@
 
 .admin_add_btn:hover {
   background: var(--admin-primary-dark);
+
   box-shadow: 0 5px 14px rgba(118, 83, 227, 0.2);
 }
 
 /* =====================================================
+
    8. ADD / EDIT QUESTION FORM
+
 ===================================================== */
 
 .admin_form_card {
   display: flex;
+
   flex-direction: column;
+
   gap: 20px;
+
   margin-bottom: 28px;
+
   padding: 26px;
+
   background: #faf9ff;
+
   border: 1px solid #ded5fa;
+
   border-radius: 16px;
 }
 
 .admin_form_card h2 {
   margin: 0;
+
   color: var(--admin-heading);
+
   font-size: 22px;
+
   font-weight: 800;
 }
 
 .admin_form_card label {
   display: flex;
+
   flex-direction: column;
+
   gap: 9px;
+
   width: 100%;
+
   color: var(--admin-text);
 }
 
 .admin_form_card label span {
   color: #374151;
+
   font-size: 14px;
+
   font-weight: 700;
 }
 
@@ -623,15 +907,25 @@
 .admin_form_card select,
 .admin_form_card textarea {
   display: block;
+
   width: 100%;
+
   min-height: 46px;
+
   padding: 12px 14px;
+
   background: white;
+
   color: var(--admin-heading);
+
   border: 1px solid #dcd3f4;
+
   border-radius: 10px;
+
   font-size: 14px;
+
   outline: none;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -641,12 +935,15 @@
 .admin_form_card select:focus,
 .admin_form_card textarea:focus {
   border-color: var(--admin-primary);
+
   box-shadow: 0 0 0 3px rgba(118, 83, 227, 0.1);
 }
 
 .admin_form_card textarea {
   min-height: 120px;
+
   line-height: 1.6;
+
   resize: vertical;
 }
 
@@ -659,24 +956,34 @@
 
 .admin_form_actions {
   display: flex;
+
   align-items: center;
+
   justify-content: flex-end;
+
   gap: 12px;
+
   margin-top: 8px;
 }
 
 .admin_cancel_btn,
 .admin_save_btn {
   min-height: 44px;
+
   padding: 11px 24px;
+
   border-radius: 10px;
+
   font-size: 14px;
+
   font-weight: 800;
 }
 
 .admin_cancel_btn {
   background: white;
+
   color: #645c75;
+
   border: 1px solid #ddd6e9;
 }
 
@@ -686,7 +993,9 @@
 
 .admin_save_btn {
   background: var(--admin-primary);
+
   color: white;
+
   border: 1px solid var(--admin-primary);
 }
 
@@ -695,30 +1004,48 @@
 }
 
 /* =====================================================
+
    9. SST QUESTION DETAILS / AI RESPONSE TABS
+
 ===================================================== */
 
 .admin_sst_tabs {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
   padding-bottom: 16px;
+
   border-bottom: 1px solid var(--admin-border);
 }
 
 .admin_sst_tabs button {
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 9px;
+
   min-height: 44px;
+
   padding: 12px 20px;
+
   background: #f0eaff;
+
   color: #6949c7;
+
   border: 1px solid transparent;
+
   border-radius: 11px;
+
   font-size: 14px;
+
   font-weight: 800;
+
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -726,7 +1053,9 @@
 
 .admin_sst_tabs button.active {
   background: var(--admin-primary);
+
   color: white;
+
   box-shadow: 0 4px 12px rgba(118, 83, 227, 0.18);
 }
 
@@ -735,76 +1064,114 @@
 }
 
 /* =====================================================
+
    10. SST AI RESPONSE PANEL
+
 ===================================================== */
 
 .admin_sst_ai_panel {
   display: flex;
+
   flex-direction: column;
+
   gap: 18px;
+
   padding: 24px;
+
   background: #f9f6ff;
+
   border: 1px solid #ded3fa;
+
   border-radius: 14px;
 }
 
 .admin_sst_ai_panel h3 {
   margin: 0;
+
   color: #44238e;
+
   font-size: 20px;
+
   font-weight: 800;
 }
 
 .admin_sst_ai_panel label {
   display: flex;
+
   flex-direction: column;
+
   gap: 10px;
 }
 
 .admin_sst_ai_panel label span {
   color: #423957;
+
   font-weight: 700;
 }
 
 .admin_sst_ai_panel textarea {
   width: 100%;
+
   min-height: 190px;
+
   padding: 15px 17px;
+
   background: white;
+
   color: var(--admin-heading);
+
   border: 1px solid #d9d0f2;
+
   border-radius: 11px;
+
   font-size: 15px;
+
   line-height: 1.7;
+
   resize: vertical;
 }
 
 .admin_sst_ai_panel textarea:focus {
   border-color: var(--admin-primary);
+
   outline: none;
+
   box-shadow: 0 0 0 3px rgba(118, 83, 227, 0.12);
 }
 
 /* =====================================================
+
    11. QUESTION LIST
+
 ===================================================== */
 
 .admin_question_table {
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
+
   margin-top: 20px;
 }
 
 .admin_question_row {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 20px;
+
   padding: 20px 22px;
+
   background: white;
+
   border: 1px solid var(--admin-border);
+
   border-radius: 14px;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -813,27 +1180,37 @@
 
 .admin_question_row:hover {
   border-color: #c9b8f7;
+
   box-shadow: 0 5px 18px rgba(93, 52, 155, 0.06);
+
   transform: translateY(-2px);
 }
 
 .admin_question_row > div:first-child {
   flex: 1;
+
   min-width: 0;
 }
 
 .admin_question_row h3 {
   margin: 0 0 8px;
+
   color: var(--admin-heading);
+
   font-size: 16px;
+
   font-weight: 800;
+
   overflow-wrap: anywhere;
 }
 
 .admin_question_row p {
   margin: 0;
+
   color: var(--admin-muted);
+
   font-size: 13px;
+
   line-height: 1.5;
 }
 
@@ -841,22 +1218,34 @@
 
 .admin_row_actions {
   display: flex;
+
   flex: 0 0 auto;
+
   align-items: center;
+
   justify-content: flex-end;
+
   gap: 10px;
 }
 
 .admin_edit_btn,
 .admin_delete_btn {
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
+
   min-height: 40px;
+
   padding: 10px 18px;
+
   border-radius: 10px;
+
   font-size: 13px;
+
   font-weight: 800;
+
   transition:
     background 0.2s ease,
     color 0.2s ease;
@@ -864,23 +1253,29 @@
 
 .admin_edit_btn {
   background: #f0eaff;
+
   color: #6544c5;
+
   border: 1px solid #ddd6fe;
 }
 
 .admin_edit_btn:hover {
   background: var(--admin-primary);
+
   color: white;
 }
 
 .admin_delete_btn {
   background: #fff1f2;
+
   color: #dc2626;
+
   border: 1px solid #fecdd3;
 }
 
 .admin_delete_btn:hover {
   background: #ffe4e6;
+
   border-color: #fca5a5;
 }
 
@@ -888,81 +1283,119 @@
 
 .admin_empty {
   padding: 40px 20px;
+
   background: #faf9ff;
+
   border: 1px dashed #ddd6fe;
+
   border-radius: 14px;
+
   color: var(--admin-muted);
+
   text-align: center;
+
   font-size: 14px;
+
   font-weight: 700;
 }
 
 /* =====================================================
+
    12. STUDENT ESSAY SUBMISSIONS
+
 ===================================================== */
 
 .admin_submissions_block {
   margin-top: 32px;
+
   padding-top: 24px;
+
   border-top: 1px solid var(--admin-border);
 }
 
 .admin_submissions_block h2 {
   margin: 0 0 8px;
+
   color: var(--admin-heading);
+
   font-size: 22px;
+
   font-weight: 800;
 }
 
 .admin_submissions_note {
   margin: 0 0 20px;
+
   color: var(--admin-muted);
+
   font-size: 14px;
 }
 
 .admin_submission_card {
   padding: 22px;
+
   background: #ffffff;
+
   border: 1px solid var(--admin-border);
+
   border-radius: 14px;
 }
 
 .admin_submission_top {
   display: flex;
+
   align-items: flex-start;
+
   justify-content: space-between;
+
   gap: 18px;
+
   margin-bottom: 14px;
 }
 
 .admin_submission_top h3 {
   margin: 0 0 8px;
+
   color: var(--admin-heading);
+
   font-size: 16px;
 }
 
 .admin_submission_top p,
 .admin_submission_meta {
   color: var(--admin-muted);
+
   font-size: 13px;
+
   line-height: 1.6;
 }
 
 .admin_submission_answer {
   margin: 16px 0;
+
   padding: 16px;
+
   background: #faf8ff;
+
   border: 1px solid #eee7ff;
+
   border-radius: 10px;
+
   color: var(--admin-text);
+
   font-size: 14px;
+
   line-height: 1.8;
+
   white-space: pre-wrap;
+
   overflow-wrap: anywhere;
 }
 
 /* =====================================================
+
    13. RESPONSIVE LAYOUT
+
 ===================================================== */
 
 @media (max-width: 1000px) {
@@ -972,7 +1405,9 @@
 
   .admin_panel .admin_sidebar_v2 {
     flex-basis: 230px;
+
     width: 230px;
+
     min-width: 230px;
   }
 
@@ -992,19 +1427,29 @@
 
   .admin_panel .admin_sidebar_v2 {
     position: relative;
+
     top: auto;
+
     flex: none;
+
     width: 100%;
+
     min-width: 0;
+
     height: auto;
+
     min-height: auto;
+
     max-height: 340px;
+
     border-right: none;
+
     border-bottom: 1px solid #cfb9f8;
   }
 
   .admin_main {
     min-height: auto;
+
     padding: 20px 16px;
   }
 
@@ -1014,7 +1459,9 @@
 
   .admin_main_header {
     flex-direction: column;
+
     align-items: stretch;
+
     gap: 16px;
   }
 
@@ -1028,6 +1475,7 @@
 
   .admin_question_row {
     flex-wrap: wrap;
+
     padding: 18px;
   }
 
@@ -1037,6 +1485,7 @@
 
   .admin_row_actions {
     width: 100%;
+
     justify-content: flex-start;
   }
 
@@ -1051,6 +1500,7 @@
 
   .admin_sst_tabs {
     flex-wrap: wrap;
+
     gap: 8px;
   }
 
@@ -1074,6 +1524,7 @@
 
   .admin_form_actions {
     flex-direction: column;
+
     align-items: stretch;
   }
 
@@ -1092,7 +1543,9 @@
 }
 
 /* =====================================================
+
    14. REDUCED MOTION
+
 ===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1100,6 +1553,68 @@
   .admin_panel *::before,
   .admin_panel *::after {
     animation-duration: 0.01ms !important;
+
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* =====================================================
+   15. ONLINE CLASSES - ADMIN NAVIGATION
+   Matches the existing AdminDashboard_with_Classes.jsx
+===================================================== */
+
+/* Place these links directly below the ONLINE CLASSES caption. */
+.admin_sidebar_v2 .admin_nav_caption + .admin_dashboard_link,
+.admin_sidebar_v2
+  .admin_nav_caption
+  + .admin_dashboard_link
+  + .admin_dashboard_link {
+  margin-bottom: 6px;
+  padding: 13px 14px;
+  color: #4a316c;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.admin_sidebar_v2 .admin_nav_caption + .admin_dashboard_link i,
+.admin_sidebar_v2
+  .admin_nav_caption
+  + .admin_dashboard_link
+  + .admin_dashboard_link
+  i {
+  width: 20px;
+  color: #7653e3;
+  font-size: 16px;
+}
+
+.admin_sidebar_v2 .admin_nav_caption + .admin_dashboard_link.active,
+.admin_sidebar_v2
+  .admin_nav_caption
+  + .admin_dashboard_link
+  + .admin_dashboard_link.active {
+  background: #ffffff;
+  color: #530783;
+  box-shadow: 0 4px 15px rgba(83, 7, 131, 0.08);
+}
+
+/* Shared layout for Teacher Availability and Lesson Bookings. */
+.admin_main > .admin_classes_content {
+  width: 100%;
+  min-width: 0;
+}
+
+.admin_classes_content h1 {
+  color: var(--admin-heading);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+@media (max-width: 760px) {
+  .admin_classes_content h1 {
+    font-size: 23px;
   }
 }

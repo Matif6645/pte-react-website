@@ -2,10 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getMergedQuestions } from "../../admin/practiceQuestions";
 import { scoreListening } from "../../admin/aiScore.js";
 import { addSubmission, updateSubmission } from "../../admin/submissonStore.js";
+
 import PracticeShared from "../PracticeShared.jsx";
 import AiEvaluationResultSST from "./AiEvaluationResultSST";
-import "../MultipleChoiceMultipleAnswer.css";
-import "../MultipleChoiceSingleAnswer.css";
+
+import "../Reading/MultipleChoiceMultipleAnswer.css";
+import "../Reading/MultipleChoiceSingleAnswer.css";
 import "./ListeningMcqMultiple.css";
 
 const DEMO = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";

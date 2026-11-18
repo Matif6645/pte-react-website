@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
-import "../MultipleChoiceMultipleAnswer.css";
-import "../MultipleChoiceSingleAnswer.css";
+
+import "../Reading/MultipleChoiceMultipleAnswer.css";
+import "../Reading/MultipleChoiceSingleAnswer.css";
+
 import "./ListeningMcqMultiple.css";
 
 const DEMO = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
@@ -608,7 +610,12 @@ function HighlightIncorrectWords({ onBack, initialCategory }) {
       (id) => !wrongIds.includes(id),
     ).length;
     const missed = wrongIds.filter((id) => !selectedIds.includes(id)).length;
-    return { rightSelected, falseSelected, missed, totalWrong: wrongIds.length };
+    return {
+      rightSelected,
+      falseSelected,
+      missed,
+      totalWrong: wrongIds.length,
+    };
   }, [q, done, selectedIds]);
 
   useEffect(() => {

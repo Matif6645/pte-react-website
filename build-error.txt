@@ -1,0 +1,102 @@
+﻿
+> pte@0.0.0 build
+> vite build
+
+[36mvite v8.3.5 [32mbuilding client environment for production...[36m[39m
+transforming...
+Ô£ô 145 modules transformed.
+node.exe : [31mÔ£ù[39m Build failed in 177ms
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([31mÔ£ù[39m Build failed in 177ms:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[31merror during build:
+[31mBuild failed with 19 errors:
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../MultipleChoiceMultipleAnswer.css' in src/components/listening/ListeningMcqMultiple.jsx
+   [38;5;246mÔò¡[0m[38;5;246mÔöÇ[0m[38;5;246m[[0m src/components/listening/ListeningMcqMultiple.jsx:4:8 [38;5;246m][0m
+   [38;5;246mÔöé[0m
+ [38;5;246m4 Ôöé[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m"../MultipleChoiceMultipleAnswer.css"[38;5;249m;[0m
+ [38;5;240m  Ôöé[0m        ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö¼ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ  
+ [38;5;240m  Ôöé[0m                          Ôò░ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Module not found.
+ [38;5;240m  Ôöé[0m 
+ [38;5;240m  Ôöé[0m [38;5;115mHelp[0m: 'src/components/listening/ListeningMcqMultiple.jsx' is imported by the following path:
+ [38;5;240m  Ôöé[0m         - src/components/listening/ListeningMcqMultiple.jsx
+ [38;5;240m  Ôöé[0m         - src/App.jsx
+ [38;5;240m  Ôöé[0m         - src/main.jsx
+ [38;5;240m  Ôöé[0m         - index.html
+[38;5;246mÔöÇÔöÇÔöÇÔò»[0m
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../MultipleChoiceMultipleAnswer.css' in src/components/listening/SelectMissingWord.jsx
+   [38;5;246mÔò¡[0m[38;5;246mÔöÇ[0m[38;5;246m[[0m src/components/listening/SelectMissingWord.jsx:4:8 [38;5;246m][0m
+   [38;5;246mÔöé[0m
+ [38;5;246m4 Ôöé[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m"../MultipleChoiceMultipleAnswer.css"[38;5;249m;[0m
+ [38;5;240m  Ôöé[0m        ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö¼ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ  
+ [38;5;240m  Ôöé[0m                          Ôò░ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Module not found.
+ [38;5;240m  Ôöé[0m 
+ [38;5;240m  Ôöé[0m [38;5;115mHelp[0m: 'src/components/listening/SelectMissingWord.jsx' is imported by the following path:
+ [38;5;240m  Ôöé[0m         - src/components/listening/SelectMissingWord.jsx
+ [38;5;240m  Ôöé[0m         - src/App.jsx
+ [38;5;240m  Ôöé[0m         - src/main.jsx
+ [38;5;240m  Ôöé[0m         - index.html
+[38;5;246mÔöÇÔöÇÔöÇÔò»[0m
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../MultipleChoiceSingleAnswer.css' in src/components/listening/SelectMissingWord.jsx
+   [38;5;246mÔò¡[0m[38;5;246mÔöÇ[0m[38;5;246m[[0m src/components/listening/SelectMissingWord.jsx:5:8 [38;5;246m][0m
+   [38;5;246mÔöé[0m
+ [38;5;246m5 Ôöé[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m"../MultipleChoiceSingleAnswer.css"[38;5;249m;[0m
+ [38;5;240m  Ôöé[0m        ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö¼ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ  
+ [38;5;240m  Ôöé[0m                         Ôò░ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Module not found.
+ [38;5;240m  Ôöé[0m 
+ [38;5;240m  Ôöé[0m [38;5;115mHelp[0m: 'src/components/listening/SelectMissingWord.jsx' is imported by the following path:
+ [38;5;240m  Ôöé[0m         - src/components/listening/SelectMissingWord.jsx
+ [38;5;240m  Ôöé[0m         - src/App.jsx
+ [38;5;240m  Ôöé[0m         - src/main.jsx
+ [38;5;240m  Ôöé[0m         - index.html
+[38;5;246mÔöÇÔöÇÔöÇÔò»[0m
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../MultipleChoiceMultipleAnswer.css' in src/components/listening/HighlightCorrectSummary.jsx
+   [38;5;246mÔò¡[0m[38;5;246mÔöÇ[0m[38;5;246m[[0m src/components/listening/HighlightCorrectSummary.jsx:4:8 [38;5;246m][0m
+   [38;5;246mÔöé[0m
+ [38;5;246m4 Ôöé[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m"../MultipleChoiceMultipleAnswer.css"[38;5;249m;[0m
+ [38;5;240m  Ôöé[0m        ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö¼ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ  
+ [38;5;240m  Ôöé[0m                          Ôò░ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Module not found.
+ [38;5;240m  Ôöé[0m 
+ [38;5;240m  Ôöé[0m [38;5;115mHelp[0m: 'src/components/listening/HighlightCorrectSummary.jsx' is imported by the following path:
+ [38;5;240m  Ôöé[0m         - src/components/listening/HighlightCorrectSummary.jsx
+ [38;5;240m  Ôöé[0m         - src/App.jsx
+ [38;5;240m  Ôöé[0m         - src/main.jsx
+ [38;5;240m  Ôöé[0m         - index.html
+[38;5;246mÔöÇÔöÇÔöÇÔò»[0m
+
+[31m[UNRESOLVED_IMPORT] [0mCould not resolve '../MultipleChoiceSingleAnswer.css' in src/components/listening/HighlightCorrectSummary.jsx
+   [38;5;246mÔò¡[0m[38;5;246mÔöÇ[0m[38;5;246m[[0m src/components/listening/HighlightCorrectSummary.jsx:5:8 [38;5;246m][0m
+   [38;5;246mÔöé[0m
+ [38;5;246m5 Ôöé[0m [38;5;249mi[0m[38;5;249mm[0m[38;5;249mp[0m[38;5;249mo[0m[38;5;249mr[0m[38;5;249mt[0m[38;5;249m 
+[0m"../MultipleChoiceSingleAnswer.css"[38;5;249m;[0m
+ [38;5;240m  Ôöé[0m        ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔö¼ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ  
+ [38;5;240m  Ôöé[0m                         Ôò░ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ Module not found.
+ [38;5;240m  Ôöé[0m 
+ [38;5;240m  Ôöé[0m [38;5;115mHelp[0m: 'src/components/listening/HighlightCorrectSummary.jsx' is imported by the following path:
+ [38;5;240m  Ôöé[0m         - src/components/listening/HighlightCorrectSummary.jsx
+ [38;5;240m  Ôöé[0m         - src/App.jsx
+ [38;5;240m  Ôöé[0m         - src/main.jsx
+ [38;5;240m  Ôöé[0m         - index.html
+[38;5;246mÔöÇÔöÇÔöÇÔò»[0m
+
+...[31m
+    at aggregateBindingErrorsIntoJsError (file:///C:/PTE/Pte/node_modules/rolldown/dist/shared/error-BJ9uQLIS.mjs:50:18)
+    at unwrapBindingResult (file:///C:/PTE/Pte/node_modules/rolldown/dist/shared/error-BJ9uQLIS.mjs:20:128)
+    at #build (file:///C:/PTE/Pte/node_modules/rolldown/dist/shared/rolldown-DWd2aEL4.mjs:146:34)
+    at async buildEnvironment (file:///C:/PTE/Pte/node_modules/vite/dist/node/chunks/node.js:34849:66)
+    at async Object.build (file:///C:/PTE/Pte/node_modules/vite/dist/node/chunks/node.js:35270:19)
+    at async Object.buildApp (file:///C:/PTE/Pte/node_modules/vite/dist/node/chunks/node.js:35267:153)
+    at async CAC.<anonymous> (file:///C:/PTE/Pte/node_modules/vite/dist/node/cli.js:790:3) {
+  errors: [Getter/Setter]
+}[39m

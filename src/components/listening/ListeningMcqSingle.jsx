@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getMergedQuestions } from "../../admin/practiceQuestions";
 import PracticeShared from "../PracticeShared.jsx";
-import "../MultipleChoiceMultipleAnswer.css";
-import "../MultipleChoiceSingleAnswer.css";
+
+import "../Reading/MultipleChoiceMultipleAnswer.css";
+import "../Reading/MultipleChoiceSingleAnswer.css";
 import "./ListeningMcqMultiple.css";
 
 const defaultQuestions = [
@@ -229,7 +230,10 @@ const defaultQuestions = [
         id: "A",
         text: "Antibiotic misuse can contribute to resistant infections.",
       },
-      { id: "B", text: "Antibiotics are effective against every viral illness." },
+      {
+        id: "B",
+        text: "Antibiotics are effective against every viral illness.",
+      },
       { id: "C", text: "Bacteria cannot adapt to antibiotic treatment." },
       {
         id: "D",
